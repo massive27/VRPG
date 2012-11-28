@@ -50,7 +50,7 @@ Public ddkeyboard As DirectInputDevice
 'A simple initialization flag.
 Public bInit As Boolean
 
-Function createDXsurface(X, Y) As DirectDrawSurface7
+Function createDXsurface(x, y) As DirectDrawSurface7
 
     ddsd2.lFlags = DDSD_CAPS Or DDSD_HEIGHT Or DDSD_WIDTH
     ddsd2.ddsCaps.lCaps = DDSCAPS_OFFSCREENPLAIN
@@ -61,14 +61,14 @@ Function createDXsurface(X, Y) As DirectDrawSurface7
 
 End Function
 
-Function makesurfdesc(X, Y) As DDSURFACEDESC2
+Function makesurfdesc(x, y) As DDSURFACEDESC2
 
     Dim hooker As DDSURFACEDESC2
 
     hooker.lFlags = DDSD_CAPS Or DDSD_HEIGHT Or DDSD_WIDTH
     hooker.ddsCaps.lCaps = DDSCAPS_OFFSCREENPLAIN
-    hooker.lWidth = X
-    hooker.lHeight = Y
+    hooker.lWidth = x
+    hooker.lHeight = y
     makesurfdesc = hooker
 
 End Function
@@ -189,6 +189,8 @@ Sub DXinit(picbox As PictureBox, Optional picbox2 As PictureBox)
     blt picbox
     'InitDXSound Form1.hwnd
     
+    Debugger.MoreInit 'm'' for compatibility...
+    
     
 Exit Sub
 ErrHandler:
@@ -226,10 +228,12 @@ On Error GoTo ErrHand:
     'when stretched.
     ddrval = Primary.blt(r1, picBuffer, r2, DDBLT_WAIT)
     'Primary.Flip Nothing, DDFLIP_WAIT  'DDFLIP_DONOTWAIT
-
+    'Primary.Flip Nothing, DDFLIP_DONOTWAIT
+    
 Exit Sub
 ErrHand:
 'MsgBox "There was an error whilst redrawing the screen.", vbCritical, "error"
+Err.clear
 End Sub
 
 Sub blt2(picbox As PictureBox, surf As DirectDrawSurface7)

@@ -1,12 +1,14 @@
 VERSION 5.00
 Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "COMDLG32.OCX"
 Begin VB.Form TitleScreen 
+   BorderStyle     =   1  'Fixed Single
    Caption         =   "Duamutef's Glorious Vore RPG"
    ClientHeight    =   8940
-   ClientLeft      =   1680
-   ClientTop       =   1065
+   ClientLeft      =   1665
+   ClientTop       =   1050
    ClientWidth     =   12000
    LinkTopic       =   "Form2"
+   MaxButton       =   0   'False
    Picture         =   "TitleScreen.frx":0000
    ScaleHeight     =   8940
    ScaleWidth      =   12000
@@ -31,7 +33,7 @@ Begin VB.Form TitleScreen
          Strikethrough   =   0   'False
       EndProperty
       ForeColor       =   &H00FFFFFF&
-      Height          =   375
+      Height          =   415
       Left            =   3600
       TabIndex        =   2
       Top             =   8520

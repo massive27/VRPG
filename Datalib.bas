@@ -174,6 +174,8 @@ If extract = 0 Then Name filen As "VTDATA" & filen
     If Not (Dir(filen)) = "" And Dir("VTDATA" & filen) = "" Then 'm''
         Name filen As "VTDATA" & filen 'm''
         getfile = "VTDATA" & filen 'm''
+    ElseIf Not Dir("VTDATA" & filen) = "" Then 'm''
+        getfile = "VTDATA" & filen 'm''
     End If 'm''
 If Dir("VTDATA" & filen) = "" And Dir(filen) = "" Then MsgBox "File not found:" & filen: getfile = ""
 

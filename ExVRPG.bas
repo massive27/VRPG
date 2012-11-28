@@ -11,9 +11,9 @@ Attribute VB_Name = "VRPG"
 ' This is our time callback event handler
 'battle2.MoveTicker
 'End Sub
-Public Const curversion = "2.14"
+Public Const curversion = "2.14 Legacy" 'm'' modified to know where we are
 
-Public Const debugmessageson = 0 '1
+Public Const debugmessageson& = 0 '1
 Public Const editon = 0
 
 Public Declare Function SetTimer Lib "user32" (ByVal hwnd As Long, ByVal nIDEvent As Long, ByVal uElapse As Long, ByVal lpTimerFunc As Long) As Long
@@ -28,7 +28,7 @@ Public Declare Function KillTimer Lib "user32" (ByVal hwnd As Long, ByVal nIDEve
 'battle2.MoveTicker
 'End Sub
 
-Declare Sub BASS_Free Lib "bass.dll" ()
+'m'' Declare Sub BASS_Free Lib "bass.dll" () 'm'' useless once DMC removed
 
 Public Type keysettings
     moveN As Integer
@@ -691,6 +691,10 @@ updatbonuses = 1
 isexpansion = 1
 
 Debugger.CharLoad 'm'' initialization of stitched code...
+Debugger.TmpFold_Check App.Path 'm'' temporary folder checking (app.path as of yet)
+Debugger.DataPak_Check App.Path 'm'' data.pak file supposed to be in game directory
+
+
 
 ReDim plr.curquests(1 To 1)
 
@@ -1916,6 +1920,8 @@ End Sub
 
 
 Sub savemap(filen)
+'m'' declarations...
+Dim a As Long, b As Long
 
 Open filen For Output As #1
 
@@ -2654,6 +2660,9 @@ createobj = objtotal
 End Function
 
 Sub updatmap()
+'m'' declarations
+Dim a As Long, b As Long
+
 'totalmonsters = 0
 'ReDim mon(1 To 1) As amonsterT
 'objtotal = 0
@@ -4663,6 +4672,9 @@ Form1.Text5.Visible = False
 End Function
 
 Function gotomap(ByVal fn)
+'m'' quitting an area and entering a neighbor area
+'m'' performance to improve
+Dim a As Long 'm''
 
 'monlev = checklevels(fn)
 'If monlev > plr.level Then If MsgBox("The lowest level monster in that area is level " & monlev & ".  You are level " & plr.level & ".  ie you really don't want to go there.  Do you want to be a 'tard and go there anyway?", vbYesNo) = vbNo Then Exit Function
@@ -6189,9 +6201,9 @@ For a = 1 To 50
     'If Not bijdang(1).sprite.Cell = 1 Then bijdang(1).sprite.RestoreBackground cStage.hdc
     'bijdang(1).sprite.StoreBackground cStage.hdc, dorkx, dorky + smurg
     
-    
-    bijdang(bijdangs(a).graphnum).sprite.TransparentDraw picBuffer.GetDC, dorkx, dorky + offset, bijdangs(a).cell, True
-    'bijdang(bijdangs(a).graphnum).sprite.TransparentDraw picbuffer, dorkx * 2, dorky * 2 + offset, bijdangs(a).cell, True
+    'm'' i dont get the point of this line...
+    bijdang(bijdangs(a).graphnum).sprite.TransparentDraw picBuffer, dorkx, dorky + offset, bijdangs(a).cell, True
+    'bijdang(bijdangs(a).graphnum).sprite.TransparentDraw picBuffer, dorkx * 2, dorky * 2 + offset, bijdangs(a).cell, True
     
     bijdangs(a).cell = bijdangs(a).cell + 1
     If bijdangs(a).cell > bijdang(bijdangs(a).graphnum).sprite.cell Then bijdangs(a).Active = 0
@@ -6201,6 +6213,8 @@ For a = 1 To 50
     'bijdang(1).sprite.StageToScreen Form1.hDC, cStage.hDC
     'bijdang(1).sprite.cell = bijdang(1).sprite.cell + 1
     End If
+    
+   
 Next a
 
 drawshooties
@@ -6210,6 +6224,8 @@ blt Form1.Picture7
 End Sub
 
 Sub makebijdang(ByVal x As Integer, ByVal y As Integer, ByVal wch As Integer)
+'m'' declarations. bijdang are the animated sprites
+Dim a As Long 'm''
 
 If wch = 5 Then playsound "1cannon1.wav"
 If wch = 6 Then playsound "1laser4.wav"
@@ -9735,6 +9751,11 @@ End Function
 
 Sub drawtexts()
 
+'m'' added some declaration to avoid automation errors
+Dim lX_CT As Long 'm'' X coordinate of text to print
+Dim lY_CT As Long 'm'' Y coordinate of text to print
+
+
 For a = 1 To UBound(drawtxts()) 'To 1 Step -1 'Draw in reverse order
     If drawtxts(a).age = 0 Or drawtxts(a).txt = "" Then GoTo 5
     'age = 30 - drawtxts(a).age * 5: If age < 0 Then age = 0
@@ -9778,11 +9799,15 @@ For a = 1 To UBound(drawtxts()) 'To 1 Step -1 'Draw in reverse order
     'picBuffer.SetFont Font
     
     picBuffer.SetForeColor RGB(r / 2, g / 2, b / 2)
-    picBuffer.drawtext drawtxts(a).x + xadd + 1, drawtxts(a).y + yadd + 1, drawtxts(a).txt, False
+    lX_CT = drawtxts(a).x + xadd + 1 'm'' VB will correctly convert the result
+    lY_CT = drawtxts(a).y + yadd + 1 'm'' VB will correctly convert the result
+    picBuffer.drawtext lX_CT, lY_CT, drawtxts(a).txt, False
     'Main Text
     picBuffer.SetForeColor RGB(r, g, b)
     picBuffer.drawtext drawtxts(a).x + xadd, drawtxts(a).y + yadd, drawtxts(a).txt, False
 
+    
+    
     
     drawtxts(a).y = drawtxts(a).y - 2
     drawtxts(a).age = drawtxts(a).age - 1
@@ -10999,8 +11024,13 @@ If plr.fatigue = 0 And montype(mon(plr.instomach).type).eattype = 1 And adddiffi
 End If
 
 'Struggling costs fatigue, whether you succeed or not, but doesn't penalize you as much if it's really hard to do
-If Not escaped = 1 Then addfatigue greater(montype(mon(plr.instomach).type).level \ 2 - (adddifficulty * 1.5), 1) Else addfatigue greater(plr.level - (adddifficulty * 1.5), 1)
-
+'m'' the original formula may go wrong, so i added a little correction
+Dim Mlevel As Long 'm''
+If plr.instomach = 0 Then Exit Function 'm'' plants dont have stomach ...
+Mlevel = Val(montype(mon(plr.instomach).type).level) 'm''
+If Val(Mlevel) = 0 Then Stop 'm''
+'m''If Not escaped = 1 Then addfatigue greater(montype(mon(plr.instomach).type).level \ 2 - (adddifficulty * 1.5), 1) Else addfatigue greater(plr.level - (adddifficulty * 1.5), 1)
+If Not escaped = 1 Then addfatigue greater(Mlevel \ 2 - (adddifficulty * 1.5), 1) Else addfatigue greater(plr.level - (adddifficulty * 1.5), 1)
 
 End Function
 

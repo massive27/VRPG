@@ -1,5 +1,4 @@
 VERSION 5.00
-Object = "{2C1EC115-F1BA-11D3-BF43-00A0CC32BE58}#9.0#0"; "DMC2.ocx"
 Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "COMDLG32.OCX"
 Object = "{DA729162-C84F-11D4-A9EA-00A0C9199875}#1.60#0"; "MpqCtl.ocx"
 Begin VB.Form Form1 
@@ -14,12 +13,6 @@ Begin VB.Form Form1
    ScaleMode       =   3  'Pixel
    ScaleWidth      =   800
    StartUpPosition =   2  'CenterScreen
-   Begin DMC2.DMC DMC1 
-      Left            =   9480
-      Top             =   4320
-      _ExtentX        =   873
-      _ExtentY        =   873
-   End
    Begin VB.Timer Timer1 
       Enabled         =   0   'False
       Interval        =   50
@@ -1033,8 +1026,8 @@ Exit Sub
 nodraw = 1
 endingprog = 1
 ClearSprites2
-BASS_Free
-Form1.DMC1.TerminateBASS
+'m''BASS_Free
+'m''Form1.DMC1.TerminateBASS
 'SetTimer Me.hwnd, 50, 200, AddressOf TimerHandler
 ' Parameters - handle, ID
 'KillTimer Me.hwnd, 51
@@ -1630,11 +1623,11 @@ End Sub
 
 
 Private Sub DMC1_ErrorOccurred(ByVal where As String, ByVal info As String)
-
-    If DMC1.Error = True Then
-        Debug.Print "DMC ERROR"
-        Debug.Print "Where: " & where & "  Why: " & info & "  Details: " & DMC1.LastError
-    End If
+'m'' DMC stuff, inhibited
+    'm'' If DMC1.Error = True Then
+    'm''     Debug.Print "DMC ERROR"
+    'm''     Debug.Print "Where: " & where & "  Why: " & info & "  Details: " & DMC1.LastError
+    'm'' End If
 
 End Sub
  

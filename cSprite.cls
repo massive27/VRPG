@@ -70,16 +70,16 @@ End Property
 Public Property Let Active(ByVal bActive As Boolean)
     m_bActive = bActive
 End Property
-Public Property Get X() As Long
-    X = m_lX
+Public Property Get x() As Long
+    x = m_lX
 End Property
-Public Property Let X(ByVal lX As Long)
+Public Property Let x(ByVal lX As Long)
     m_lX = lX
 End Property
-Public Property Get Y() As Long
-    Y = m_lY
+Public Property Get y() As Long
+    y = m_lY
 End Property
-Public Property Let Y(ByVal lY As Long)
+Public Property Let y(ByVal lY As Long)
     m_lY = lY
 End Property
 
@@ -150,14 +150,14 @@ Public Sub StoreBackground(ByVal hDC&, ByVal lX&, ByVal lY&)
     m_bBackstored = True
 End Sub
 
-Public Sub TransparentDraw(ByVal hDC&, ByVal lX&, ByVal lY&, ByVal lCell&, _
+Public Sub TransparentDraw(hDC, ByVal lX&, ByVal lY&, ByVal lCell&, _
     Optional ByVal bUseBuildDC As Variant)
-    m_lCurrentCell = lCell
+    'm'' m_lCurrentCell = lCell 'code stitching : this wrongly resets cells count
     m_lPrevX = m_lLastX
     m_lPrevY = m_lLastY
     m_lLastX = lX
     m_lLastY = lY
-    'm''m_cSpriteBitmap.TransparentDraw hDC, lX, lY, lCell, bUseBuildDC
+    m_cSpriteBitmap.TransparentDraw hDC, lX, lY, lCell, bUseBuildDC
 End Sub
 
 Public Sub DirectBltSprite(ByVal lHDC&, ByVal lX&, ByVal lY&, ByVal lCell&)

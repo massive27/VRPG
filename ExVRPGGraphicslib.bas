@@ -113,13 +113,13 @@ bill = bill + 1
 
 'For a = 0 To 5
 sprt2.RestoreBackground cStage.hDC
-sprt2.X = 15
-sprt2.Y = sprt2.Y + uprdown
-If sprt2.Y > 200 Then uprdown = -15
-If sprt2.Y < 5 Then uprdown = 15
-sprt2.StoreBackground cStage.hDC, sprt2.X, sprt2.Y
+sprt2.x = 15
+sprt2.y = sprt2.y + uprdown
+If sprt2.y > 200 Then uprdown = -15
+If sprt2.y < 5 Then uprdown = 15
+sprt2.StoreBackground cStage.hDC, sprt2.x, sprt2.y
 'm''sprt2.TransparentDraw picBuffer, sprt2.X, sprt2.Y, sprt2.cell, False
-sprt2.TransparentDraw picBuffer.GetDC, sprt2.X, sprt2.Y, sprt2.cell, False
+sprt2.TransparentDraw picBuffer.GetDC, sprt2.x, sprt2.y, sprt2.cell, False
 'cShip.StageToScreen lHDC, cStage.hDC
 'sprt2.RestoreBackground cStage.hDC
 'Next a
@@ -131,7 +131,7 @@ DoEvents
 
 End Sub
 
-Function newsprite(hDC As Long, FileName As String, X As Long, Y As Long, Optional Xframes = 1, Optional Yframes = 1)
+Function newsprite(hDC As Long, FileName As String, x As Long, y As Long, Optional Xframes = 1, Optional Yframes = 1)
 ChDir App.Path
 MsgBox "Obsolete function newsprite called"
 Stop
@@ -141,7 +141,7 @@ If lastsprite <= 1 Then lastsprite = 1: ReDim sprite(1 To lastsprite) As cSprite
 For a = 1 To 500
     If spritemaps(a).FileName = FileName Then
 '    totalsprites = totalsprites + 1
-    CreateSprite spritemaps(a).cmap, sprite(lastsprite), hDC: spritefile(lastsprite) = FileName: newsprite = lastsprite: sprite(lastsprite).cell = 1: sprite(lastsprite).X = X: sprite(lastsprite).Y = Y
+    CreateSprite spritemaps(a).cmap, sprite(lastsprite), hDC: spritefile(lastsprite) = FileName: newsprite = lastsprite: sprite(lastsprite).cell = 1: sprite(lastsprite).x = x: sprite(lastsprite).y = y
     lastsprite = lastsprite + 1
     ReDim Preserve sprite(1 To lastsprite) As cSprite
     ReDim Preserve spritefile(1 To lastsprite) As String
@@ -170,7 +170,7 @@ For a = 1 To lastsprite
 
 '    sprite(a).RestoreBackground cStage.hdc
 '    sprite(a).StoreBackground cStage.hdc, sprite(a).x, sprite(a).y
-    sprite(a).TransparentDraw cStage.hDC, sprite(a).X, sprite(a).Y, sprite(a).cell, True
+    sprite(a).TransparentDraw cStage.hDC, sprite(a).x, sprite(a).y, sprite(a).cell, True
 '''    sprite(a).TransparentDraw picBuffer, sprite(a).X, sprite(a).Y, sprite(a).Cell, True
 '    cShip.StageToScreen desthHDC, cStage.hdc
 

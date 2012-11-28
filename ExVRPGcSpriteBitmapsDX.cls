@@ -343,7 +343,8 @@ Dim ddsd2 As DDSURFACEDESC2
     If Dir(sSpriteBitmap) = "" Or sSpriteBitmap = "" Then gamemsg "Warning:  File not found: " & sSpriteBitmap: sSpriteBitmap = getfile("flail2.gif")
     If sSpriteBitmap = "" Then MsgBox "Error #2 in Transparentdraw function.": Exit Function
     If Not Dir(Left(sSpriteBitmap, Len(sSpriteBitmap) - 4) & ".gif") = "" Then sSpriteBitmap = Left(sSpriteBitmap, Len(sSpriteBitmap) - 4) & ".gif" ': Debug.Print "Using GIF"
-    If Not Dir("c:\vb\expansionvrpg\gifs\" & Left(sSpriteBitmap, Len(sSpriteBitmap) - 4) & ".gif") = "" Then sSpriteBitmap = "c:\vb\expansionvrpg\gifs\" & Left(sSpriteBitmap, Len(sSpriteBitmap) - 4) & ".gif" ': Debug.Print "Using GIF"
+    'm'' below is Duam's special code for update. removed for faster loading.
+    'm''If Not Dir("c:\vb\expansionvrpg\gifs\" & Left(sSpriteBitmap, Len(sSpriteBitmap) - 4) & ".gif") = "" Then sSpriteBitmap = "c:\vb\expansionvrpg\gifs\" & Left(sSpriteBitmap, Len(sSpriteBitmap) - 4) & ".gif" ': Debug.Print "Using GIF"
     
 
     FileName = sSpriteBitmap
@@ -361,7 +362,7 @@ Dim ddsd2 As DDSURFACEDESC2
     'cKey.high = dX.CreateColorRGB(1, 1, 1)
     'cKey.lOW = dX.CreateColorRGB(0, 0, 0)
     
-    If Not Right(sSpriteBitmap, 4) = ".bmp" Then SavePicture Form1.Picture1.Image, "temp.bmp": sSpriteBitmap = "temp.bmp"
+    If Not Right(sSpriteBitmap, 4) = ".bmp" Then SavePicture Form1.Picture1.image, "temp.bmp": sSpriteBitmap = "temp.bmp"
     
     Set DXS = DD.CreateSurfaceFromFile(sSpriteBitmap, ddsd2)
     
@@ -388,13 +389,23 @@ Dim ddsd2 As DDSURFACEDESC2
             m_lCY = lYImageCount
             ' The width & Height of the sprite:
             
+            'm'' rescale the loaded pic to fit into a picturebox.
+            'm'' Duam code is time consuming so I added a With, but
+            'm'' better performances could be reached with caching those Form properties.
             
+            'm'' m_lDX = Form1.Picture1.ScaleWidth \ m_lCX
+            'm'' m_lDY = Form1.Picture1.ScaleHeight \ m_lCY
+            
+            'm'' mwidth = Form1.Picture1.ScaleWidth
+            'm'' mheight = Form1.Picture1.ScaleHeight
+            With Form1.Picture1
+                mwidth = .ScaleWidth
+                mheight = .ScaleHeight
 
-            m_lDX = Form1.Picture1.ScaleWidth \ m_lCX
-            m_lDY = Form1.Picture1.ScaleHeight \ m_lCY
-            
-            mwidth = Form1.Picture1.ScaleWidth
-            mheight = Form1.Picture1.ScaleHeight
+                m_lDX = mwidth \ m_lCX
+                m_lDY = mheight \ m_lCY
+            End With
+
             
             'DXS.GetSurfaceDesc ddsd2
             'm_lDX = ddsd2.lWidth \ m_lCX
@@ -1353,13 +1364,13 @@ If fr = 1 Then Multframe = 0: Exit Function
 
 For a = 1 To fr
 
-    X = (a - 1) Mod xfr
-    Y = Int((a - 1) / xfr)
+    x = (a - 1) Mod xfr
+    y = Int((a - 1) / xfr)
 
     Set DXS2(a) = DD.CreateSurface(ddsd2)
     
-    src.Left = ddsd2.lWidth * X
-    src.Top = ddsd2.lHeight * Y
+    src.Left = ddsd2.lWidth * x
+    src.Top = ddsd2.lHeight * y
     src.Right = src.Left + ddsd2.lWidth
     src.Bottom = src.Top + ddsd2.lHeight
     
