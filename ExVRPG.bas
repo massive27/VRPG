@@ -764,6 +764,10 @@ dbmsg "Switching to main screen" 'm'' debug log
 TitleScreen.Show 1
 Form1.Text5.Visible = True: DoEvents 'm'' shows the "Loading..." panel for better UI
 
+#If USELEGACY <> 1 Then
+    Add_UI.RemOldUI 'm'' remove old textboxes from the old UI
+#End If
+
 3 If plr.Class = "" Then newchar
 If plr.Class = "" Then GoTo 3
 
@@ -897,7 +901,7 @@ Next a
 
 End Sub
 
-Function roll(ByVal damage)
+Function roll(ByVal damage) As Long 'm'' declare...
 damage = Int(damage)
 roll = Int((damage - 1 + 1) * Rnd + 1)
 
@@ -1111,10 +1115,11 @@ If cells = 0 Then cells = 1
 Set sp = Nothing
 Set sp = New cSpriteBitmaps
 
+#If USELEGACY = 1 Then 'm'' Duam's leftover debug code.
 Open "lastfile.txt" For Output As #69
 Write #69, "File Name:" & filen
 Close #69
-
+#End If 'm''
 
 sp.CreateFromFile filen, cells, ycells, , 0
 If red > 255 Then red = 255
@@ -1129,7 +1134,10 @@ If red > 0 Or green > 0 Or blue > 0 Then sp.recolor red, green, blue, light, , s
 'sp.CreateFromPicture dummypic, cells, ycells, , RGB(0, 0, 0)
 'sp.CreateFromPicture pb.Picture, cells, ycells, , RGB(0, 0, 0)
 'If cells = 0 Then Stop
+
+#If USELEGACY = 1 Then 'm'' Duam's leftover debug code.
 If Not Dir("lastfile.txt") = "" Then Kill "lastfile.txt"
+#End If 'm''
 
 End Sub
 
@@ -2189,7 +2197,13 @@ If stomachlevel = 13 Then createobjtype "Shit", "poo1small.bmp": createobj "Shit
             If roll(2) = 1 Or plr.diglevel >= 2 Then digestclothes 255, 1 Else plr.diglevel = plr.diglevel + 1: playsound "burp" & roll(5) & ".wav": Form1.updatbody
         End If
         End If
-        If plr.diglevel > 3 Then plr.plrdead = 1
+        #If USELEGACY = 1 Then 'm''
+        If plr.diglevel > 3 Then plr.plrdead = 1 'm'' original duam's line
+        #Else 'm''
+        'm'' if the player is digested with stuff in his belly, it will be released inside the pred
+        If plr.diglevel > 3 Then plr.plrdead = 1 'm''
+            'TO DO
+        #End If 'm''
     End If
     
 
@@ -2205,6 +2219,8 @@ If stomachlevel = 13 Then createobjtype "Shit", "poo1small.bmp": createobj "Shit
 End Sub
 
 Sub monai()
+Dim a As Long 'm'' declare...
+
 For a = 1 To totalmonsters
     If mon(a).type = 0 Then GoTo 5
     If mon(a).stunned > 0 Then mon(a).stunned = mon(a).stunned - 1: GoTo 5
@@ -2282,7 +2298,7 @@ allmove = 0
 
 End Sub
 
-Sub mondigest(ByVal monnum)
+Sub mondigest(ByVal monnum As Long)  'm'' declare
 
 If mon(mon(monnum).instomach).type = 0 Then Exit Sub
 
@@ -2535,7 +2551,7 @@ Function posit(v1)
 If v1 < 1 Then posit = -v1 Else posit = v1
 End Function
 
-Sub plrmove(xplus, yplus)
+Sub plrmove(ByVal xplus As Long, ByVal yplus As Long) 'm'' declare
 If plr.X + xplus < 1 And Not mapjunk.maps(4) = "" Then
 fn = mapjunk.maps(4)
 monlev = checklevels(fn)
@@ -3351,7 +3367,8 @@ getfromstring = gstr
 End Function
 
 Function updathp()
-
+'m'' print the various status. skipped some using the experimental new UI
+#If USELEGACY = 1 Then
 Form1.Text1.text = "HP:" & plr.hp & "/" & gethpmax
 rat = plr.hp / gethpmax
 Form1.Text1.ForeColor = RGB(0, 0, 255)
@@ -3361,6 +3378,7 @@ If rat < 0.8 Then Form1.Text1.ForeColor = RGB(155, 255, 0)
 If rat < 0.7 Then Form1.Text1.ForeColor = RGB(255, 255, 0)
 If rat < 0.5 Then Form1.Text1.ForeColor = RGB(255, 155, 0)
 If rat < 0.3 Then Form1.Text1.ForeColor = RGB(255, 0, 0)
+#End If
 
 If plr.plrdead = 1 Then GoTo 5
 
@@ -4855,7 +4873,7 @@ End Function
 
 Function gotomap(ByVal fn)
 'm'' quitting an area and entering a neighbor area
-'m'' performance to improve
+'m'' performance to improve. Looks like it's the recoloring that is slow
 Dim a As Long 'm''
 
 'monlev = checklevels(fn)
@@ -4869,7 +4887,14 @@ Do While plr.foodinbelly > 0
     digestfood
 Loop
 
+#If USELEGACY = 0 Then 'm'' added cosmetic "loading" screen early
+    Form1.Text5.Visible = True: DoEvents
+#End If 'm''
+
 ChDir App.Path
+
+
+#If USELEGACY = 1 Then 'm'' original order of map swtiching ...
 
 If Not Dir("autosave.plr") = "" Then Kill "autosave.plr"
 
@@ -4879,6 +4904,25 @@ fsavechar "plrdat.tmp" 'FileD.FileTitle
 
 addfile "plrdat.tmp", "autosave.plr", 1
 addfile "curgame.dat", "autosave.plr", 1
+
+#Else 'm'' new order, fixing mercernaries not saved in autosave game event
+
+If Not Dir("autosave.plr") = "" Then Kill "autosave.plr"
+
+'m'' sadly this is much more tricky than that :
+'m'' the autosave saves the whole map, including the merc
+'m'' when you enter back the map, it will load the merc, AND adding the merc that
+'m'' are following you from previous map, thus duplicating them...
+getcarrymonsters
+savebindata Left$(plr.curmap, Len(plr.curmap) - 4) & ".dat"
+fsavechar "plrdat.tmp" 'FileD.FileTitle
+
+addfile "plrdat.tmp", "autosave.plr", 1
+addfile "curgame.dat", "autosave.plr", 1
+
+
+
+#End If
 
 clearboosts
 clearsprites
@@ -6371,6 +6415,7 @@ drawshooties
 End Sub
 
 Sub drawbijdang()
+Dim a As Long 'm'' declare
 
 'bijdrawing = bijdrawing + 1
 'DoEvents
@@ -6437,7 +6482,7 @@ Next a
 
 End Sub
 
-Function isnaked()
+Function isnaked() As Boolean 'm'' declare...
 For a = 1 To 16
     If clothes(a).loaded = 1 Then isnaked = False: Exit Function
 Next a
@@ -6453,6 +6498,7 @@ If num1 < num2 Then lesser = num1 Else lesser = num2
 End Function
 
 Function givespell(school, school2, spellmult, Optional abslevel = 0)
+Dim a As Long 'm'' declare
 
 If abslevel > 0 Then
 
@@ -6698,6 +6744,7 @@ If Y > mapx Or Y < 1 Then GoTo 5
 If map(X, Y).blocked = 1 Or map(X, Y).monster > 0 Then GoTo 5
 z = createmonster(F, X, Y)
 mon(z).owner = caneat
+
 
 If maxmonsters > 0 Then killextrasummons monname, maxmonsters
 
@@ -7099,6 +7146,7 @@ givespell skillname, "None", 0, Val(plr.specials(a, 1))
 End Function
 
 Function totalskills() As Integer
+Dim a As Long, b As Long, tot As Long  'm'' declares
 tot = 0
 For a = 0 To 30
     tot = tot + Val(plr.specials(a, 1)) * 2
@@ -7148,9 +7196,10 @@ Close #1
 checklevels = lev
 End Function
 
-Function gamemsg(txt)
-Form1.Text7.text = Left(Form1.Text7.text, 5000)
-Form1.Text7.text = txt & vbCrLf & Form1.Text7.text
+Function gamemsg(ByVal txt As String)  'm'' declares
+Dim tmp As String 'm'' local buffer (faster than the form object)
+tmp = Left$(Form1.Text7.text, 5000) 'm'' added $ to use Left$() which is faster than Left()
+Form1.Text7.text = txt & vbCrLf & tmp 'm'' use buffer
 End Function
 
 Function stdfilter(txt) As String
@@ -7166,7 +7215,7 @@ stdfilter = txt
 End Function
 
 Function getobjtype(name) As objecttype
-
+Dim a As Long 'm'' declare
 For a = 1 To UBound(objtypes())
     If objtypes(a).name = name Then getobjtype = objtypes(a): Exit Function
 Next a
@@ -7371,6 +7420,10 @@ End Function
 
 Function digestfood()
 
+#If USELEGACY <> 1 Then 'm''
+    If Form1.menu_mod(7).Checked = True Then Exit Function 'm'' do not digest
+#End If 'm''
+
 If plr.foodinbelly > 0 And plr.foodinbelly > plr.monsinbelly Then
 plr.foodinbelly = plr.foodinbelly - 1: plr.hp = plr.hp + (plr.hpmax * roll(20) / 100)
 Form1.updatbody
@@ -7463,6 +7516,11 @@ mont = montype(mon.type)
 'damagemon a, rolldice(plr.level, 6)
 'mon.x = plr.x: mon.y = plr.y
 movemon monnum, 0, 0
+
+#If USELEGACY <> 1 Then 'm''
+    If force = 0 And Form1.menu_mod(7).Checked = True Then Exit Function 'm'' do not digest
+#End If 'm''
+
 If turncount Mod 15 = 0 Or force > 0 Then
     playsound "stomach" & roll(4) & ".wav"
      dmg = rolldice(plr.level, 8 + skilltotal("Super Acid", 2, 1))
@@ -7472,7 +7530,18 @@ If turncount Mod 15 = 0 Or force > 0 Then
     If mon.hp > 0 Then playsound "stomach" & roll(4) & ".wav"
     If mon.hp <= 0 Then
     gamemsg "You have utterly digested the " & mont.name & "!" '  It's strength is now yours."
-    createobj "Shit", plr.X, plr.Y
+    #If USELEGACY = 1 Then
+        createobj "Shit", plr.X, plr.Y
+    #Else
+        'm'' I always think it is kinky to be able to poo outside while inside a monster
+        If plr.instomach = 0 Then 'm''
+            createobj "Shit", plr.X, plr.Y 'm''
+        Else 'm''
+            'm'' the digested monster will be killed, but the bijdang animation must be rightly located
+            mon.X = VRPG.mon(plr.instomach).X 'm'' force position to be current pred's
+            mon.Y = VRPG.mon(plr.instomach).Y 'm''
+        End If 'm''
+    #End If
     If ifmonstereaten(montype(mon.type).name) = False Then gamemsg "You have gained a skill point from digesting a new monster!"
     playsound "burp" & roll(5) & ".wav"
     plrdamage -(mont.hp / 10)
@@ -7495,7 +7564,14 @@ If turncount Mod 15 = 0 Or force > 0 Then
         plr.monsinbelly = plr.monsinbelly - 1
         plr.foodinbelly = plr.foodinbelly - 1
         mon.X = plr.X: mon.Y = plr.Y
-        monmove monnum, roll(3) - 2, roll(3) - 2
+        'm'' very rare : you swallowed a monster, get swallowed, and then the monster escape your stomach, ending in the other monster stomach
+        If plr.instomach > 0 And plr.Swallowtime > 2 Then 'm''
+            mon.instomach = plr.instomach 'm''
+            VRPG.mon(plr.instomach).hasinstomach = monnum 'm''
+            gamemsg mont.name & " is squeezed against you inside " & montype(VRPG.mon(plr.instomach).type).name & "'s innards!"
+        Else 'm''
+            monmove monnum, roll(3) - 2, roll(3) - 2
+        End If 'm''
         'movemon monnum, roll(3) - 2 + plr.x, roll(3) - 2 + plr.y
         Form1.updatbody
     End If
@@ -7507,6 +7583,7 @@ If plr.foodinbelly = 0 Then Form1.updatbody: gamemsg "Your " & getbelly("") & " 
 End Function
 
 Function ifnpcsaw() As Boolean
+Dim a As Long, b As Long, c As Long  'm'' declare
 On Error Resume Next
 Dim tobj As objecttype
 For a = plr.X - 6 To plr.X + 6
@@ -7569,7 +7646,8 @@ Form10.Show
 'Form10.Label2(a).caption = "Fuck."
 End Function
 
-Function ifsaid(str) As Boolean
+Function ifsaid(ByVal str As String) As Boolean  'm'' declare
+Dim a As Long 'm'' declare
 hassaid = False
 For a = 0 To 50
     If plr.alreadysaid(a) = "" Then Exit Function
@@ -7578,8 +7656,8 @@ Next a
 
 End Function
 
-Function addsaid(str)
-
+Function addsaid(ByVal str As String) 'm'' declare
+Dim a As Long 'm'' declare
 For a = 0 To 50
     If plr.alreadysaid(a) = str Then Exit Function
     If plr.alreadysaid(a) = "" Then plr.alreadysaid(a) = str: Exit Function
@@ -7588,6 +7666,7 @@ Next a
 End Function
 
 Function ifmonstereaten(monname) As Boolean
+Dim a As Long 'm'' declare
 ifmonstereaten = True
 For a = 0 To 500
     If plr.diggedmons(a) = monname Then Exit Function
@@ -7645,8 +7724,9 @@ shootygraphs(7).CreateFromFile "bolts.bmp", 18, 1, , 0
 
 End Sub
 
-Function createshooty(xplus, yplus, stype, shootyis As String, Optional startx = 400, Optional starty = 300)
+Function createshooty(xplus, yplus, stype, shootyis As String, Optional startx = 400, Optional starty = 300) As Long 'm'' declare
 'Shootyis = Owner:dice:damage:pierce:radius:bijdang
+Dim a As Long 'm'' declare
 4
     For a = 1 To 100
         If shooties(a).Active = 0 Then
@@ -7727,6 +7807,7 @@ End Function
 
 Function drawshooties()
 'Shootyis = Owner:dice:damage:pierce:radius:bijdang
+Dim a As Long 'm'' declare
 
 For a = 1 To 100
     If shooties(a).Active = 1 Then
@@ -9958,7 +10039,14 @@ Sub drawtexts()
 'm'' added some declaration to avoid automation errors
 Dim lX_CT As Long 'm'' X coordinate of text to print
 Dim lY_CT As Long 'm'' Y coordinate of text to print
+Dim a As Long 'm''
 
+#If USELEGACY <> 1 Then
+'m'' experimental UI
+Add_UI.drawui 'm''
+#End If
+
+With picBuffer 'm'' avoid object long jump load
 
 For a = 1 To UBound(drawtxts()) 'To 1 Step -1 'Draw in reverse order
     If drawtxts(a).age = 0 Or drawtxts(a).txt = "" Then GoTo 5
@@ -10002,13 +10090,13 @@ For a = 1 To UBound(drawtxts()) 'To 1 Step -1 'Draw in reverse order
     'sfont.bold = True
     'picBuffer.SetFont Font
     
-    picBuffer.SetForeColor RGB(r / 2, g / 2, b / 2)
+    .SetForeColor RGB(r / 2, g / 2, b / 2)
     lX_CT = drawtxts(a).X + xadd + 1 'm'' VB will correctly convert the result
     lY_CT = drawtxts(a).Y + yadd + 1 'm'' VB will correctly convert the result
-    picBuffer.drawtext lX_CT, lY_CT, drawtxts(a).txt, False
+    .drawtext lX_CT, lY_CT, drawtxts(a).txt, False
     'Main Text
-    picBuffer.SetForeColor RGB(r, g, b)
-    picBuffer.drawtext drawtxts(a).X + xadd, drawtxts(a).Y + yadd, drawtxts(a).txt, False
+    .SetForeColor RGB(r, g, b)
+    .drawtext drawtxts(a).X + xadd, drawtxts(a).Y + yadd, drawtxts(a).txt, False
 
     
     
@@ -10017,6 +10105,8 @@ For a = 1 To UBound(drawtxts()) 'To 1 Step -1 'Draw in reverse order
     drawtxts(a).age = drawtxts(a).age - 1
     If drawtxts(a).age <= 0 Then drawtxts(a).txt = ""
 5 Next a
+
+End With 'm''
 
 End Sub
 
@@ -10038,6 +10128,8 @@ If spaceon = 1 Then X = X + 400 - plrship.X + sxoff
 If spaceon = 1 Then Y = Y + 300 - plrship.Y + syoff
 
 'If textid = "plrshields" Then Stop
+
+
 
 For a = 1 To UBound(drawtxts())
     If Not textid = "" And Not textid = "0" And drawtxts(a).textid = textid Then
@@ -10401,7 +10493,7 @@ plr.fatigue = plr.fatigue - amt: If plr.fatigue < 0 Then plr.fatigue = 0
 End Function
 
 Function drawstatbars(X, Y)
-
+'m'' part of integrated GUI draw
 Static statbarsloaded As Byte
 
 If statbarsloaded = 0 Then loadstatbars: statbarsloaded = 1
@@ -11140,7 +11232,7 @@ carrymonsters(b).numeach = 0
 Next b
 
 5 For a = 1 To UBound(mon())
-    If mon(a).owner > 0 And mon(a).type > 0 And mon(a).hp > 0 And mon(a).X > 0 Then
+    If mon(a).owner > 0 And mon(a).type > 0 And mon(a).hp > 0 And mon(a).X > 0 And mon(a).instomach = 0 Then 'm'' added handling of in-stomach monsters
         For b = 1 To 10
         If montype(mon(a).type).name = carrymonsters(b).montype.name Then carrymonsters(b).numeach = carrymonsters(b).numeach + 1: killmon a, 1: Exit For
         If carrymonsters(b).montype.name = "" Then carrymonsters(b).montype = montype(mon(a).type): carrymonsters(b).numeach = carrymonsters(b).numeach + 1: killmon a, 1: Exit For
@@ -11155,6 +11247,7 @@ End Function
 Function putcarrymonsters()
 
 'If monsterstoput = 0 Then Exit Function
+
 
 For b = 1 To 10
     If carrymonsters(b).numeach < 1 Then Exit For
@@ -11661,7 +11754,7 @@ Function dbmsg(txt)
 
 End Function
 
-Function HasSkill(skillname)
+Function HasSkill(ByRef skillname As String) As Boolean  'm'' declare
 
 HasSkill = False
 

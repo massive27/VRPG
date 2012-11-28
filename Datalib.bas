@@ -340,8 +340,21 @@ openbinfile = filenum
 End Function
 
 Function killbinfiles()
+'m'' modified clearing of files to benefits from cache (2012-11-20 release)
+#If USELEGACY = 1 Then 'm''
+
 On Local Error Resume Next
 If Not Dir("VTDATA*.*") = "" Then Kill "VTDATA*.*"
+
+#Else
+    On Local Error GoTo ErC 'm''
+    Kill "VTDATA*.txt" 'm''
+    Kill "VTDATA*.dat" 'm''
+    Exit Function 'm''
+ErC: 'm''
+    Err.clear 'm'' it's faster to clear error than doing the Dir() stuff
+    Resume Next 'm''
+#End If
 
 End Function
 

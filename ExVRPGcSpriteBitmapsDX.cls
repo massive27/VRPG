@@ -289,6 +289,7 @@ Dim ddsd2 As DDSURFACEDESC2
     'If sSpriteBitmap = "temp.bmp" Then
     gcol = DXS.GetLockedPixel(2, 2) 'Compensate for off-black BG colors in different file formats
     
+    
     UnlockMe
     
     'getrgb gcol, r1, g1, b1
@@ -378,6 +379,11 @@ Dim ddsd2 As DDSURFACEDESC2
     
     'If sSpriteBitmap = "temp.bmp" Then
     gcol = DXS.GetLockedPixel(2, 2) 'Compensate for off-black BG colors in different file formats
+    
+    #If USELEGACY <> 1 Then
+    'm'' experimental : to get rid of the ugly non transparent border, clear it with trans color.
+    Debugger.GD_CleanPic DXS, ddsd2.lWidth, ddsd2.lHeight 'm''
+    #End If
     
     UnlockMe
     
@@ -527,7 +533,16 @@ Private Sub Class_Terminate()
     ClearUp
 End Sub
 
-Sub recolor(ByVal r As Byte, ByVal g As Byte, ByVal bl As Byte, Optional ByVal lightness As Single = 0.5, Optional ByVal transparency = 0, Optional shiny = 0, Optional transonly = 0, Optional tolerance = 8)
+Sub recolor(ByVal r As Byte, ByVal g As Byte, ByVal bl As Byte, Optional ByVal lightness As Single = 0.5, Optional ByVal transparency As Long = 0, Optional ByVal shiny As Long = 0, Optional transonly As Long = 0, Optional tolerance = 8)
+'m'' recoloring algo to change the grey part of picture into something shiny
+'m'' painfully slow...
+
+Dim a As Long, b As Long 'm'' declaring for faster exec
+Dim total As Long, transc As Long, basecol As Long 'm''
+Dim redd As Long, green As Long, blue As Long 'm''
+Dim targ As Single, sr As Single, sg As Single, sb As Single 'm''
+
+
 
 'recolor2 r, g, bl, lightness, transparency, shiny, transonly
 
@@ -543,12 +558,13 @@ Sub recolor(ByVal r As Byte, ByVal g As Byte, ByVal bl As Byte, Optional ByVal l
 'bl = 10
 
 DD.GetDisplayMode display
-
+#If USELEGACY = 1 Then 'm'' duam's old debug stuff
 Open "lastcolored.txt" For Output As #69
 Write #69, "RGB:", r, g, bl
 'Write #69, "Width: " & sdesc.lWidth & " Height:" & sdesc.lHeight
 Write #69, "Lightness:" & lightness
 Close #69
+#End If 'm''
 lightness = lightness + 0.2
 
 If Multframe = 1 Then recolorsplit r, g, bl, lightness, transparency, shiny: Exit Sub
@@ -601,15 +617,21 @@ whitecol = GenRGB(255, 255, 255)
 'DXS.GetSurfaceDesc sdesc
 DXS.Lock elrectum, sdesc, DDLOCK_WAIT, 0 'DDLOCK_NOSYSLOCK or
 
+
 basecol = DXS.GetLockedPixel(2, 2)
 
-blue2 = dX.ColorGetBlue(basecol)
-green2 = dX.ColorGetGreen(basecol)
-redd2 = dX.ColorGetRed(basecol)
+'m'' blue2 = dX.ColorGetBlue(basecol) 'm'' looks useless, so : comment !
+'m'' green2 = dX.ColorGetGreen(basecol) 'm'' also
+'m'' redd2 = dX.ColorGetRed(basecol) 'm'' also
+sr = r 'm'' converts variant, will helps calc faster
+sg = g 'm''
+sb = bl 'm''
 
 'getrgb basecol, redd2, green2, blue2
 
 If sdesc.lWidth <= 0 Or sdesc.lHeight <= 0 Then MsgBox "Error #1 in recolor function.": Exit Sub
+
+With DXS 'm'' tweak : implicit call of DXS object in the huge loop below
 
 For a = 0 To sdesc.lWidth - 1
     If transparency = 1 Then transc = (a + 1) Mod 2
@@ -617,7 +639,7 @@ For a = 0 To sdesc.lWidth - 1
     
         If transparency = 1 Then If transc = 1 Then transc = 0 Else transc = 1
     
-        col = DXS.GetLockedPixel(a, b)
+        col = .GetLockedPixel(a, b) 'm'' DXS. implicit
         
         If b = 1 And a = 1 Then basecol = col
         'getrgb col, redd, green, blue
@@ -629,7 +651,7 @@ For a = 0 To sdesc.lWidth - 1
         
 2        If col <= 0 Then GoTo 5
         If transonly = 1 Then
-            If col = basecol Then DXS.SetLockedPixel a, b, 0
+            If col = basecol Then .SetLockedPixel a, b, 0 'm'' DXS. implicit
             'If diff(redd, redd2) < 3 And diff(green, green2) < 3 And diff(blue, blue2) < 3 Then DXS.SetLockedPixel a, b, 0
             GoTo 5
         End If
@@ -639,7 +661,8 @@ For a = 0 To sdesc.lWidth - 1
         'blue = Int(col / 65536)
         
         'If redd = green And green = blue And blue = redd Then
-        If diff(redd, green) < tolerance And diff(green, blue) < tolerance And diff(redd, green) < tolerance Then
+        'm'' If diff(redd, green) < tolerance And diff(green, blue) < tolerance And diff(redd, green) < tolerance Then
+        If Abs(redd - green) < tolerance And Abs(green - blue) < tolerance And Abs(redd - green) < tolerance Then 'm'' make diff() function inline to avoid asm call jumps
         total = redd
         
         If shiny = 2 Then
@@ -647,9 +670,13 @@ For a = 0 To sdesc.lWidth - 1
 134            If total > 250 Then total = total - 250: GoTo 134
         End If
         targ = CSng(total / (250) * (0.5 + lightness))
-        redd = r * targ
-        green = g * targ
-        blue = bl * targ
+        'm'' redd = r * targ 'm'' see below the 3 lines replacing those
+        'm'' green = g * targ
+        'm'' blue = bl * targ
+        
+        redd = sr * targ 'm'' using declared var for faster computation
+        green = sg * targ 'm''
+        blue = sb * targ 'm''
         
         'redd = 255
         'green = 120
@@ -698,7 +725,7 @@ For a = 0 To sdesc.lWidth - 1
         If coller < 0 Then coller = 0
         
         If coller > whitecol Then coller = whitecol
-        If transc = 0 Then DXS.SetLockedPixel a, b, coller Else DXS.SetLockedPixel a, b, gcol 'dX.CreateColorRGB(redd, green, blue)
+        If transc = 0 Then .SetLockedPixel a, b, coller Else .SetLockedPixel a, b, gcol 'dX.CreateColorRGB(redd, green, blue)  'm'' DXS. implicit
         'If redd >= 0 And green >= 0 And blue >= 0 Then pc.PSet (a, b), RGB(redd, green, blue)
         
         End If
@@ -714,11 +741,15 @@ Next a
 
 '    DXS.SetColorKey DDCKEY_SRCBLT, cKey
 'End If
-DXS.Unlock elrectum 'Unlock the surface
+.Unlock elrectum 'Unlock the surface 'm'' DXS. implicit
+
+End With
 
 nodraw = 0
 
+#If USELEGACY = 1 Then 'm'' old duam debug code
 Kill "lastcolored.txt"
+#End If 'm''
 
 Exit Sub
 errorhandler: MsgBox "Recolor fucked i'self. "
@@ -847,6 +878,8 @@ Dim sdesc2 As DDSURFACEDESC2
     
     'If sSpriteBitmap = "temp.bmp" Then
     gcol = DXS.GetLockedPixel(2, 2) 'Compensate for off-black BG colors in different file formats
+    
+    
     
     UnlockMe
     
@@ -1215,6 +1248,8 @@ End Sub
 
 Sub distort(centerx As Integer, centery As Integer, Width As Integer, Height As Integer)
 
+
+
 ReDim pixooz(Width) As Long
 
 'pc.ScaleMode = vbPixels
@@ -1226,6 +1261,11 @@ Dim sdesc As DDSURFACEDESC2
 
 DXS.GetSurfaceDesc sdesc
 DXS.Lock r1, sdesc, DDLOCK_NOSYSLOCK Or DDLOCK_WAIT, 0
+
+If Form1.menu_mod(3).Checked = False Then 'm''
+    Debugger.GD_BulgeIt DXS, centerx, centery, Height, Width 'm''
+    GoTo 100 'm''
+End If 'm''
 
 For b = centery To centery + Height
     
@@ -1296,6 +1336,7 @@ For b = centery To centery + Height
  Next b
 
 'pc.Picture = pc.image
+100: 'm''
 DXS.Unlock r1
 
 End Sub

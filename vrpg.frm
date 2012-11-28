@@ -9,6 +9,7 @@ Begin VB.Form Form1
    ClientWidth     =   12000
    KeyPreview      =   -1  'True
    LinkTopic       =   "Form1"
+   LockControls    =   -1  'True
    ScaleHeight     =   600
    ScaleMode       =   3  'Pixel
    ScaleWidth      =   800
@@ -490,6 +491,43 @@ Begin VB.Form Form1
          Caption         =   "About"
       End
    End
+   Begin VB.Menu menu_mod_root 
+      Caption         =   "Mod"
+      NegotiatePosition=   3  'Right
+      Visible         =   0   'False
+      Begin VB.Menu menu_mod 
+         Caption         =   "List all eaten monsters"
+         Index           =   0
+      End
+      Begin VB.Menu menu_mod 
+         Caption         =   "Check skill points consistency"
+         Index           =   1
+      End
+      Begin VB.Menu menu_mod 
+         Caption         =   "-"
+         Index           =   2
+      End
+      Begin VB.Menu menu_mod 
+         Caption         =   "Use legacy bulge generator"
+         Index           =   3
+      End
+      Begin VB.Menu menu_mod 
+         Caption         =   "Uncapped skill level"
+         Index           =   4
+      End
+      Begin VB.Menu menu_mod 
+         Caption         =   "Set character points"
+         Index           =   5
+      End
+      Begin VB.Menu menu_mod 
+         Caption         =   "Debugger"
+         Index           =   6
+      End
+      Begin VB.Menu menu_mod 
+         Caption         =   "Do not digest"
+         Index           =   7
+      End
+   End
 End
 Attribute VB_Name = "Form1"
 Attribute VB_GlobalNameSpace = False
@@ -692,6 +730,7 @@ If InStr(1, curcheatword, "sexyinblack") Then Ccom = "": curcheatword = "": plr.
 If InStr(1, curcheatword, "ihaveadeathwish") Then Ccom = "": curcheatword = "": plr.X = 5: plr.Y = 5: gotomap "thirshaslair.txt"
 If InStr(1, curcheatword, "iwannagohome") Then Ccom = "": curcheatword = "": plr.X = 5: plr.Y = 5: gotomap "VRPGData.txt"
 If InStr(1, curcheatword, "angelsaretasty") Then Ccom = "": curcheatword = "": plr.X = 5: plr.Y = 5: gotomap "cityofangels.txt"
+
 
 KeyAscii = 0
 End Sub
@@ -920,6 +959,11 @@ If editon = 0 Then edit.Visible = False
 
 ' Parameters - handle, ID
 'KillTimer Me.hwnd, 50
+
+#If USELEGACY <> 1 Then 'm'' some special stuff for modded version goes here
+Form1.Picture7.BackColor = 0& 'm'' cosmetic : main picturebox set to black
+Form1.menu_mod_root.Visible = True 'm'' activate the "mod" menu
+#End If 'm''
 
 End Sub
 
@@ -1203,8 +1247,72 @@ plr.X = Int(mapx / 2)
 plr.Y = Int(mapy / 2)
 End Sub
 
+Private Sub menu_mod_Click(Index As Integer)
+'m'' fully non-legacy stuff are added here
+
+Dim i As Long 'm''
+
+#If USELEGACY <> 1 Then 'm'' fully set as optional compilation for space-saving
+
+Select Case Index 'm''
+Case 0 'm''
+'m'' will print the list of digged monsters in the game event box
+    gamemsg "You're remembering what you have digested..." 'm''
+    For i = 0 To 500 'm''
+        If plr.diggedmons(i) <> "" Then gamemsg plr.diggedmons(i) 'm''
+    Next i 'm''
+Case 1 'm''
+'m'' skill point consistency check
+    'm'' diff between level + dig monster and attributes
+Case 2 'm''
+'m'' nothing
+
+Case 3 'm''
+'m'' use legacy bulge
+    If menu_mod(3).Checked = False Then
+        menu_mod(3).Checked = True
+    Else
+        menu_mod(3).Checked = False
+    End If
+    
+Case 4 'm''
+'m'' unlimited skill level
+    If menu_mod(4).Checked = False Then 'm''
+        menu_mod(4).Checked = True 'm''
+        t = InputBox("Enter skill point (default = current amount)", "VRPG Mod Cheat!", plr.skillpoints) 'm''
+        If Val(t) > 0 Then plr.skillpoints = Val(t) 'm'' avoid crash if non-numerical
+    Else 'm''
+        menu_mod(4).Checked = False 'm''
+    End If 'm''
+Case 5 'm''
+'m'' set char point
+    t = InputBox("Enter character point", "VRPG Mod Cheat!", plr.charpoints) 'm''
+    If Val(t) > 0 Then plr.charpoints = Val(t) 'm'' avoid crash if non-numerical
+
+Case 6 'm''
+'m'' debugger
+    Debugger.EFBP 'm'' printing of file table cache
+
+Case 7 'm''
+'m'' do not digest
+    If menu_mod(7).Checked = False Then
+        menu_mod(7).Checked = True
+    Else
+        menu_mod(7).Checked = False
+    End If
+    
+End Select 'm''
+
+#End If 'm''
+
+End Sub
+
+Private Sub menu_mod_root_Click()
+'m'' placeholer for root event of the "mod" menu
+End Sub
+
 Private Sub MpqControl1_GotMessage(ByVal text As String)
-Debug.Print text 'm'' useless, let's ignore
+'m''Debug.Print text 'm'' useless, let's ignore
 End Sub
 
 Private Sub newcharmen_Click()

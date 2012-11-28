@@ -88,6 +88,8 @@ loadgame = 1
 Load Form1 'm'' let form1 preloads here
 loadclick FileD
 
+DoEvents 'm'' refresh the screen to remove the ugly cmdialog ghosted hdc
+
 Me.Hide
 Form1.Show
 
@@ -125,6 +127,8 @@ floadchar fname ' FileD.FileName
 'If FileD.FileTitle = "" Or Dir(FileD.FileTitle) = "" Then Exit Sub
 Me.Hide
 Form1.Show
+
+Add_UI.RemOldUI
 
 'floadchar FileD.FileTitle
 

@@ -717,7 +717,7 @@ End Sub
 Private Sub Command4_Click(Index As Integer)
 
 If plr.charpoints < 1 Then Exit Sub
-
+#If USELEGACY = 1 Then
 Select Case Index
     Case 0: plr.str = plr.str + 1: plr.hpmax = plr.hpmax + 2
     Case 1: plr.dex = plr.dex + 1: plr.spmax = plr.spmax + 2
@@ -727,6 +727,25 @@ Select Case Index
     Case 5: plr.mpmax = plr.mpmax + 15
     Case 6: plr.spmax = plr.spmax + 6
 End Select
+#Else 'm'' added overflow checks
+Select Case Index 'm''
+    Case 0 'm''
+        If plr.str = 255 Then Exit Sub 'm''
+        plr.str = plr.str + 1: plr.hpmax = plr.hpmax + 2 'm''
+    Case 1 'm''
+        If plr.dex = 255 Then Exit Sub 'm''
+        plr.dex = plr.dex + 1: plr.spmax = plr.spmax + 2 'm''
+    Case 2 'm''
+        If plr.endurance = 255 Then Exit Sub 'm''
+        plr.endurance = plr.endurance + 1: plr.hpmax = plr.hpmax + 2 'm''
+    Case 3 'm''
+        If plr.int = 255 Then Exit Sub 'm''
+        plr.int = plr.int + 1: plr.mpmax = plr.mpmax + 2: plr.spmax = plr.spmax + 1 'm''
+    Case 4: plr.hpmax = plr.hpmax + 15 'm''
+    Case 5: plr.mpmax = plr.mpmax + 15 'm''
+    Case 6: plr.spmax = plr.spmax + 6 'm''
+End Select 'm''
+#End If
 
 plr.charpoints = plr.charpoints - 1
 
@@ -868,7 +887,7 @@ End Sub
 Private Sub Label5_Click()
 
 plr.name = InputBox("Name?", , plr.name)
-If plr.name = "" Then plr.name = GetName
+If plr.name = "" Then plr.name = getname
 updatall
 End Sub
 

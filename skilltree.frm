@@ -715,16 +715,26 @@ End Function
 Private Sub Command1_Click(Index As Integer)
 Index2 = Index
 Index = butnarray(Index)
-If getplrskill(skilltree(Index).skillname, 0) > 10 Then Exit Sub
+
+#If USELEGACY = 1 Then
+    If getplrskill(skilltree(Index).skillname, 0) > 10 Then Exit Sub 'm'' original duam line
+#Else
+    If Form1.menu_mod(4).Checked = True Then 'm''
+        'm'' no limit to skill level
+    Else 'm''
+        If getplrskill(skilltree(Index).skillname, 0) > 10 Then Exit Sub 'm''
+    End If 'm''
+#End If
+
 If skilltree(Index).skillname = "" Then Exit Sub
 
 If iscombatskill(skilltree(Index).skillname) > 0 Then
 If plr.combatskillpoints > 0 Then addskill skilltree(Index).skillname: plr.combatskillpoints = plr.combatskillpoints - 1
 Command1(Index2).caption = skilltree(Index).skillname & " " & getplrskill(skilltree(Index).skillname)
 Else:
-If ifclassskill(skilltree(Index).skillname) = True Then cost = 3 + getplrskill(skilltree(Index).skillname, 0) Else cost = (3 + getplrskill(skilltree(Index).skillname, 0)) * 2
+If ifclassskill(skilltree(Index).skillname) = True Then Cost = 3 + getplrskill(skilltree(Index).skillname, 0) Else Cost = (3 + getplrskill(skilltree(Index).skillname, 0)) * 2
 
-If plr.skillpoints < cost Then Exit Sub
+If plr.skillpoints < Cost Then Exit Sub
 addskill skilltree(Index).skillname
 
 'Give/Upgrade spells according to skill
@@ -738,7 +748,7 @@ If skilltree(Index).skillname = "Mana Mastery" And getplrskill("Mana Mastery") =
 If skilltree(Index).skillname = "Endurance" Then plr.hpmax = plr.hpmax + getplrskill("Endurance") * plr.level
 If skilltree(Index).skillname = "Mana Mastery" Then plr.mpmax = plr.mpmax + getplrskill("Mana Mastery") * plr.level
 
-plr.skillpoints = plr.skillpoints - cost
+plr.skillpoints = plr.skillpoints - Cost
 Command1(Index2).caption = skilltree(Index).skillname & " " & getplrskill(skilltree(Index).skillname)
 End If
 
@@ -757,9 +767,9 @@ If iscombatskill(skilltree(Index).skillname) > 0 Then
 If chars(CurChar).combatskillpoints > 0 Then addskill skilltree(Index).skillname: chars(CurChar).combatskillpoints = chars(CurChar).combatskillpoints - 1
 Command1(Index2).caption = skilltree(Index).skillname & " " & getplrskill(skilltree(Index).skillname)
 Else:
-If ifclassskill(skilltree(Index).skillname) = True Then cost = 3 + getplrskill(skilltree(Index).skillname, 0) Else cost = (3 + getplrskill(skilltree(Index).skillname, 0)) * 2
+If ifclassskill(skilltree(Index).skillname) = True Then Cost = 3 + getplrskill(skilltree(Index).skillname, 0) Else Cost = (3 + getplrskill(skilltree(Index).skillname, 0)) * 2
 
-If chars(CurChar).skillpoints < cost Then Exit Sub
+If chars(CurChar).skillpoints < Cost Then Exit Sub
 addskill skilltree(Index).skillname
 
 'Give/Upgrade spells according to skill
@@ -773,7 +783,7 @@ If skilltree(Index).skillname = "Mana Mastery" And getplrskill("Mana Mastery") =
 If skilltree(Index).skillname = "Endurance" Then chars(CurChar).hpmax = chars(CurChar).hpmax + getplrskill("Endurance") * chars(CurChar).level
 If skilltree(Index).skillname = "Mana Mastery" Then chars(CurChar).mpmax = chars(CurChar).mpmax + getplrskill("Mana Mastery") * chars(CurChar).level
 
-chars(CurChar).skillpoints = chars(CurChar).skillpoints - cost
+chars(CurChar).skillpoints = chars(CurChar).skillpoints - Cost
 Command1(Index2).caption = skilltree(Index).skillname & " " & getplrskill(skilltree(Index).skillname)
 End If
 

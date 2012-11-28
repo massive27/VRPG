@@ -67,6 +67,34 @@ Attribute VB_Name = "Debugger"
 'm'' 2012-11-05
 'm'' - added an output-to-file debugger for debug purpose
 'm'' - Astar algorithm started but unused
+'m'' 2012-11-09
+'m'' - removing Duamutef's debug stuff that slows down loadings and are useless
+'m'' - added cosmetic : black background, "loading" popup, removed ghosted dialogbox when loading saved game, ...
+'m'' - autosave now saves mercenaries
+'m'' - added a "Mod" menu in menubar for future feature of the modded edition
+'m'' - added a Mod menu item : "list all eaten monster", printing all digged monsters of player
+'m'' - tweaking the cSpriteBitmaps.recolor function to reduce cpu usage / loading time (gain : 15%)
+'m'' 2012-11-16
+'m'' - reverting back the autosave saving mercenaries : that duplicates them.
+'m'' - declaring lots of variable for better performances
+'m'' - removed the "poo" sprite when player digest a mob while being in another mob stomach
+'m'' - added a light cleaning function to remove borders out of sprites.
+'m'' 2012-11-20
+'m'' - declaring some more for smoother performances (should use less cpu / allow more game speed)
+'m'' - added a unpacked file handler for faster file-to-unpack seeking
+'m'' - somehow almost fixed the temporary files not deleted with above new feature
+'m'' - corrected this very release with a conflicting deletion of temporary extracted files
+'m'' - added an key index in the unpacked file handler for faster search
+'m'' 2012-11-22
+'m'' - added Add_UI module
+'m'' - changed hp/mp/sp/gold UI information printing
+'m'' 2012-11-26
+'m'' - fixed the GD_Bulge to make nice belly bulge instead of Duam code, currently works well on Naga only
+'m'' - added a cheat option : use or not use the new Bulge render
+'m'' - added a cheat option : unlimited skill level
+'m'' - added a cheat option : user-define amount of character point to distribute
+'m'' - added vore behavior : if the player swallow a tough monster, then get swallowed himself, if the monster escape the player's stomach, it will ends up if the pred stomach instead of outside.
+
 
 
 Public API_Timer_Handle As Long
@@ -98,6 +126,15 @@ Public d_TmpFolder As String
 'declaration for multipack (mod) management
 Public PakFiles() As String
 Public PakCount As Long
+
+'declataion for already-unpacked files handling
+Private Type TMPFH
+    skey As Long 'key for faster search
+    sname As String 'short name
+    spath As String 'real fs name
+End Type
+Private ExtractedFile() As TMPFH
+Private ExtractedLen As Long 'counter
 
 'declaration for A-star pathfinding algorithm ====
 Private Type ASTAR_POINT
@@ -142,50 +179,200 @@ Type AS_TRACK
 End Type
 Dim monroute() As AS_TRACK
 
-Sub GD_BulgeIt(picFrom As PictureBox, picTo As PictureBox, Xcenter, Ycenter, Radius, Factor)
+Sub GD_BulgeIt(ByRef picFrom As DirectDrawSurface7, ByVal Xcenter As Long, ByVal Ycenter As Long, ByVal Radius As Double, ByVal Factor As Double)
 Dim pcd As Double
+Dim rt As RECT
+Dim Datas() As Long
+Dim DataSize As DDSURFACEDESC2
+Dim minx As Long, maxx As Long, miny As Long, maxy As Long, si As Long, sj As Long
+Dim tmp1 As Double
+Dim ox As Double, oy As Double
+Dim RadiusLim As Long 'for non-naga, limits the overall radius bulge
+
+Dim nx As Long, ny As Long, px As Single, py As Single
+Dim btl As Single, btr As Single, bbl As Single, bbr As Single
 
 'experimental Bulge generator to have cleaner big belly.
 'to fine tune
 
-picTo.Picture = picFrom.Picture
+picFrom.GetSurfaceDesc DataSize
+
+'local copy (may not be necessary actually)
+ReDim Datas(1 To DataSize.lWidth, 1 To DataSize.lHeight) As Long
+With picFrom
+For si = 1 To DataSize.lWidth
+For sj = 1 To DataSize.lHeight
+    Datas(si, sj) = .GetLockedPixel(si, sj)
+Next sj, si
+'m'' fine tuning
+If plr.Class <> "Naga" Then
+    'Ycenter = Ycenter + Factor + 8
+    Radius = 20 + 2 * plr.foodinbelly
+    Factor = 2 + plr.foodinbelly * 0.8
+    Ycenter = 81
+    RadiusLim = 24
+Else
+    'm'' naga special bulge
+    Radius = 27 + 3.3 * plr.foodinbelly
+    RadiusLim = Radius
+    Factor = 4 + plr.foodinbelly
+    Ycenter = 166
+    Xcenter = 148
     
+    'Ycenter = Ycenter + Factor
+End If
+
+
+
 'direct calc, no conv matrix
 minx = Xcenter - Radius
 miny = Ycenter - Radius
 maxx = Xcenter + Radius
 maxy = Ycenter + Radius
+If maxx > DataSize.lWidth Then maxx = DataSize.lWidth
+If miny < 1 Then miny = 1
+
 For si = minx To maxx
     pcd = (Xcenter - si) * (Xcenter - si)
     For sj = miny To maxy
-        'a = Atan2(Ycenter - sj, Xcenter - si)
-        r = Sqr(pcd + (Ycenter - sj) ^ 2)
+        tmp1 = Ycenter - sj
+        a = Atan2(tmp1, Xcenter - si)
+        r = Sqr(pcd + tmp1 * tmp1)
         If r <= Radius Then
             rn = r + Sin((r / Radius) * 3.141592 + 3.141592) * Factor
         Else
             rn = r
         End If
-        ox = Xcenter - (rn * Cos(a))
-        oy = Ycenter - (rn * Sin(a))
-        pxl = picFrom.Point(ox, oy)
-         picTo.PSet (si, sj), pxl
+        ox = CDbl(Xcenter) - (rn * Cos(a))
+        oy = CDbl(Ycenter) - (rn * Sin(a))
+        'weighted pixel for better result, aka wu-pixel
+        nx = Int(ox)                               ' Calculate the coordinates of the top left pixel
+        ny = Int(oy)                               '
+        px = ox - nx                                ' Calculate the
+        py = oy - ny                                '
+        
+        btl = (1 - px) * (1 - py)      ' Calculate the brightness of each of the 4 pixels
+        btr = (px) * (1 - py)         ' and multiply bu the brightness
+        bbl = (1 - px) * (py)           '
+        bbr = (px) * (py)
+        If nx > 0 And ny > 0 And nx < DataSize.lWidth And ny < DataSize.lHeight Then
+        'If nx < Xcenter + RadiusLim And ny < Ycenter + RadiusLim And nx > Xcenter - RadiusLim And ny > Ycenter - RadiusLim Then
+        If (Datas(nx, ny) > 0) Then .SetLockedPixel si, sj, Datas(nx, ny)
+        'End If
+        End If
+        '.SetLockedPixel si, sj, GD_Calccol(Datas(nx, ny), Datas(nx, ny), btl)
+        '.SetLockedPixel si + 1, sj, GD_Calccol(Datas(nx, ny), Datas(nx, ny), btr)
+        '.SetLockedPixel si, sj + 1, GD_Calccol(Datas(nx, ny), Datas(nx, ny), bbl)
+        '.SetLockedPixel si + 1, sj + 1, GD_Calccol(Datas(nx, ny), Datas(nx, ny), bbr)
     Next sj
 Next si
+End With
+
+
 End Sub
+
+Private Function GD_Calccol(ByVal CurrentColor As Long, ByVal AddedColor As Long, ByVal AddedColorWeight As Long) As Long
+'m'' to calc color.
+Dim r As Integer, g As Integer, b As Integer
+Dim ar As Integer, ag As Integer, ab As Integer
+Dim rw As Single 'inverse weight
+
+r = CurrentColor And 255&
+g = (CurrentColor And &HFF00&) \ 256&
+b = (CurrentColor And &HFF0000) \ &H10000
+ar = AddedColor And 255&
+ag = (AddedColor And &HFF00&) \ 256&
+ab = (AddedColor And &HFF0000) \ &H10000
+rw = 1 - AddedColorWeight
+
+GD_Calccol = RGB(r * rw + ar * addedcolorweigt, g * rw + ag * AddedColorWeight, b * rw + ab * AddedColorWeight)
+
+End Function
+
+Private Function Atan2(ByVal Y As Double, X As Double) As Double
+'m'' arcant providing radian angle
+ If X = 0 Then
+    If Y >= 0 Then
+        Atan2 = 1.5707963267949
+    Else
+        Atan2 = 4.71238898038469
+    End If
+    Exit Function
+    
+End If
+ 
+    If Y > 0 Then
+      If X >= Y Then
+        Atan2 = Atn(Y / X)
+      ElseIf X <= -Y Then
+        Atan2 = Atn(Y / X) + 3.14159265358979
+      Else
+        Atan2 = 1.5707963267949 - Atn(X / Y)
+      End If
+    Else
+      If X >= -Y Then
+        Atan2 = Atn(Y / X)
+      ElseIf X <= Y Then
+        Atan2 = Atn(Y / X) - 3.14159265358979
+      Else
+        Atan2 = -Atn(X / Y) - 1.5707963267949
+      End If
+    End If
+End Function
+
+Sub GD_CleanPic(MyDXS As DirectDrawSurface7, ByVal lW As Long, ByVal lH As Long)
+'m'' try to clean the picture to get invisible border
+Dim i As Long
+Dim tc As Long
+
+    With MyDXS
+    tc = .GetLockedPixel(2, 2) 'm'' transparency color should be here
+    
+    For i = 1 To lW
+        .SetLockedPixel i, 1, tc
+        .SetLockedPixel i, lH, tc
+    Next i
+    For i = 1 To lH
+        .SetLockedPixel 1, i, tc
+        .SetLockedPixel lW, i, tc
+    Next i
+    
+    End With
+
+
+End Sub
+
 
 Function getfile_mod(ByVal filen As String, Optional ByVal PakFile As String = "Data.pak", Optional ByVal add As Byte = 0, Optional extract As Byte = 0, Optional noerr = 0, Optional pakfileonly = 0) As String
 Dim i As Long
+Dim sfilen As String, tmp As String
+Dim skey As Long
 
 'm'' modified getfile function to handle multiple pack
 
+'m'' to tweak : quickly find existing file
+
+'m'' handling already-extracted files with memory table
+If Left$(filen, 6) = "VTDATA" Then sfilen = Mid$(filen, 7) Else sfilen = filen
+tmp = Right$(filen, 3) 'get extension
+skey = Asc(Mid$(filen, 1, 1))
+For i = 1 To ExtractedLen
+    If ExtractedFile(i).skey = skey Then
+        If ExtractedFile(i).sname = sfilen Then
+            getfile_mod = ExtractedFile(i).spath
+            Exit Function
+        End If
+    End If
+Next i
+
 getfile_mod = ""
 
-'m'' file already extracted
-If Not Dir(filen) = "" Then getfile_mod = filen: Exit Function
-If Not Dir("VTDATA" & filen) = "" Then getfile_mod = "VTDATA" & filen: Exit Function
+'m'' file already extracted -- 2012-11-20 : should be useless thx to memory table
+If Not Dir$(filen) = "" Then getfile_mod = filen: Exit Function
+If Not Dir$("VTDATA" & filen) = "" Then getfile_mod = "VTDATA" & filen: Exit Function
 
 'm'' handling unextracted files
-If Left(filen, 6) = "VTDATA" Then filen = Right(filen, Len(filen) - 6)
+If Left$(filen, 6) = "VTDATA" Then filen = Right$(filen, Len(filen) - 6)
 If datinited = 0 Then MsgBox "MPQ control not initialized. Restart the game.": Exit Function
 
 'm'' seeking if file exists
@@ -194,17 +381,19 @@ For i = 1 To PakCount
 If Right$(PakFiles(i), 1) = "\" Then
     'not a pak, but a folder
     cfile$ = ".\" & PakFiles(i) & filen
-    If Not (Dir(cfile$) = "") Then
+    If Not (Dir$(cfile$) = "") Then
         'file exists in the folder. we simply said that "it is here"
         getfile_mod = cfile$
+        GoSub AddToTable
         Exit Function
     Else
         'file not exists. Duam stuff : not a bitmap, maybe a gif ?
-        If Right(filen, 4) = ".bmp" Then filen = Left(filen, Len(filen) - 4) & ".gif"
+        If Right$(filen, 4) = ".bmp" Then filen = Left$(filen, Len(filen) - 4) & ".gif"
         cfile$ = ".\" & PakFiles(i) & filen
-        If Not (Dir(cfile$) = "") Then
+        If Not (Dir$(cfile$) = "") Then
             'file exists in the folder. we simply said that "it is here"
             getfile_mod = cfile$
+            GoSub AddToTable
             Exit Function
         End If
         'trick end, nothing.
@@ -231,6 +420,7 @@ Else
             'm'' rename
             Name filen As "VTDATA" & filen
             getfile_mod = "VTDATA" & filen
+            GoSub AddToTable
             Exit Function
         End If
     End If
@@ -238,7 +428,24 @@ Else
 End If
 Next i
 
+Exit Function
+'adding file to table
+AddToTable:
+    If tmp = "txt" Or tmp = "dat" Then Return 'do not cache .txt and .dat files
+    ExtractedLen = ExtractedLen + 1
+    ReDim Preserve ExtractedFile(1 To ExtractedLen) As TMPFH
+    ExtractedFile(ExtractedLen).skey = skey
+    ExtractedFile(ExtractedLen).sname = sfilen
+    ExtractedFile(ExtractedLen).spath = getfile_mod
+    Return
 End Function
+
+Sub EFBP()
+'m'' extracted file buffer printout
+For i = 1 To ExtractedLen
+    gamemsg i & " : " & ExtractedFile(i).sname & " @ " & ExtractedFile(i).spath
+Next i
+End Sub
 
 Sub killallmonster_butboss()
 'a little code to have an alternative of the "oopsie" cheatcode.

@@ -50,7 +50,7 @@ Public ddkeyboard As DirectInputDevice
 'A simple initialization flag.
 Public bInit As Boolean
 
-Function createDXsurface(x, y) As DirectDrawSurface7
+Function createDXsurface(X, Y) As DirectDrawSurface7
 
     ddsd2.lFlags = DDSD_CAPS Or DDSD_HEIGHT Or DDSD_WIDTH
     ddsd2.ddsCaps.lCaps = DDSCAPS_OFFSCREENPLAIN
@@ -61,14 +61,14 @@ Function createDXsurface(x, y) As DirectDrawSurface7
 
 End Function
 
-Function makesurfdesc(x, y) As DDSURFACEDESC2
+Function makesurfdesc(X, Y) As DDSURFACEDESC2
 
     Dim hooker As DDSURFACEDESC2
 
     hooker.lFlags = DDSD_CAPS Or DDSD_HEIGHT Or DDSD_WIDTH
     hooker.ddsCaps.lCaps = DDSCAPS_OFFSCREENPLAIN
-    hooker.lWidth = x
-    hooker.lHeight = y
+    hooker.lWidth = X
+    hooker.lHeight = Y
     makesurfdesc = hooker
 
 End Function

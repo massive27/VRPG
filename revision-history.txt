@@ -5,7 +5,7 @@ BUG LIST
 - naga class inflated belly glitch
 - Healing fountain not restoring combat point (may be a feature, will have to look how behave the code before fixing)
 - Monster may spawn in wall
-- Adding a list of "eaten monsters" for fun facts and skill point checking (doing the list of non-vored one will be hard)
+- Adding a list of "eaten monsters" for fun facts and skill point checking (doing the list of non-vored one will be hard) ADDED
 - Check on description of some permacast spell, adding missing one (may be out of code, so out of my range!)
 - inedible stuff : loot in Abandoned Temple
 
@@ -15,11 +15,11 @@ BUG LIST
 - spawned pets does not eat after the first screen(level) you spawn them on (Heady9)
 - Allanna's hiring some mercenaries, the options menu doesnt let hiring all "options" (Throku, Revx_Z)
 - scroll selling from Melanca doesnt work on All-Dye (Revx_Z)
-- not all temporary files deleted (Revx_Z, Throku)
+- not all temporary files deleted (Revx_Z, Throku) FIXED
 - startup screen crash if "load game" then "cancel" selected (Revx_Z) FIXED
 - talking to potion salesperson, inputting non-numerical data cause game crash (Revx_Z) FIXED
 - skillicon-ChargedStrike.jpg failed to be extracted on time, causing err53 crash (Revx_Z)
-- autosave doesn't save mercenaries / autosave happening when buying merc, going other map and exiting (Revx_Z)
+- autosave doesn't save mercenaries / autosave happening when buying merc, going other map and exiting (Revx_Z) FIXED / FAILED
 - more than 9999 potion makes screen glitch / not enough space (Revx_Z)
 
 
