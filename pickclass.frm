@@ -364,12 +364,13 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
+
 Private Sub Command1_Click(Index As Integer)
 plr.Class = Command1(Index).caption
 Unload Me
 End Sub
 
-Private Sub Command1_MouseMove(Index As Integer, Button As Integer, Shift As Integer, X As Single, Y As Single)
+Private Sub Command1_MouseMove(Index As Integer, Button As Integer, Shift As Integer, x As Single, y As Single)
 
 Label1.caption = Command1(Index).caption
 
@@ -491,7 +492,7 @@ makesprite waterspr, Form1.Picture1, "underwater1.bmp", 0, 0, 255, 1
 
 loaddata "VRPGData.txt"
 
-plr.X = 25: plr.Y = 25
+plr.x = 25: plr.y = 25
 soundon = 1
 'MsgBox "Welcome to Duamutef's Glorious Vore RPG! Click on the Help menu if you don't know how to play."
 'MsgBox "You step into your home town, relieved to be back among the people of your own clan. For weeks you have been hearing stories of a horrible dragon. This dragon, Thirsha, lives in a volcano to the far North. Seers prophesy that soon she will sweep through and kill everyone in the region, including you. You must find the three dragon keys and gain entrance to her lair--it is said that if you are able to do so, you can destroy her."
@@ -508,9 +509,10 @@ Private Sub Form_Load()
 If winlev = 0 Then Command1(6).Visible = False: Command1(7).Visible = False: Command1(8).Visible = False: Command1(9).Visible = False: Command1(10).Visible = False: Command1(11).Visible = False
 Option1(0).Value = True
 If winlev = 1 Then Command1(8).Visible = False: Command1(9).Visible = False: Command1(10).Visible = False: Command1(11).Visible = False
+'m'' implicitly, if winlev > 2, all classes are unlocked
 End Sub
 
-Private Sub Form_MouseMove(Button As Integer, Shift As Integer, X As Single, Y As Single)
+Private Sub Form_MouseMove(Button As Integer, Shift As Integer, x As Single, y As Single)
 Label1.caption = ""
 Label2.caption = ""
 End Sub
@@ -523,7 +525,7 @@ Loop
 End If
 End Sub
 
-Private Sub Frame1_MouseMove(Button As Integer, Shift As Integer, X As Single, Y As Single)
+Private Sub Frame1_MouseMove(Button As Integer, Shift As Integer, x As Single, y As Single)
 Label1.caption = "DIFFICULTY"
 Label2.caption = "This selects the difficulty.  Higher difficulties mean monsters do more damage and have higher hit points, but also give more experience and gold.  Shops and maps are randomized when on any difficulty other than Normal.  When you win the game, you unlock extra character classes depending on what difficulty you won the game on."
 End Sub

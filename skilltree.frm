@@ -780,7 +780,7 @@ End If
 
 End Sub
 
-Private Sub Command1_MouseMove(Index As Integer, Button As Integer, Shift As Integer, x As Single, y As Single)
+Private Sub Command1_MouseMove(Index As Integer, Button As Integer, Shift As Integer, X As Single, Y As Single)
 Index = butnarray(Index)
 If skilltree(Index).skillname = "" Then Exit Sub
 Label1.caption = skilltree(Index).skillname & vbCrLf & "Current level:" & getplrskill(skilltree(Index).skillname) & vbCrLf & skilltree(Index).caption
@@ -794,7 +794,7 @@ Label2.caption = "Skill Points:" & plr.skillpoints & vbCrLf & "Combat Skill Poin
 
 End Sub
 
-Private Sub Command1_MouseMove_new(Index As Integer, Button As Integer, Shift As Integer, x As Single, y As Single)
+Private Sub Command1_MouseMove_new(Index As Integer, Button As Integer, Shift As Integer, X As Single, Y As Single)
 'm'' this is the original Duam sub
 
 Index = butnarray(Index)

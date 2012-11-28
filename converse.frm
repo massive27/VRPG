@@ -541,7 +541,8 @@ If getfromstring(choicename, 1) = "##BUY2" Then
 End If
 
 If choicename = "#BUYLIFE" Then
-    num = InputBox("How many?")
+    num = InputBox("How many?") 'm'' original line, making crash if non-numeric
+    num = Val(num) 'm'' converting to numerical
     If isexpansion = 0 Then
         If plr.gp < num * potioncost(plr.lpotionlev) Then
         disptext "You do not have enough gold for that many."
@@ -567,7 +568,8 @@ If choicename = "#BUYLIFE" Then
 End If
 
 If choicename = "#BUYMANA" Then
-    num = InputBox("How many?")
+    num = InputBox("How many?") 'm'' original line, making crash if non-numeric
+    num = Val(num) 'm'' converting to numerical
     If plr.gp < num * potioncost(plr.mpotionlev) Then
     disptext "You do not have enough gold for that many."
     Else:

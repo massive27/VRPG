@@ -1,0 +1,59 @@
+BUG LIST
+
+- village teleportation bringing back to life eaten people, also allowing to get infinite skill point.
+- Squirm skill learning from Jeritia may unbalance the game.
+- naga class inflated belly glitch
+- Healing fountain not restoring combat point (may be a feature, will have to look how behave the code before fixing)
+- Monster may spawn in wall
+- Adding a list of "eaten monsters" for fun facts and skill point checking (doing the list of non-vored one will be hard)
+- Check on description of some permacast spell, adding missing one (may be out of code, so out of my range!)
+- inedible stuff : loot in Abandoned Temple
+
+- spawning in a map, within a deadend (no exit) space (Revx_Z, *known*)
+- having level 1 Eleandra the Sorceress instead of the loaded savegame (Avant)
+- saving and loading only loads the first ever save out of the savegame file (warbrand4)
+- spawned pets does not eat after the first screen(level) you spawn them on (Heady9)
+- Allanna's hiring some mercenaries, the options menu doesnt let hiring all "options" (Throku, Revx_Z)
+- scroll selling from Melanca doesnt work on All-Dye (Revx_Z)
+- not all temporary files deleted (Revx_Z, Throku)
+- startup screen crash if "load game" then "cancel" selected (Revx_Z) FIXED
+- talking to potion salesperson, inputting non-numerical data cause game crash (Revx_Z) FIXED
+- skillicon-ChargedStrike.jpg failed to be extracted on time, causing err53 crash (Revx_Z)
+- autosave doesn't save mercenaries / autosave happening when buying merc, going other map and exiting (Revx_Z)
+- more than 9999 potion makes screen glitch / not enough space (Revx_Z)
+
+
+
+WONT BE FIXED
+- VTDATAConversations.txt disappears when exiting the game / impossible to fix dialogues (Revx_Z)
+==> this is a feature. If you want to modify Conversations.txt, make it as a mod
+- respawn yourself after being utterly digested (NekoYuki, *known*)
+==> since it is possible only with cheat code, it wont be fixed. That's what cheats are for ;)
+- inedible stuff : Zettia in Home City
+==> feature out of Duam's original game design
+- Likayasha's conversation loophole allowing to get enchanted potion twice, after killing the Giantess
+==> error in .txt, not source code
+- inconsistency on map edge texture 
+==> it looks like a feature in the code, i dont plan to fix that one
+
+
+IMPROVEMENTS WHISHLIST
+
+- Adding check-against-skill for Conversation (i think Duam didnt do it because it is difficult, due to how the game handle skills)
+- Adding dummy graphics for extra monster (not required. The code for MONTYP4 will include many changes) (Revx_Z)
+- Possibilty of continue game after the win even / Trisha kill, including checkpoint for Mod support. DONE
+- Activating the keypad "5" for "stand still" (may be a gameplay exploit, dunno if i'll do it) (Revx_Z)
+- Adding sanity checks in the magic item generation to avoid nonsense (Revx_Z)
+- Adding a "error 430" handling to lead the user on how to fix it (missing d3drm.dll)
+- Belly streching rendered without the weapon to avoid a glitch (Revx_Z)
+- changing on how Eating villagers' feature works.
+- Eating villagers' too quick (should add the same digestion routine for npc, with dice roll on escape attempt, etc... also when PC is eaten by a villager)
+- adding a "revoke" spell to dismiss summoned creatures
+- better pathfinding, especially when monster is attacked (Revx_Z)
+- Enlarging the overall game size
+- Adding a MONTYP4 parameter for more in-depth tuning and modding of the game (full specification must be validated first) (Throku)
+- reformations pods, once used, let the player respawn if killed. Inventory emptied (warbrand4)
+- Neko outfit for characters (NekoYuki)
+- MOD, use Conversations-[wildcard].txt first then Conversations.txt to seek dialogue for people (Revx_Z)
+- more easily modifiable file format (xml or openoffice) (wsensor)
+- conversation screen : picture centered in the middle, text on the left, option on the right (Throku)

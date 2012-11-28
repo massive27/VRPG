@@ -327,11 +327,15 @@ Public Function CreateFromFile( _
 Dim tBM As Bitmap
 Dim bContinue As Boolean
 Dim ddsd2 As DDSURFACEDESC2
+
     
     On Error GoTo 5
     GoTo 10
 5     MsgBox "Error in 'CreateFromFile' function"
 10
+    
+    'm'' Duam use a picturebox for loading and retrieving size of pictures.
+    'm'' I added With to reduce the timecall of the object
     
     If sSpriteBitmap = "" Then MsgBox "Error #1 in CreateFromFile function.": Exit Function
     'If Left(sSpriteBitmap, 4) = "kari" Then Stop
@@ -348,21 +352,25 @@ Dim ddsd2 As DDSURFACEDESC2
     
 
     FileName = sSpriteBitmap
+    
+    With Form1.Picture1 'm''
 
     'ChDir App.Path
     'Dim orcpic As StdPicture
     If Dir(sSpriteBitmap) = "" Or sSpriteBitmap = "" Then gamemsg "Warning:  File not found: " & sSpriteBitmap: origbitmap = sSpriteBitmap: sSpriteBitmap = getfile("flail2.gif")
-    Form1.Picture1.Picture = LoadPicture(sSpriteBitmap)
+    'm'' Form1.Picture1.Picture = LoadPicture(sSpriteBitmap)
+    .Picture = LoadPicture(sSpriteBitmap) 'm''
 
     ddsd2.lFlags = DDSD_CAPS Or DDSD_HEIGHT Or DDSD_WIDTH
     ddsd2.ddsCaps.lCaps = DDSCAPS_OFFSCREENPLAIN
-    ddsd2.lWidth = Form1.Picture1.ScaleWidth
-    ddsd2.lHeight = Form1.Picture1.ScaleHeight
+    ddsd2.lWidth = .ScaleWidth 'm'' Form1.Picture1.ScaleWidth
+    ddsd2.lHeight = .ScaleHeight 'm'' Form1.Picture1.ScaleHeight
     Dim cKey As DDCOLORKEY
     'cKey.high = dX.CreateColorRGB(1, 1, 1)
     'cKey.lOW = dX.CreateColorRGB(0, 0, 0)
     
-    If Not Right(sSpriteBitmap, 4) = ".bmp" Then SavePicture Form1.Picture1.image, "temp.bmp": sSpriteBitmap = "temp.bmp"
+    'm'' If Not Right(sSpriteBitmap, 4) = ".bmp" Then SavePicture Form1.Picture1.image, "temp.bmp": sSpriteBitmap = "temp.bmp"
+    If Not Right(sSpriteBitmap, 4) = ".bmp" Then SavePicture .image, "temp.bmp": sSpriteBitmap = "temp.bmp"
     
     Set DXS = DD.CreateSurfaceFromFile(sSpriteBitmap, ddsd2)
     
@@ -389,27 +397,18 @@ Dim ddsd2 As DDSURFACEDESC2
             m_lCY = lYImageCount
             ' The width & Height of the sprite:
             
-            'm'' rescale the loaded pic to fit into a picturebox.
-            'm'' Duam code is time consuming so I added a With, but
-            'm'' better performances could be reached with caching those Form properties.
-            
-            'm'' m_lDX = Form1.Picture1.ScaleWidth \ m_lCX
-            'm'' m_lDY = Form1.Picture1.ScaleHeight \ m_lCY
-            
-            'm'' mwidth = Form1.Picture1.ScaleWidth
-            'm'' mheight = Form1.Picture1.ScaleHeight
-            With Form1.Picture1
-                mwidth = .ScaleWidth
-                mheight = .ScaleHeight
 
-                m_lDX = mwidth \ m_lCX
-                m_lDY = mheight \ m_lCY
-            End With
+            mwidth = .ScaleWidth 'm'' Form1.Picture1.ScaleWidth
+            mheight = .ScaleHeight 'm'' Form1.Picture1.ScaleHeight
 
+            m_lDX = mwidth \ m_lCX
+            m_lDY = mheight \ m_lCY
             
             'DXS.GetSurfaceDesc ddsd2
             'm_lDX = ddsd2.lWidth \ m_lCX
             'm_lDY = ddsd2.lHeight \ m_lCY
+            
+    End With 'm''
 
     splitsurface lXImageCount, lYImageCount
     
@@ -1364,13 +1363,13 @@ If fr = 1 Then Multframe = 0: Exit Function
 
 For a = 1 To fr
 
-    x = (a - 1) Mod xfr
-    y = Int((a - 1) / xfr)
+    X = (a - 1) Mod xfr
+    Y = Int((a - 1) / xfr)
 
     Set DXS2(a) = DD.CreateSurface(ddsd2)
     
-    src.Left = ddsd2.lWidth * x
-    src.Top = ddsd2.lHeight * y
+    src.Left = ddsd2.lWidth * X
+    src.Top = ddsd2.lHeight * Y
     src.Right = src.Left + ddsd2.lWidth
     src.Bottom = src.Top + ddsd2.lHeight
     

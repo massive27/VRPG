@@ -9,7 +9,6 @@ Begin VB.Form TitleScreen
    ClientWidth     =   12000
    LinkTopic       =   "Form2"
    MaxButton       =   0   'False
-   Picture         =   "TitleScreen.frx":0000
    ScaleHeight     =   8940
    ScaleWidth      =   12000
    StartUpPosition =   2  'CenterScreen
@@ -86,6 +85,7 @@ End Sub
 Private Sub Label2_Click()
 
 loadgame = 1
+Load Form1 'm'' let form1 preloads here
 loadclick FileD
 
 Me.Hide

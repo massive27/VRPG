@@ -11,7 +11,20 @@ Attribute VB_Name = "VRPG"
 ' This is our time callback event handler
 'battle2.MoveTicker
 'End Sub
+
+'m'' CONDITIONAL COMPILATION
+'m'' because i'm borded to duplicate the source, here is a
+'m'' conditional compilation marker, in order to keep track on
+'m'' difference between "genuine" gameplay (and bug...) and the "revamped" gameplay
+'m'' I didnt add the 'm'' remark on conditional compilation block because the '#' will do.
+
+#Const USELEGACY = 0
+
+#If USELEGACY = 1 Then
 Public Const curversion = "2.14 Legacy" 'm'' modified to know where we are
+#Else
+Public Const curversion = "2.14 Modded" 'm'' the other one !
+#End If
 
 Public Const debugmessageson& = 0 '1
 Public Const editon = 0
@@ -127,8 +140,8 @@ Public objgraphs() As cSpriteBitmaps
 
 Public Type shootyt
     Active As Byte
-    x As Single
-    y As Single
+    X As Single
+    Y As Single
     xplus As Single
     yplus As Single
     frame As Byte
@@ -143,16 +156,16 @@ End Type
 Public Type bijdangsprites
     cS As cSpriteBitmaps
     sprite As cSprite
-    x As Integer
-    y As Integer
+    X As Integer
+    Y As Integer
 End Type
 
 Public Type bijdangsT
     Active As Byte
     graphnum As Integer
     cell As Integer
-    x As Integer
-    y As Integer
+    X As Integer
+    Y As Integer
 End Type
 
 Public bijdangs(50) As bijdangsT
@@ -221,8 +234,8 @@ Public Type playertype
     hplost As Long 'Expansion only--HP that cannot be regained via potions
     mpmax As Long
     mp As Long
-    x As Integer
-    y As Integer
+    X As Integer
+    Y As Integer
     exp As Double
     expneeded As Double
     level As Byte
@@ -344,8 +357,8 @@ Public Type amonsterT
     type As Integer
     hp As Long
     mp As Integer
-    x As Integer
-    y As Integer
+    X As Integer
+    Y As Integer
     xoff As Integer
     yoff As Integer
     cell As Byte
@@ -389,8 +402,8 @@ Public Type aobject
     type As Integer
     string As String 'For NPC speech and stuff
     string2 As String 'for NPC graphics
-    x As Integer
-    y As Integer
+    X As Integer
+    Y As Integer
     name As String
     xoff As Integer
     yoff As Integer
@@ -454,8 +467,8 @@ End Type
 'End Type
 
 Public Type textT
-    x As Single
-    y As Single
+    X As Single
+    Y As Single
     'size As Byte
     txt As String
     highr As Byte
@@ -480,8 +493,8 @@ Public plrbodyloaded As Byte
 Public bijdrawing As Integer
 
 Public Type rainT
-    x As Integer
-    y As Integer
+    X As Integer
+    Y As Integer
     frame As Byte
     stopped As Byte
 End Type
@@ -668,6 +681,7 @@ Public struggled As Byte 'Whether the player has struggled--increases damage and
 
 
 Sub Main()
+dbmsg "Game launch" 'm'' for the log file entry point.
 'On Error Resume Next
 Randomize
 'ChDir "C:\VB\VRPG\"
@@ -690,9 +704,38 @@ setplrkeys
 updatbonuses = 1
 isexpansion = 1
 
+
+
 Debugger.CharLoad 'm'' initialization of stitched code...
+dbmsg "Filesystem and data.pak check" 'm'' debug info
 Debugger.TmpFold_Check App.Path 'm'' temporary folder checking (app.path as of yet)
 Debugger.DataPak_Check App.Path 'm'' data.pak file supposed to be in game directory
+
+#If USELEGACY <> 1 Then
+'m'' mod manager loading
+Debugger.PakCount = 0 'm''
+ReDim Debugger.PakFiles(1 To 4) 'm''
+'m'' command line analysis
+If InStr(1, command, "mod", vbTextCompare) > 0 Then 'm''
+    'm'' a mod addon is indicated in the commandline
+    tmp = Split(command, " ", , vbBinaryCompare) 'm''
+    For i = 0 To UBound(tmp) - 1 'm'' analysis parameters
+        If tmp(i) Like "-mod" Then 'm''
+            Debugger.PakCount = Debugger.PakCount + 1 'm''
+            If PakCount = UBound(PakFiles) Then ReDim Preserve PakFiles(1 To PakCount + 4) As String 'm'' extend mod stack
+            Debugger.PakFiles(PakCount) = Trim(tmp(i + 1)) 'm''
+        End If 'm''
+    Next i 'm''
+End If 'm''
+
+'m'' adding main pak file
+PakCount = PakCount + 1 'm''
+Debugger.PakFiles(PakCount) = "Data.pak" 'm''
+#End If
+
+'m'' preparing title screen from Data.pak
+tspic = getfile_mod("TitleScreen.jpg") 'm''
+If (tspic <> "") Then TitleScreen.Picture = LoadPicture(tspic) 'm''
 
 
 
@@ -717,14 +760,20 @@ loadprefs
 'Form10.Show: Form10.Hide
 'getmonstats
 
+dbmsg "Switching to main screen" 'm'' debug log
 TitleScreen.Show 1
+Form1.Text5.Visible = True: DoEvents 'm'' shows the "Loading..." panel for better UI
+
 3 If plr.Class = "" Then newchar
 If plr.Class = "" Then GoTo 3
 
 Set cStage = New cBitmap
 'cStage.CreateFromFile "sky1.bmp"
+
 cStage.CreateAtSize 800, 600
-loadbijdang
+Form1.Show: Form1.Text5.Visible = True: DoEvents 'm'' shows the "Loading..." panel for better UI
+dbmsg "bijdang loading" 'm'' debug log
+loadbijdang 'm'' note: loadbijdang is pretty slow.
 
 Set backgr = New cSpriteBitmaps
 
@@ -736,7 +785,7 @@ backgr.CreateFromFile "dirtback2.bmp", 1, 1, , GenRGB(255, 255, 0)
 lastsprite = 1
 lastmap = 1
 Form1.Show
-'Form1.Show
+DoEvents 'm'' doevents let UI refresh a bit
 
 'ReDim map(1 To 200, 1 To 200) As tiletype
 
@@ -796,13 +845,16 @@ Form1.updatbody
 
 soundon = 1
 
+'m'' hide the "Loading..." panel for better UI
+Form1.Text5.Visible = False: DoEvents 'm''
+
 If loadgame = 0 Then
     'loaddata "VRPGData.txt"
     loaddata "eggcreche.txt"
     'randommap
     'makesprite plrgraphs, Form1.Picture1, "C:\VB\VRPG\testplayer.bmp", 0, 0, 255, 0.1
     
-    plr.x = 19: plr.y = 19
+    plr.X = 19: plr.Y = 19
     If Form1.Command2.Enabled = True Then Form1.Command2.SetFocus
     'And isexpansion = 0
     If cheaton = 0 Then showform10 "Birth", 1, "intro1.jpg": MsgBox "Welcome to Duamutef's Glorious Vore RPG! Click on the Help menu if you don't know how to play."
@@ -858,7 +910,8 @@ If dick = 0 Then makeminimap: dick = 1
 
 DoEvents
 
-Dim drawrange
+Dim drawrange As Long 'm'' added declaration
+Dim a As Long, b As Long, c As Long  'm'' added declaration
 drawrange = 10
 
 If Form1.Visible = False Then Exit Sub
@@ -877,12 +930,12 @@ If stilldrawing > 1 Then Exit Sub
 
 For a = 1 To totalmonsters
     If mon(a).type = 0 Then GoTo 72
-    getlitxy mon(a).x, mon(a).y, mon(a).litx, mon(a).lity, mongraphs(mon(a).type), 1
+    getlitxy mon(a).X, mon(a).Y, mon(a).litx, mon(a).lity, mongraphs(mon(a).type), 1
 72 Next a
 
 If plr.instomach >= 1 Then
-    plr.x = mon(plr.instomach).x: plr.y = mon(plr.instomach).y
-    If mon(plr.instomach).instomach > 0 Then plr.x = mon(mon(plr.instomach).instomach).x: plr.y = mon(mon(plr.instomach).instomach).y
+    plr.X = mon(plr.instomach).X: plr.Y = mon(plr.instomach).Y
+    If mon(plr.instomach).instomach > 0 Then plr.X = mon(mon(plr.instomach).instomach).X: plr.Y = mon(mon(plr.instomach).instomach).Y
     plr.xoff = plr.xoff + mon(plr.instomach).xoff: plr.yoff = plr.yoff + mon(plr.instomach).yoff
     
     If stomachlevel <= 1 Then mon(plr.instomach).cell = 3 Else mon(plr.instomach).cell = 2
@@ -896,10 +949,10 @@ picBuffer.blt r1, backgr.DXS, r1, 0
 'picBuffer.BltColorFill r1, 0
 
 
-For a = plr.x - drawrange To plr.x + drawrange '+9
+For a = plr.X - drawrange To plr.X + drawrange '+9
 'DoEvents
 If a < 1 Or a > mapx Then GoTo 6
-    For b = plr.y - drawrange To plr.y + drawrange
+    For b = plr.Y - drawrange To plr.Y + drawrange
      If b < 1 Or b > mapy Then GoTo 5
      If map(a, b).tile <= 25 Then drawobj tilespr, a, b, map(a, b).tile
      If map(a, b).tile > 25 Then drawobj tilespr2, a, b, map(a, b).tile Mod 25
@@ -909,8 +962,9 @@ If a < 1 Or a > mapx Then GoTo 6
 
  
 zex = 0
-If map(plr.x, plr.y).blocked = 2 Then zex = 1
- 
+If map(plr.X, plr.Y).blocked = 2 Then zex = 1
+
+'m'' code analysis : this make the attack picture and still picture switch
 For c = 1 To totalmonsters
     If mon(c).animdelay < 0 Then
         mon(c).animdelay = mon(c).animdelay + 1
@@ -921,28 +975,49 @@ For c = 1 To totalmonsters
         If mon(c).animdelay = 0 Then mon(c).cell = 1: If plr.instomach = c Then mon(c).cell = 2
     End If
     
+    #If USELEGACY = 1 Then
     If mon(c).hasinstomach > 0 Then
     mon(c).cell = 2
         If mon(mon(c).hasinstomach).stomachlevel < 4 Then mon(c).cell = 3
     End If
+    #Else
+    'm'' due to the fix letting monster boss able to attack even with a full belly,
+    'm'' the cell draw must be = 3 (attack) if there is an attack ongoing
+    If mon(c).hasinstomach > 0 Then
+        If mon(c).animdelay < 0 Then
+            mon(c).cell = 3
+        Else
+            mon(c).cell = 2
+        End If
+    End If
+    'm'' little debug control, player may kill a summon that have been swallowed
+    If (mon(c).hasinstomach = 0 And mon(c).cell = 2) Then 'm''
+        If (plr.instomach <> c) Then
+            mon(c).cell = 1
+        Else
+            mon(c).cell = 2
+        End If
+    End If
+    #End If
 Next c
 
 
- 
-For a = plr.x - drawrange To plr.x + drawrange
+
+For a = plr.X - drawrange To plr.X + drawrange
 'DoEvents
 
 'If isexpansion = 1 Then maxtile = 50 Else maxtile = 25
 maxtile = 50
 
+
 If a < 1 Or a > mapx Then GoTo 8
-    For b = plr.y - drawrange To plr.y + drawrange
+    For b = plr.Y - drawrange To plr.Y + drawrange
      If b < 1 Or b > mapy Then GoTo 7
 '     drawobj tilespr, a, b, map(a, b).tile
      
      
      If Not map(a, b).ovrtile = 0 Then
-        If a - plr.x < 3 And a - plr.x > -1 And b - plr.y < 3 And b - plr.y > -1 Then
+        If a - plr.X < 3 And a - plr.X > -1 And b - plr.Y < 3 And b - plr.Y > -1 Then
             If map(a, b).ovrtile < maxtile Then drawobj transovrspr, a, b, map(a, b).ovrtile
             If isexpansion = 1 Then If map(a, b).ovrtile > 50 Then drawobj transextraovrs(map(a, b).ovrtile - 50), a, b
             If isexpansion = 0 Then If map(a, b).ovrtile > 25 Then drawobj transextraovrs(map(a, b).ovrtile - 25), a, b
@@ -956,8 +1031,9 @@ If a < 1 Or a > mapx Then GoTo 8
      
      If map(a, b).monster > totalmonsters Then GoTo 7
      If map(a, b).monster > 0 Then
+'     Stop
      If mon(map(a, b).monster).type > 0 And mon(map(a, b).monster).stomachlevel < 4 Then drawobj mongraphs(mon(map(a, b).monster).type), a, b, mon(map(a, b).monster).cell, 1, mon(map(a, b).monster).xoff, mon(map(a, b).monster).yoff, mon(map(a, b).monster).litx, mon(map(a, b).monster).lity
-     If Not mon(map(a, b).monster).x = a Then map(a, b).monster = 0 'Fix for unattackable monsters
+     If Not mon(map(a, b).monster).X = a Then map(a, b).monster = 0 'Fix for unattackable monsters
      End If
      
      If map(a, b).object > objtotal Then GoTo 7
@@ -965,7 +1041,7 @@ If a < 1 Or a > mapx Then GoTo 8
          If objtypes(objs(map(a, b).object).type).graphloaded = 0 And Not objtypes(objs(map(a, b).object).type).graphname = "" Then makesprite objgraphs(objs(map(a, b).object).type), Form1.Picture1, objtypes(objs(map(a, b).object).type).graphname, objtypes(objs(map(a, b).object).type).r, objtypes(objs(map(a, b).object).type).g, objtypes(objs(map(a, b).object).type).b, objtypes(objs(map(a, b).object).type).l, objtypes(objs(map(a, b).object).type).cells: objtypes(objs(map(a, b).object).type).graphloaded = 1
          If objtypes(objs(map(a, b).object).type).graphloaded = 1 Then drawobj objgraphs(objs(map(a, b).object).type), a, b, , 1, objs(map(a, b).object).xoff, objs(map(a, b).object).yoff
      End If
-     If a = plr.x And b = plr.y And (plr.instomach = 0 Or stomachlevel <= 1) Then
+     If a = plr.X And b = plr.Y And (plr.instomach = 0 Or stomachlevel <= 1) Then
      'If zex = 0 Then drawobj plrgraphs, plr.X, plr.Y, , , plr.xoff, plr.yoff, , , 1
      drawauras 1
      If zex = 0 Then plrgraphs.TransparentDraw picBuffer, 400 - (plrgraphs.CellWidth / 2) - 25, 300 - plrgraphs.CellWidth - 24 + zex + 50, 1 Else waterspr.TransparentDraw picBuffer, 400 - waterspr.CellWidth / 2, 300, 1, False
@@ -1012,10 +1088,10 @@ Static rloaded As Byte
 If rloaded = 0 Then Set raingraph = New cSpriteBitmaps: raingraph.CreateFromFile "rain1.bmp", 4, 1, , 0: rloaded = 1: raingraph.recolor 30, 200, 250
 For a = 1 To 50
 If rain(a).frame = 0 Then rain(a).frame = 1
-If rain(a).frame > 4 Then rain(a).y = 0: rain(a).x = roll(800): rain(a).stopped = 0: rain(a).frame = 1
-If rain(a).stopped = 0 Then rain(a).x = rain(a).x + 5: rain(a).y = rain(a).y + 10 Else rain(a).frame = rain(a).frame + 1
+If rain(a).frame > 4 Then rain(a).Y = 0: rain(a).X = roll(800): rain(a).stopped = 0: rain(a).frame = 1
+If rain(a).stopped = 0 Then rain(a).X = rain(a).X + 5: rain(a).Y = rain(a).Y + 10 Else rain(a).frame = rain(a).frame + 1
 If rain(a).stopped = 0 Then If roll(50) = 1 Then rain(a).stopped = 1
-raingraph.TransparentDraw picBuffer, rain(a).x, rain(a).y, rain(a).frame
+raingraph.TransparentDraw picBuffer, rain(a).X, rain(a).Y, rain(a).frame
 5 Next a
 
 End Function
@@ -1092,7 +1168,7 @@ sp.CreateFromPicture pb, cells, ycells, , RGB(0, 0, 0)
 grloading = 0
 End Sub
 
-Sub drawobj(obj As cSpriteBitmaps, x, y, Optional cell = 1, Optional midtile = 0, Optional ByRef xoff = 0, Optional ByRef yoff = 0, Optional ByRef litx = 0, Optional ByRef lity = 0, Optional nodecoffs = 0)
+Sub drawobj(obj As cSpriteBitmaps, X, Y, Optional cell = 1, Optional midtile = 0, Optional ByRef xoff = 0, Optional ByRef yoff = 0, Optional ByRef litx = 0, Optional ByRef lity = 0, Optional nodecoffs = 0)
 'positions something correctly according to it's X and Y coordinates
 
 On Error GoTo 15
@@ -1102,9 +1178,9 @@ GoTo 12
 
 'If Not roll(8) = 1 Then Exit Sub
 If cell = 0 Then Exit Sub
-dorkx = (x - plr.x - y + plr.y) * 48 + 400 - plr.xoff - (obj.CellWidth / 2) + xoff
+dorkx = (X - plr.X - Y + plr.Y) * 48 + 400 - plr.xoff - (obj.CellWidth / 2) + xoff
 If dorkx < -120 Or dorkx > 850 Then Exit Sub
-dorky = (x + y - plr.x - plr.y) * 24 - plr.yoff + 300 - (obj.CellHeight - 48) - (midtile * 24) + yoff
+dorky = (X + Y - plr.X - plr.Y) * 24 - plr.yoff + 300 - (obj.CellHeight - 48) - (midtile * 24) + yoff
 If xoff = 0 And yoff = 0 Then GoTo 5
 If nodecoffs > 0 Then GoTo 5
 
@@ -1125,19 +1201,19 @@ obj.TransparentDraw picBuffer, dorkx, dorky, cell, False
 
 End Sub
 
-Sub getlitxy(ByVal x, ByVal y, ByRef litx, ByRef lity, obj As cSpriteBitmaps, Optional midtile = 0)
-dorkx = (x - plr.x - y + plr.y) * 48 + 400 - plr.xoff - (obj.CellWidth / 2) + xoff
+Sub getlitxy(ByVal X, ByVal Y, ByRef litx, ByRef lity, obj As cSpriteBitmaps, Optional midtile = 0)
+dorkx = (X - plr.X - Y + plr.Y) * 48 + 400 - plr.xoff - (obj.CellWidth / 2) + xoff
 'If dorkx < -40 Or dorkx > 750 Then Exit Sub
-dorky = (x + y - plr.x - plr.y) * 24 - plr.yoff + 300 - (obj.CellHeight - 48) - (midtile * 24) + yoff
+dorky = (X + Y - plr.X - plr.Y) * 24 - plr.yoff + 300 - (obj.CellHeight - 48) - (midtile * 24) + yoff
 litx = dorkx
 lity = dorky
 
 End Sub
 
-Sub getlitxy2(ByVal x, ByVal y, ByRef litx, ByRef lity, Optional midtile = 0)
-dorkx = (x - plr.x - y + plr.y) * 48 + 400 - plr.xoff + xoff
+Sub getlitxy2(ByVal X, ByVal Y, ByRef litx, ByRef lity, Optional midtile = 0)
+dorkx = (X - plr.X - Y + plr.Y) * 48 + 400 - plr.xoff + xoff
 'If dorkx < -40 Or dorkx > 750 Then Exit Sub
-dorky = (x + y - plr.x - plr.y) * 24 - plr.yoff + 300 - (midtile * 24) + yoff
+dorky = (X + Y - plr.X - plr.Y) * 24 - plr.yoff + 300 - (midtile * 24) + yoff
 litx = dorkx
 lity = dorky
 
@@ -1158,7 +1234,7 @@ If Dir(filen) = "" Then If Not Dir(plr.name & "\" & Left(filen, Len(filen) - 4) 
 
 Dim segfilename As String
 
-If Right(filen, Len("VRPGData.txt")) = "VRPGData.txt" Then showform10 "Intro", 1: plr.x = 29: plr.y = 29: filen = getfile(origfile, datfile)
+If Right(filen, Len("VRPGData.txt")) = "VRPGData.txt" Then showform10 "Intro", 1: plr.X = 29: plr.Y = 29: filen = getfile(origfile, datfile)
 If filen = "Spells.txt" Then GoTo 113
 plr.curmap = filen
 revamp
@@ -1235,11 +1311,11 @@ makesprite mongraphs(lastmontype), Form1.Picture1, montype(lastmontype).gfile, r
         
         If durg = "#CONVGIRL" Then
         efnum = 1: objts = objts + 1: ReDim Preserve objtypes(1 To objts): ReDim Preserve objgraphs(1 To UBound(objtypes())) As cSpriteBitmaps: Input #1, objtypes(objts).name: name = objtypes(objts).name
-            Input #1, x, y, graphic, frames, portrait, mobile, r, g, b
+            Input #1, X, Y, graphic, frames, portrait, mobile, r, g, b
             objtypes(objts).r = r: objtypes(objts).g = g: objtypes(objts).b = b: objtypes(objts).l = 0.5: objtypes(objts).graphname = graphic: objtypes(objts).cells = frames
             addeffect2 objtypes(objts), "Conversation", name, portrait
             If Val(mobile) > 0 Then addeffect2 objtypes(objts), "Mobile", mobile
-            createobj objts, x, y, name
+            createobj objts, X, Y, name
         End If
         
         If durg = "#EFFECT" Then
@@ -1255,12 +1331,12 @@ makesprite mongraphs(lastmontype), Form1.Picture1, montype(lastmontype).gfile, r
         
         If durg = "#GRAPH" Then Input #1, objtypes(objts).graphname, objtypes(objts).cells, objtypes(objts).r, objtypes(objts).g, objtypes(objts).b, objtypes(objts).l ': makesprite objtypes(objts).graph, Form1.Picture1, objtypes(objts).graphname, objtypes(objts).r, objtypes(objts).g, objtypes(objts).b, objtypes(objts).l, objtypes(objts).cells: objtypes(objts).graphloaded = 1
 
-        If durg = "#CREATEOBJ" Then Input #1, name, x, y, name2, ostr, ostr2: createobj name, x, y, name2, ostr, ostr2
+        If durg = "#CREATEOBJ" Then Input #1, name, X, Y, name2, ostr, ostr2: createobj name, X, Y, name2, ostr, ostr2
         
         If durg = "#MULTCREATEOBJ" Then
-        Input #1, num, name, x, y, name2, ostr, ostr2: swaptxt ostr2, "/", ",": swaptxt ostr2, "$", Chr(34)
+        Input #1, num, name, X, Y, name2, ostr, ostr2: swaptxt ostr2, "/", ",": swaptxt ostr2, "$", Chr(34)
         For a = 1 To num
-        createobj name, x, y, name2, ostr, ostr2
+        createobj name, X, Y, name2, ostr, ostr2
         Next a
         End If
         
@@ -1274,16 +1350,16 @@ makesprite mongraphs(lastmontype), Form1.Picture1, montype(lastmontype).gfile, r
         If durg = "#MAPCHUNK" Then Input #1, tt, sizs: randomchunk Val(sizs), , , Val(tt)
         If durg = "#OVRCHUNK" Then Input #1, tt, sizs: ovrchunk Val(sizs), , , Val(tt)
             
-        If durg = "#BUILDING" Then Input #1, Xs, Ys, x, y, tt, ot, ty: createbuilding Xs, Ys, ty, 1, tt, ot, x, y
-        If durg = "#BUILDING2" Then Input #1, Xs, Ys, x, y, tt, ot, ty: createbuilding Xs, Ys, ty, 0, tt, ot, x, y
+        If durg = "#BUILDING" Then Input #1, Xs, Ys, X, Y, tt, ot, TY: createbuilding Xs, Ys, TY, 1, tt, ot, X, Y
+        If durg = "#BUILDING2" Then Input #1, Xs, Ys, X, Y, tt, ot, TY: createbuilding Xs, Ys, TY, 0, tt, ot, X, Y
         
         If durg = "#LOADSEG" Then Input #1, segfilename, Xs, Ys, rotat, floortype, walltype, salesobj, signobj, bij1, bij2, doorobj, stealobj: loadseg segfilename, Xs, Ys, rotat, floortype, walltype, (salesobj), (signobj), (bij1), (bij2), (doorobj), (stealobj)
 
         
         If durg = "#MULTBUILDING" Then
-        Input #1, num, Xs, Ys, x, y, tt, ot, ty
+        Input #1, num, Xs, Ys, X, Y, tt, ot, TY
         Do While num > 0
-        createbuilding Xs, Ys, ty, 1, tt, ot, x, y
+        createbuilding Xs, Ys, TY, 1, tt, ot, X, Y
         num = num - 1
         Loop
         End If
@@ -1300,7 +1376,7 @@ makesprite mongraphs(lastmontype), Form1.Picture1, montype(lastmontype).gfile, r
         If durg = "#SPRINKLE" Then Input #1, num, tt: sprinkle num, tt
         If durg = "#FILLMAP" Then Input #1, tt: fillmap tt
         If durg = "#FILLOVR" Then Input #1, ot: fillovr ot
-        If durg = "#DUNGEON" Then Input #1, x, y, x2, y2, tt, ot, ton: createdungeon tt, ot, x, y, x2, y2, ton: checkaccess2
+        If durg = "#DUNGEON" Then Input #1, X, Y, x2, y2, tt, ot, ton: createdungeon tt, ot, X, Y, x2, y2, ton: checkaccess2
         If durg = "#CLANCOLOR" Then Input #1, clan(0).r, clan(0).b, clan(0).g, clan(0).light
         
         
@@ -1327,7 +1403,7 @@ killbinfiles
 
 End Sub
 
-Function createmonster(ByVal mont, ByVal x, ByVal y) As Integer
+Function createmonster(ByVal mont, ByVal X, ByVal Y) As Integer
 wm = 1
 If Val(mont) = 0 Then
 For b = 1 To lastmontype
@@ -1344,14 +1420,14 @@ If mont > lastmontype Then MsgBox "Error #1 in Createmonster"
 If a = totalmonsters + 1 Then ReDim Preserve mon(1 To a) As amonsterT: totalmonsters = totalmonsters + 1
 mon(wm).type = mont
 mon(wm).hp = montype(mont).hp
-map(x, y).monster = wm
-mon(wm).x = x
-mon(wm).y = y
+map(X, Y).monster = wm
+mon(wm).X = X
+mon(wm).Y = Y
 mon(wm).cell = 1
 createmonster = wm
 End Function
 
-Function drawbody(hDC As DirectDrawSurface7, x, y, Optional newhdc As Boolean = False)
+Function drawbody(hDC As DirectDrawSurface7, X, Y, Optional newhdc As Boolean = False)
 
 Static cleavageloaded As Byte
 On Error Resume Next
@@ -1370,77 +1446,77 @@ nocleavage = 0
 
 If cleavageloaded = 0 Then Set cleavage = New cSpriteBitmaps: cleavage.CreateFromFile "cleavage.bmp", 1, 1, , 0: cleavageloaded = 1
 
-215 If plr.diglevel < 3 Then gbody.TransparentDraw hDC, x, y, 1, newhdc
+215 If plr.diglevel < 3 Then gbody.TransparentDraw hDC, X, Y, 1, newhdc
 
-If plr.diglevel > 0 And plr.diglevel <= 5 Then plr.diglevel = greater(plr.diglevel, 1): digbody(plr.diglevel).TransparentDraw hDC, x, y, 1, newhdc ', newhdc
+If plr.diglevel > 0 And plr.diglevel <= 5 Then plr.diglevel = greater(plr.diglevel, 1): digbody(plr.diglevel).TransparentDraw hDC, X, Y, 1, newhdc ', newhdc
 
-If plr.diglevel < 3 Then plrhair.TransparentDraw hDC, x + 27, y + 5, 1, newhdc ', vbSrcCopy
+If plr.diglevel < 3 Then plrhair.TransparentDraw hDC, X + 27, Y + 5, 1, newhdc ', vbSrcCopy
 
 Dim patchg As cSpriteBitmaps
-Set patchg = New cSpriteBitmaps: patchg.CreateFromFile "patch1.bmp", 1, 1: getrgb plr.haircolor, rh, gh, bh, 32: patchg.recolor rh, gh, bh: If plr.diglevel < 3 Then patchg.TranslucentDraw hDC, x + 50, y + 88, 1, , 2
+Set patchg = New cSpriteBitmaps: patchg.CreateFromFile "patch1.bmp", 1, 1: getrgb plr.haircolor, rh, gh, bh, 32: patchg.recolor rh, gh, bh: If plr.diglevel < 3 Then patchg.TranslucentDraw hDC, X + 50, Y + 88, 1, , 2
 
 If plr.plrdead > 0 Then nocleavage = 1
 
 For a = 1 To 16
     clothes(a).drawn = 0
     'Capes have wear1 as Jacket, wear2 as Wings
-    If clothes(a).wear2 = "Wings" And clothes(a).loaded = 1 Then capegraphs.TransparentDraw hDC, x, y, 1, newhdc, clothes(a).raster ': clothes(a).drawn = 1
-    If clothes(a).wear1 = "Wings" And clothes(a).loaded = 1 Then cgraphs(a).graph.TransparentDraw hDC, x, y, 1, newhdc, clothes(a).raster: clothes(a).drawn = 1
+    If clothes(a).wear2 = "Wings" And clothes(a).loaded = 1 Then capegraphs.TransparentDraw hDC, X, Y, 1, newhdc, clothes(a).raster ': clothes(a).drawn = 1
+    If clothes(a).wear1 = "Wings" And clothes(a).loaded = 1 Then cgraphs(a).graph.TransparentDraw hDC, X, Y, 1, newhdc, clothes(a).raster: clothes(a).drawn = 1
 Next a
 
 For a = 1 To 16
     'clothes(a).drawn = 0
     If clothes(a).wear1 = "Cyberbody" Then nocleavage = 1
-    If clothes(a).loaded = 1 And Left(clothes(a).wear1, 5) = "Cyber" Then cgraphs(a).graph.TransparentDraw hDC, x, y, 1, newhdc, clothes(a).raster: clothes(a).drawn = 1
+    If clothes(a).loaded = 1 And Left(clothes(a).wear1, 5) = "Cyber" Then cgraphs(a).graph.TransparentDraw hDC, X, Y, 1, newhdc, clothes(a).raster: clothes(a).drawn = 1
 Next a
 
 'Draw Cleavage
 For a = 1 To 16
-    If clothes(a).wear1 = "Upper" Then If Not nocleavage = 1 Then cleavage.TransparentDraw hDC, x + 44, y + 45, 1, newhdc: Exit For
-    If clothes(a).wear2 = "Upper" Then If Not nocleavage = 1 Then cleavage.TransparentDraw hDC, x + 44, y + 45, 1, newhdc: Exit For
-    If clothes(a).wear1 = "Bra" Then If Not nocleavage = 1 Then cleavage.TransparentDraw hDC, x + 44, y + 45, 1, newhdc: Exit For
-    If clothes(a).wear2 = "Bra" Then If Not nocleavage = 1 Then cleavage.TransparentDraw hDC, x + 44, y + 45, 1, newhdc: Exit For
-    If clothes(a).wear1 = "Jacket" Then If Not nocleavage = 1 Then cleavage.TransparentDraw hDC, x + 44, y + 45, 1, newhdc: Exit For
+    If clothes(a).wear1 = "Upper" Then If Not nocleavage = 1 Then cleavage.TransparentDraw hDC, X + 44, Y + 45, 1, newhdc: Exit For
+    If clothes(a).wear2 = "Upper" Then If Not nocleavage = 1 Then cleavage.TransparentDraw hDC, X + 44, Y + 45, 1, newhdc: Exit For
+    If clothes(a).wear1 = "Bra" Then If Not nocleavage = 1 Then cleavage.TransparentDraw hDC, X + 44, Y + 45, 1, newhdc: Exit For
+    If clothes(a).wear2 = "Bra" Then If Not nocleavage = 1 Then cleavage.TransparentDraw hDC, X + 44, Y + 45, 1, newhdc: Exit For
+    If clothes(a).wear1 = "Jacket" Then If Not nocleavage = 1 Then cleavage.TransparentDraw hDC, X + 44, Y + 45, 1, newhdc: Exit For
 Next a
 
 For a = 1 To 16
     If clothes(a).drawn = 1 Then GoTo 34
     If clothes(a).loaded = 1 And clothes(a).wear1 = "Panties" Then
-    If clothes(a).wear2 = "Bra" Then If Not nocleavage = 1 Then cleavage.TransparentDraw hDC, x + 44, y + 45, 1, newhdc 'y+47
-    cgraphs(a).graph.TransparentDraw hDC, x, y, 1, newhdc, clothes(a).raster: clothes(a).drawn = 1: Exit For
+    If clothes(a).wear2 = "Bra" Then If Not nocleavage = 1 Then cleavage.TransparentDraw hDC, X + 44, Y + 45, 1, newhdc 'y+47
+    cgraphs(a).graph.TransparentDraw hDC, X, Y, 1, newhdc, clothes(a).raster: clothes(a).drawn = 1: Exit For
     End If
 34 Next a
 
 For a = 1 To 16
 If clothes(a).drawn = 1 Then GoTo 7
     If clothes(a).loaded = 1 And clothes(a).wear1 = "Bra" Then
-    If Not nocleavage = 1 Then cleavage.TransparentDraw hDC, x + 44, y + 45, 1, newhdc 'Draw cleavage if a bra is being worn
-    cgraphs(a).graph.TransparentDraw hDC, x, y, 1, newhdc, clothes(a).raster: clothes(a).drawn = 1: Exit For
+    If Not nocleavage = 1 Then cleavage.TransparentDraw hDC, X + 44, Y + 45, 1, newhdc 'Draw cleavage if a bra is being worn
+    cgraphs(a).graph.TransparentDraw hDC, X, Y, 1, newhdc, clothes(a).raster: clothes(a).drawn = 1: Exit For
     End If
 7 Next a
 
 For a = 1 To 16
 If clothes(a).drawn = 1 Then GoTo 14
-    If clothes(a).loaded = 1 And clothes(a).wear1 = "Legs" Then cgraphs(a).graph.TransparentDraw hDC, x, y, 1, newhdc, clothes(a).raster: clothes(a).drawn = 1: Exit For
+    If clothes(a).loaded = 1 And clothes(a).wear1 = "Legs" Then cgraphs(a).graph.TransparentDraw hDC, X, Y, 1, newhdc, clothes(a).raster: clothes(a).drawn = 1: Exit For
 14 Next a
 
 For a = 1 To 16
 If clothes(a).drawn = 1 Then GoTo 15
-    If clothes(a).loaded = 1 And clothes(a).wear1 = "Arms" Then cgraphs(a).graph.TransparentDraw hDC, x, y, 1, newhdc, clothes(a).raster: clothes(a).drawn = 1: Exit For
+    If clothes(a).loaded = 1 And clothes(a).wear1 = "Arms" Then cgraphs(a).graph.TransparentDraw hDC, X, Y, 1, newhdc, clothes(a).raster: clothes(a).drawn = 1: Exit For
 15 Next a
 
 For a = 1 To 16
 If clothes(a).drawn = 1 Then GoTo 8
     'If clothes(a).loaded = 1 And clothes(a).wear1 = "Lower" Then cgraphs(a).graph.TransparentDraw hDC, x, y, 1, newhdc: clothes(a).drawn = 1: Exit For
-    If clothes(a).loaded = 1 And clothes(a).wear1 = "Lower" Then cgraphs(a).graph.TransparentDraw hDC, x, y, 1, newhdc, clothes(a).raster: clothes(a).drawn = 1: Exit For
+    If clothes(a).loaded = 1 And clothes(a).wear1 = "Lower" Then cgraphs(a).graph.TransparentDraw hDC, X, Y, 1, newhdc, clothes(a).raster: clothes(a).drawn = 1: Exit For
 
 8 Next a
 
 For a = 1 To 16
 If clothes(a).drawn = 1 Then GoTo 9
     'If clothes(a).loaded = 1 And clothes(a).wear1 = "Upper" Then cgraphs(a).graph.TransparentDraw hDC, x, y, 1, newhdc: clothes(a).drawn = 1: Exit For
-    If clothes(a).wear2 = "Bra" Then If Not nocleavage = 1 Then cleavage.TransparentDraw hDC, x + 44, y + 45, 1, newhdc
-    If clothes(a).loaded = 1 And clothes(a).wear1 = "Upper" Then cgraphs(a).graph.TransparentDraw hDC, x, y, 1, newhdc, clothes(a).raster: clothes(a).drawn = 1: Exit For
+    If clothes(a).wear2 = "Bra" Then If Not nocleavage = 1 Then cleavage.TransparentDraw hDC, X + 44, Y + 45, 1, newhdc
+    If clothes(a).loaded = 1 And clothes(a).wear1 = "Upper" Then cgraphs(a).graph.TransparentDraw hDC, X, Y, 1, newhdc, clothes(a).raster: clothes(a).drawn = 1: Exit For
     
     'If clothes(a).loaded = 1 And clothes(a).wear1 = "Upper" Then cgraphs(a).graph.DirectBltSprite hDC, x, y, 1, vbSrcPaint: clothes(a).drawn = 1: Exit For
 
@@ -1449,17 +1525,17 @@ If clothes(a).drawn = 1 Then GoTo 9
 'Draw everything left but the jackets
 For a = 1 To 16
 If clothes(a).drawn = 1 Then GoTo 11
-    If clothes(a).loaded = 1 And Not clothes(a).wear1 = "Jacket" Then cgraphs(a).graph.TransparentDraw hDC, x, y, 1, newhdc, clothes(a).raster
+    If clothes(a).loaded = 1 And Not clothes(a).wear1 = "Jacket" Then cgraphs(a).graph.TransparentDraw hDC, X, Y, 1, newhdc, clothes(a).raster
 11 Next a
 
 'Draw Jackets
 For a = 1 To 16
 If clothes(a).drawn = 1 Then GoTo 10
-    If clothes(a).loaded = 1 And clothes(a).wear1 = "Jacket" Then cgraphs(a).graph.TransparentDraw hDC, x, y, 1, newhdc, clothes(a).raster: clothes(a).drawn = 1: Exit For
+    If clothes(a).loaded = 1 And clothes(a).wear1 = "Jacket" Then cgraphs(a).graph.TransparentDraw hDC, X, Y, 1, newhdc, clothes(a).raster: clothes(a).drawn = 1: Exit For
     'If clothes(a).loaded = 1 And clothes(a).wear1 = "Cape" Then cgraphs(a).graph.TransparentDraw hDC, x, y, 1, newhdc, clothes(a).raster: clothes(a).drawn = 1: Exit For
 10 Next a
 
-If Not wep.graphname = "" And Not plr.plrdead = 1 Then wepgraph.TransparentDraw hDC, x + 24 - wep.xoff, y + 104 - wep.yoff, 1, newhdc
+If Not wep.graphname = "" And Not plr.plrdead = 1 Then wepgraph.TransparentDraw hDC, X + 24 - wep.xoff, Y + 104 - wep.yoff, 1, newhdc
 
 End Function
 
@@ -1497,6 +1573,8 @@ End Function
 Function addclothes(name As String, filen As String, armor As Byte, wear1 As String, Optional wear2 As String = "NONE", Optional r = 256, Optional g = 0, Optional b = 0, Optional l = 0.5, Optional makeobj = 0, Optional raster As RasterOpConstants = vbSrcCopy)
 
 If plr.Class = "Naga" Then If wear1 = "Panties" Or wear1 = "Lower" Or wear2 = "Panties" Or wear2 = "Lower" Then Exit Function 'Nagas can't wear anything below the belt...
+'m'' the sub calling addclothes (takeobj) include now the Naga class handling code, to avoid this violent exit
+
 
 If wear2 = "" Then wear2 = "NONE"
 If r = 256 Then r = clan(0).r: g = clan(0).g: b = clan(0).b: l = clan(0).light
@@ -1552,11 +1630,11 @@ For a = 1 To 16
     clothes(a).loaded = 1
     addclothes = a
     If makeobj = 1 Then
-        f = createobjtype(name, filen, r, g, b, l, 1)
-        addeffect f, "Clothes", filen, armor, wear1, wear2
-        objtypes(f).r = r: objtypes(f).g = g: objtypes(f).b = b: objtypes(f).l = l
+        F = createobjtype(name, filen, r, g, b, l, 1)
+        addeffect F, "Clothes", filen, armor, wear1, wear2
+        objtypes(F).r = r: objtypes(F).g = g: objtypes(F).b = b: objtypes(F).l = l
 '        g = createobj(name, 0, 0, name)
-        clothes(a).obj = objtypes(f)
+        clothes(a).obj = objtypes(F)
     End If
 '    If Not IsMissing(obj) Then clothes(a).obj = obj
     'checkclothes a
@@ -1570,7 +1648,7 @@ Sub plrattack(ByVal target, Optional ByVal noturn = 0, Optional ByVal extraattac
 If target = 0 Or mon(target).owner > 0 And Not Ccom = "EAT" Then Exit Sub
 If mon(target).hp < 1 Then Exit Sub
 If mon(target).instomach = -1 Then Exit Sub
-If diff(plr.x, mon(target).x) > 1 Or diff(plr.y, mon(target).y) > 1 Then If Not wep.type = "Bow" Then Exit Sub
+If diff(plr.X, mon(target).X) > 1 Or diff(plr.Y, mon(target).Y) > 1 Then If Not wep.type = "Bow" Then Exit Sub
 If Ccom = "EAT" And mon(target).owner = 1 Then mon(target).owner = 0
 
 Dim monz As monstertype
@@ -1581,7 +1659,7 @@ monz = montype(mon(target).type)
 'Experience for attack attempts, regardless of whether player hits
 plr.exp = plr.exp + Int(montype(mon(target).type).exp / 10)
 
-makebijdang mon(target).x, mon(target).y, 1
+makebijdang mon(target).X, mon(target).Y, 1
 
 'player wins
 aroll = roll(getdex + 2)
@@ -1611,8 +1689,8 @@ If Ccom = "EAT" Then
         plr.monsinbelly = plr.monsinbelly + 1
         playsound "swallow1.wav"
         Form1.updatbody
-        map(mon(target).x, mon(target).y).monster = 0
-        movemon target, plr.x, plr.y, 1
+        map(mon(target).X, mon(target).Y).monster = 0
+        movemon target, plr.X, plr.Y, 1
         
         
         Else:
@@ -1627,7 +1705,7 @@ If usingskill = "Stun" And mon(target).stunned = 0 Then
     If succroll(plr.level, 10 - skilltotal("Stun", 2, 1)) + skilltotal("Stun", 1, 1) > succroll(montype(mon(target).type).level, 5) Then
       If spendsp(5) = True Then
         mon(target).stunned = roll(skilltotal("Stun", 3, 2))
-        makebijdang mon(target).x, mon(target).y, 4
+        makebijdang mon(target).X, mon(target).Y, 4
         playsound "thunk.wav"
         End If
     End If
@@ -1637,7 +1715,7 @@ End If
 If wep.type = "Mace" And mon(target).stunned = 0 Then
     If roll(4) = 1 Then
         mon(target).stunned = roll(3 + skilltotal("Stun", 2, 1)) + 2
-        makebijdang mon(target).x, mon(target).y, 4
+        makebijdang mon(target).X, mon(target).Y, 4
         playsound "thunk.wav"
     End If
 End If
@@ -1732,7 +1810,7 @@ End Sub
 Sub damagemon(ByVal target, ByVal damage, Optional ByVal expmult As Single = 1)
 mon(target).hp = mon(target).hp - damage
 
-getlitxy mon(target).x, mon(target).y, damx, damy, mongraphs(mon(target).type)
+getlitxy mon(target).X, mon(target).Y, damx, damy, mongraphs(mon(target).type)
 
 addtext Int(damage), damx + roll(30) - 15, damy + roll(30) - 15, 255, 10, 3
 
@@ -1757,17 +1835,17 @@ If mon(target).hp < 1 Then
         If aroll < 90 Then
         broll = roll(3)
         Select Case broll
-        Case 1: createobj "Large Gold Pile", mon(target).x, mon(target).y, "Gold", Int(montype(mon(target).type).exp)
-        Case 2: createobj "Medium Gold Pile", mon(target).x, mon(target).y, "Gold", Int(montype(mon(target).type).exp / 2)
-        Case 3: createobj "Small Gold Pile", mon(target).x, mon(target).y, "Gold", Int(montype(mon(target).type).exp / 4)
+        Case 1: createobj "Large Gold Pile", mon(target).X, mon(target).Y, "Gold", Int(montype(mon(target).type).exp)
+        Case 2: createobj "Medium Gold Pile", mon(target).X, mon(target).Y, "Gold", Int(montype(mon(target).type).exp / 2)
+        Case 3: createobj "Small Gold Pile", mon(target).X, mon(target).Y, "Gold", Int(montype(mon(target).type).exp / 4)
         End Select
         End If
         
         'plr.gp = plr.gp + Int(montype(mon(target).type).exp / 2)
-        If aroll >= 90 And aroll < 93 Then createclothes Val(montype(mon(target).type).level), mon(target).x, mon(target).y
-        If aroll >= 93 And aroll < 95 Then createclothes Val(montype(mon(target).type).level), mon(target).x, mon(target).y, "Armor"
-        If aroll >= 95 And aroll < 96 Then createclothes Val(montype(mon(target).type).level), mon(target).x, mon(target).y, "Weapons"
-        If aroll >= 96 Then creategem mon(target).x, mon(target).y, Val(montype(mon(target).type).level)
+        If aroll >= 90 And aroll < 93 Then createclothes Val(montype(mon(target).type).level), mon(target).X, mon(target).Y
+        If aroll >= 93 And aroll < 95 Then createclothes Val(montype(mon(target).type).level), mon(target).X, mon(target).Y, "Armor"
+        If aroll >= 95 And aroll < 96 Then createclothes Val(montype(mon(target).type).level), mon(target).X, mon(target).Y, "Weapons"
+        If aroll >= 96 Then creategem mon(target).X, mon(target).Y, Val(montype(mon(target).type).level)
         
         
         
@@ -1785,9 +1863,12 @@ If mon(target).instomach > 0 Then mon(mon(target).instomach).hasinstomach = 0
 mon(target).instomach = 0
 mon(target).stomachlevel = 0
 
+'m'' trying to comment duamutef code :
+'m'' if the picture of my monster is a big belly, let's check what he have in its stomach.
+'m'' and let's move to his coordinate whatever is in its stomach
 If mon(target).cell = 2 Then
 For a = 1 To totalmonsters
-    If mon(a).instomach = target Then movemon a, mon(target).x, mon(target).y
+    If mon(a).instomach = target Then movemon a, mon(target).X, mon(target).Y
 Next a
 End If
 
@@ -1796,11 +1877,11 @@ If mon(target).type = 0 Then GoTo 3
 If montype(mon(target).type).name = "Thirsha" Then wingame
 If montype(mon(target).type).name = mapjunk.questmonster Then ifquest montype(mon(target).type).name, 1
 If plr.instomach = target Then plr.instomach = 0 'Get player out of stomach if that monster is killed
-map(mon(target).x, mon(target).y).monster = 0
-3 If killthemotherfucker = 0 Then makebijdang mon(target).x, mon(target).y, 2
+map(mon(target).X, mon(target).Y).monster = 0
+3 If killthemotherfucker = 0 Then makebijdang mon(target).X, mon(target).Y, 2
 If killthemotherfucker = 0 Then playsound "monsterdie.wav"
-mon(target).x = 0
-mon(target).y = 0
+mon(target).X = 0
+mon(target).Y = 0
 mon(target).type = 0
 mon(target).owner = 0
 End Sub
@@ -1863,17 +1944,18 @@ rolldice = total
 
 End Function
 
-Function movemon(ByVal target, ByVal x, ByVal y, Optional skipthing = 0)
+Function movemon(ByVal target, ByVal X, ByVal Y, Optional skipthing = 0)
 
-If mon(target).x = 0 Then GoTo 5
-If mon(target).y = 0 Then GoTo 5
-If x > 0 And y > o Then If map(x, y).monster > 0 Then Exit Function
-If skipthing = 0 And map(mon(target).x, mon(target).y).monster = target Then map(mon(target).x, mon(target).y).monster = 0
-5 If x <= 0 Or x > mapx Or y <= 0 Or y > mapy Then Exit Function
+If mon(target).X = 0 Then GoTo 5
+If mon(target).Y = 0 Then GoTo 5
+'m''If x > 0 And y > o Then If map(x, y).monster > 0 Then Exit Function 'm'' Duam wrote o instead of 0
+If X > 0 And Y > 0 Then If map(X, Y).monster > 0 Then Exit Function 'm''
+If skipthing = 0 And map(mon(target).X, mon(target).Y).monster = target Then map(mon(target).X, mon(target).Y).monster = 0
+5 If X <= 0 Or X > mapx Or Y <= 0 Or Y > mapy Then Exit Function
 'If skipthing = 1 And mon(target).x > 0 And mon(target).y > 0 Then map(mon(target).x, mon(target).y).monster = 0
-mon(target).x = x
-mon(target).y = y
-If x > 0 Then map(x, y).monster = target
+mon(target).X = X
+mon(target).Y = Y
+If X > 0 Then map(X, Y).monster = target
 
 End Function
 
@@ -1939,11 +2021,11 @@ Close #1
 End Sub
 
 Sub monmove(ByVal target, ByVal xplus, ByVal yplus, Optional skipthing = 0)
-If (mon(target).x + xplus) < 1 Or (mon(target).x + xplus) > mapx Then Exit Sub
-If (mon(target).y + yplus) < 1 Or (mon(target).y + yplus) > mapy Then Exit Sub
-If map(mon(target).x + xplus, mon(target).y + yplus).blocked = 1 Then Exit Sub
-If map(mon(target).x + xplus, mon(target).y + yplus).monster > 0 Then Exit Sub
-movemon target, mon(target).x + xplus, mon(target).y + yplus, skipthing
+If (mon(target).X + xplus) < 1 Or (mon(target).X + xplus) > mapx Then Exit Sub
+If (mon(target).Y + yplus) < 1 Or (mon(target).Y + yplus) > mapy Then Exit Sub
+If map(mon(target).X + xplus, mon(target).Y + yplus).blocked = 1 Then Exit Sub
+If map(mon(target).X + xplus, mon(target).Y + yplus).monster > 0 Then Exit Sub
+movemon target, mon(target).X + xplus, mon(target).Y + yplus, skipthing
 
 'plr.xoff = getxoff(xplus, yplus)
 'plr.yoff = getyoff(xplus, yplus)
@@ -1963,7 +2045,7 @@ Sub turnthing(Optional notmoving = 0)
 
 Static hasntmoved
 
-If map(plr.x, plr.y).blocked = 1 Then map(plr.x, plr.y).blocked = 0: map(plr.x, plr.y).ovrtile = 0: checkaccess2
+If map(plr.X, plr.Y).blocked = 1 Then map(plr.X, plr.Y).blocked = 0: map(plr.X, plr.Y).ovrtile = 0: checkaccess2
 
 If monsterstoput > 0 Then putcarrymonsters
 
@@ -2078,7 +2160,7 @@ If stomachlevel = 9 Then addtext "You have been forced down into the " & montype
 If stomachlevel = 12 Then addtext "You are nearing the end of the " & montype(mon(plr.instomach).type).name & "'s digestive tract!", 280, , , , , 60
 If stomachlevel = 12 Then addtext "It will have no choice but to shit you out soon!", , 215, , , , 60
 If stomachlevel = 13 Then addtext "The " & montype(mon(plr.instomach).type).name & " has shit you out!"
-If stomachlevel = 13 Then createobjtype "Shit", "poo1small.bmp": createobj "Shit", plr.x, plr.y: mon(plr.instomach).cell = 1: plrescape "The " & montype(mon(plr.instomach).type).name & " has shit you out!": playsound "fart57.wav": Exit Sub
+If stomachlevel = 13 Then createobjtype "Shit", "poo1small.bmp": createobj "Shit", plr.X, plr.Y: mon(plr.instomach).cell = 1: plrescape "The " & montype(mon(plr.instomach).type).name & " has shit you out!": playsound "fart57.wav": Exit Sub
 
 4   playsound "stomach" & roll(4) + 1 & ".wav"
     playsound "swallow" & roll(4) + 3 & ".wav"
@@ -2116,7 +2198,7 @@ If stomachlevel = 13 Then createobjtype "Shit", "poo1small.bmp": createobj "Shit
         Do While isnaked = False
             digestclothes 255, 1
         Loop
-        createobjtype "Shit", "poo1small.bmp": createobj "Shit", plr.x, plr.y: mon(plr.instomach).cell = 1: mon(plr.instomach).instomach = 0: plr.instomach = 0: stopsounds: playsound "fart57.wav": wep.dice = 0: wep.graphname = "": Set wepgraph = Nothing: plr.plrdead = 1
+        createobjtype "Shit", "poo1small.bmp": createobj "Shit", plr.X, plr.Y: mon(plr.instomach).cell = 1: mon(plr.instomach).instomach = 0: plr.instomach = 0: stopsounds: playsound "fart57.wav": wep.dice = 0: wep.graphname = "": Set wepgraph = Nothing: plr.plrdead = 1
         gamemsg "You have been utterly digested."
    End If
 
@@ -2127,10 +2209,15 @@ For a = 1 To totalmonsters
     If mon(a).type = 0 Then GoTo 5
     If mon(a).stunned > 0 Then mon(a).stunned = mon(a).stunned - 1: GoTo 5
     If mon(a).instomach > 0 Then If mon(mon(a).instomach).hp < 0 Then mon(a).instomach = 0
-    'If mon(a).instomach > 0 Then
-    '    movemon a, 0, 0
-    '    mondigest a: GoTo 5
-    'End If
+    
+    #If USELEGACY = 1 Then
+    #Else
+    'm'' monsters eating each others. Duam suppressed this code. I fixed it
+    If mon(a).instomach > 0 Then 'm''
+        movemon a, 0, 0 'm''
+        mondigest a: GoTo 5 'm''
+    End If 'm''
+    #End If
     
     If mon(a).instomach = -1 Then
         plrdigmon mon(a), a
@@ -2139,13 +2226,42 @@ For a = 1 To totalmonsters
         
 
         
-    If mon(a).x > 0 Then map(mon(a).x, mon(a).y).monster = a
+    If mon(a).X > 0 Then map(mon(a).X, mon(a).Y).monster = a
     If mon(a).owner > 0 Then friendai mon(a), a: GoTo 5
-    If plr.instomach = 0 And plr.plrdead = 0 And Not mon(a).cell = 2 And diff(plr.x, mon(a).x) <= 1 And diff(plr.y, mon(a).y) <= 1 And mon(a).instomach = 0 Then monatk a: GoTo 5
-    If roll(6) < montype(mon(a).type).move Or allmove > 0 Then
-    If montype(mon(a).type).move > 2 Then If ((diff(plr.x, mon(a).x) > 7 Or diff(plr.y, mon(a).y) > 7) Or (plr.instomach > 0) Or (roll(4) = 1 And allmove = 0)) Then monmove a, roll(3) - 2, roll(3) - 2 Else monmove a, posneg(plr.x, mon(a).x), posneg(plr.y, mon(a).y)
+    
+    'm'' this line below prevents monster with a full belly to attack the player.
+#If USELEGACY = 1 Then
+    If plr.instomach = 0 And plr.plrdead = 0 And Not mon(a).cell = 2 And diff(plr.X, mon(a).X) <= 1 And diff(plr.Y, mon(a).Y) <= 1 And mon(a).instomach = 0 Then monatk a: GoTo 5
+#Else
+    'm'' because it would be a exploit to "fill" a boss, here is a tweak
+    'm'' "if i'm the boss and wherever i've a full belly or not, i'll attack the player"
+    If plr.instomach = 0 And plr.plrdead = 0 And diff(plr.X, mon(a).X) <= 1 And diff(plr.Y, mon(a).Y) <= 1 And mon(a).instomach = 0 Then
+        If Not mon(a).cell = 2 Then
+            monatk a
+            GoTo 5
+        Else
+            If montype(mon(a).type).name = mapjunk.questmonster Then
+                monatk a:
+                GoTo 5
+            End If
+        End If
     End If
-    If Not montype(mon(a).type).missileatk = "" And plr.instomach = 0 And diff(plr.x, mon(a).x) < 7 And diff(plr.y, mon(a).y) < 7 Then
+#End If
+    
+    
+    If roll(6) < montype(mon(a).type).move Or allmove > 0 Then
+    
+    'm'' movement AI of Duam here : if monster less than 7 cell away from player, move to player.
+    'm''
+    If montype(mon(a).type).move > 2 Then
+        If ((diff(plr.X, mon(a).X) > 7 Or diff(plr.Y, mon(a).Y) > 7) Or (plr.instomach > 0) Or (roll(4) = 1 And allmove = 0)) Then
+            monmove a, roll(3) - 2, roll(3) - 2
+        Else
+            monmove a, posneg(plr.X, mon(a).X), posneg(plr.Y, mon(a).Y)
+        End If
+    End If
+    End If
+    If Not montype(mon(a).type).missileatk = "" And plr.instomach = 0 And diff(plr.X, mon(a).X) < 7 And diff(plr.Y, mon(a).Y) < 7 Then
         atk = montype(mon(a).type).missileatk
         If roll(getfromstring(atk, 2)) = 1 Then
         
@@ -2176,20 +2292,32 @@ If roll(8) < 7 Then Exit Sub
 mon(monnum).stomachlevel = mon(monnum).stomachlevel + 1
 
 If mon(monnum).stomachlevel < 4 Then
+    'm'' formula to get out
     If succroll(montype(mon(monnum).type).skill) > succroll(montype(mon(mon(monnum).instomach).type).skill * 2) Then
-        mon(monnum).x = mon(mon(monnum).instomach).x: mon(monnum).y = mon(mon(monnum).instomach).y
+        mon(monnum).X = mon(mon(monnum).instomach).X: mon(monnum).Y = mon(mon(monnum).instomach).Y
+        'm'' loop to seek a place to pop out of the stomach
 3         monmove monnum, roll(3) - 2, roll(3) - 2, 1
-          If mon(monnum).x = mon(mon(monnum).instomach).x And mon(monnum).y = mon(mon(monnum).instomach).y Then GoTo 3
-        mon(mon(monnum).instomach).cell = 1: mon(monnum).instomach = 0
+          If mon(monnum).X = mon(mon(monnum).instomach).X And mon(monnum).Y = mon(mon(monnum).instomach).Y Then GoTo 3
+        'm'' mon(mon(monnum).instomach).cell = 1: mon(monnum).instomach = 0 'm'' too early reset
         mon(monnum).stomachlevel = 0
         mon(mon(monnum).instomach).hasinstomach = 0
+        mon(mon(monnum).instomach).cell = 1 'm''
+        mon(monnum).instomach = 0 'm'' right time to reset
         playsound "burp" & roll(5) & ".wav"
         Exit Sub
         
     End If
 End If
 
+#If USELEGACY = 1 Then
 If mon(monnum).stomachlevel = 4 Then playsound "swallow6.wav"
+'m'' fixed cell rendered depending on stomach level
+#Else
+If mon(monnum).stomachlevel = 4 Then 'm''
+    playsound "swallow6.wav" 'm''
+    mon(mon(monnum).instomach).cell = 2 'm''
+End If 'm''
+#End If
 
 mon(monnum).hp = mon(monnum).hp - rolldice(montype(mon(mon(monnum).instomach).type).acid, 6)
 
@@ -2197,7 +2325,7 @@ If mon(monnum).hp <= 0 Then
 
 If plr.instomach = monnum Then plr.instomach = mon(monnum).instomach
 mon(mon(monnum).instomach).hasinstomach = 0
-createobj "Shit", mon(mon(monnum).instomach).x, mon(mon(monnum).instomach).y: mon(mon(monnum).instomach).cell = 1: mon(monnum).instomach = 0: playsound "fart57.wav"
+createobj "Shit", mon(mon(monnum).instomach).X, mon(mon(monnum).instomach).Y: mon(mon(monnum).instomach).cell = 1: mon(monnum).instomach = 0: playsound "fart57.wav"
 'map(mon(monnum).x, mon(monnum).y).monster = 0
 mon(monnum).stomachlevel = 0
 mon(monnum).type = 0
@@ -2220,30 +2348,31 @@ End Sub
 
 Sub friendai(ByRef wmon As amonsterT, ByVal monnum)
 
+t = montype(mon(monnum).type).name
 
-If diff(plr.x, wmon.x) > 15 Or diff(plr.y, wmon.y) > 15 Then
+If diff(plr.X, wmon.X) > 15 Or diff(plr.Y, wmon.Y) > 15 Then
 'Let friendly monsters teleport to the player, provided they aren't in a stomach and are mobile to begin with
 If Not montype(wmon.type).move = 0 Then
     For a = 1 To totalmonsters
         If mon(a).instomach = monnum Then Exit For
     Next a
-If a = totalmonsters + 1 Then movemon monnum, plr.x, plr.y
+If a = totalmonsters + 1 Then movemon monnum, plr.X, plr.Y
 End If
 End If
 
-If diff(plr.x, wmon.x) > 6 Or diff(plr.y, wmon.y) > 6 And Not montype(wmon.type).move = 0 Then monmove monnum, posneg(plr.x, mon(monnum).x), posneg(plr.y, mon(monnum).y) Else 'Keep within six spaces of the player
+If diff(plr.X, wmon.X) > 6 Or diff(plr.Y, wmon.Y) > 6 And Not montype(wmon.type).move = 0 Then monmove monnum, posneg(plr.X, mon(monnum).X), posneg(plr.Y, mon(monnum).Y) Else 'Keep within six spaces of the player
 
 'Attack if possible, otherwise move
 If wmon.cell = 2 And Not montype(wmon.type).move = 0 Then monmove monnum, roll(3) - 2, roll(3) - 2
 
 
-For a = mon(monnum).x - 1 To mon(monnum).x + 1
-For b = mon(monnum).y - 1 To mon(monnum).y + 1
+For a = mon(monnum).X - 1 To mon(monnum).X + 1
+For b = mon(monnum).Y - 1 To mon(monnum).Y + 1
 
     If a > mapx Or a < 1 Then GoTo 5
     If b > mapy Or b < 1 Then GoTo 5
 
-    If a = mon(monnum).x And b = mon(monnum).y Then GoTo 5
+    If a = mon(monnum).X And b = mon(monnum).Y Then GoTo 5
     If map(a, b).monster > 0 Then If mon(map(a, b).monster).owner = 0 Then targ = map(a, b).monster: Exit For
 5 Next b
 Next a
@@ -2274,15 +2403,41 @@ End Sub
 Function monatk2(ByRef mon1 As amonsterT, ByRef mon2 As amonsterT, ByVal monnum1, ByVal monnum2, Optional ByVal nocounterattack = 0)
 'When 2 monsters attack one another
 If mon2.type = 0 Or mon1.type = 0 Then Exit Function
+
+#If USELEGACY <> 1 Then
+'m'' for some reason, this code lack handling when one monster swallow the other.
+'m'' the "prey" is never in the "pred"
+'m'' so this is a fix :)
+If mon1.instomach > 0 Then Exit Function 'm''
+#End If
+
 playsound montype(mon1.type).Sound '  "attack1.wav"
 playsound montype(mon2.type).Sound
 If Not mon(monnum1).cell = 2 Then mon(monnum1).animdelay = -roll(3)
 If Not mon(monnum2).cell = 2 Then mon(monnum2).animdelay = -roll(3)
 
-getlitxy mon1.x, mon1.y, damx, damy, mongraphs(mon1.type)
+
+
+getlitxy mon1.X, mon1.Y, damx, damy, mongraphs(mon1.type)
 
 If succroll(montype(mon1.type).skill + 20) >= succroll(montype(mon2.type).skill + 20) Then
+
+    #If USELEGACY = 1 Then
     If mon1.cell = 2 Or mon1.hasinstomach > 0 Then GoTo 5 'cannot attack when already full
+    #Else
+    'm'' make boss able to fight even with a full belly, but unable to swallow more (avoiding party wipe!)
+    If mon1.cell = 2 Or mon1.hasinstomach > 0 Then 'm''
+        If montype(mon1.type).name = mapjunk.questmonster Then 'm''
+            damagemon monnum2, rolldice(montype(mon1.type).dice, montype(mon1.type).damage), 0.5 'm''
+            GoTo 5 'm'' party wipe avoid
+        Else 'm''
+            GoTo 5 'm''
+        End If 'm''
+    End If 'm''
+    #End If 'm''
+    
+    'mon1.cell = 1
+    'mon1.hasinstomach = 0
     'mon2.hp = mon2.hp - rolldice(montype(mon1.type).dice, montype(mon1.type).damage)
     'If mon2.hp <= 0 Then killmon monnum2: GoTo 5
     damagemon monnum2, rolldice(montype(mon1.type).dice, montype(mon1.type).damage), 0.5
@@ -2296,6 +2451,12 @@ If succroll(montype(mon1.type).skill + 20) >= succroll(montype(mon2.type).skill 
         playsound "swallow1.wav"
         addtext getgener("*GULP*", "*SLURP*", "*CHOMP*", "*GULP*"), damx, damy - 25, 250, 250, 10
         mon2.xoff = 0: mon2.yoff = 0
+        #If USELEGACY <> 1 Then
+            'm'' little game message to say one of your pet being swallowed!
+            If mon1.owner = 0 Then 'm''
+                gamemsg "Your " & montype(mon2.type).name & " have been swallowed by a " & montype(mon1.type).name & " !" 'm''
+            End If 'm''
+        #End If
     End If
 5
 
@@ -2326,13 +2487,13 @@ For c = 1 To 5
 'For b = mon(monnum).y - c To mon(monnum).y + c
 
 'Go after monsters close to the player
-For a = plr.x - c To plr.x + c
-For b = plr.y - c To plr.y + c
+For a = plr.X - c To plr.X + c
+For b = plr.Y - c To plr.Y + c
 
 If a > mapx Or a < 1 Then GoTo 5
 If b > mapy Or b < 1 Then GoTo 5
 
-If a = mon(monnum).x And b = mon(monnum).y Then GoTo 5
+If a = mon(monnum).X And b = mon(monnum).Y Then GoTo 5
 If map(a, b).monster > 0 Then If mon(map(a, b).monster).owner = 0 Then targ = map(a, b).monster: Exit For
 
 5 Next b
@@ -2344,15 +2505,15 @@ Next c
 If targ = 0 Then Exit Function
 findmon = targ
 
-If nomove = 0 Then monmove monnum, posneg(mon(targ).x, mon(monnum).x), posneg(mon(targ).y, mon(monnum).y)
+If nomove = 0 Then monmove monnum, posneg(mon(targ).X, mon(monnum).X), posneg(mon(targ).Y, mon(monnum).Y)
 
 End Function
 
 Function nearmon(ByVal distance, Optional ByVal ignorethismon = 0)
 'Returns enemy monster near player
 nearmon = 0
-For a = plr.x - distance To plr.x + distance
-For b = plr.y - distance To plr.y + distance
+For a = plr.X - distance To plr.X + distance
+For b = plr.Y - distance To plr.Y + distance
     If a > mapx Or a < 1 Then GoTo 5
     If b > mapy Or b < 1 Then GoTo 5
 
@@ -2375,40 +2536,40 @@ If v1 < 1 Then posit = -v1 Else posit = v1
 End Function
 
 Sub plrmove(xplus, yplus)
-If plr.x + xplus < 1 And Not mapjunk.maps(4) = "" Then
+If plr.X + xplus < 1 And Not mapjunk.maps(4) = "" Then
 fn = mapjunk.maps(4)
 monlev = checklevels(fn)
 If monlev > plr.level Then If MsgBox("The lowest level monster in that area is level " & monlev & ".  You are level " & plr.level & ".  Meaning you really don't want to go there.  Do you want to be a 'tard and go there anyway?", vbYesNo) = vbNo Then Exit Sub
-gotomap mapjunk.maps(4): plr.x = mapx: plr.y = Int(mapy / 2): Exit Sub
+gotomap mapjunk.maps(4): plr.X = mapx: plr.Y = Int(mapy / 2): Exit Sub
 End If
 
-If plr.y + yplus < 1 And Not mapjunk.maps(1) = "" Then
+If plr.Y + yplus < 1 And Not mapjunk.maps(1) = "" Then
 fn = mapjunk.maps(1)
 monlev = checklevels(fn)
 If monlev > plr.level Then If MsgBox("The lowest level monster in that area is level " & monlev & ".  You are level " & plr.level & ".  Meaning you really don't want to go there.  Do you want to be a 'tard and go there anyway?", vbYesNo) = vbNo Then Exit Sub
-gotomap mapjunk.maps(1): plr.x = Int(mapx / 2): plr.y = mapy: Exit Sub
+gotomap mapjunk.maps(1): plr.X = Int(mapx / 2): plr.Y = mapy: Exit Sub
 End If
 
-If plr.x + xplus > mapx And Not mapjunk.maps(2) = "" Then
+If plr.X + xplus > mapx And Not mapjunk.maps(2) = "" Then
 fn = mapjunk.maps(2)
 monlev = checklevels(fn)
 If monlev > plr.level Then If MsgBox("The lowest level monster in that area is level " & monlev & ".  You are level " & plr.level & ".  Meaning you really don't want to go there.  Do you want to be a 'tard and go there anyway?", vbYesNo) = vbNo Then Exit Sub
-gotomap mapjunk.maps(2): plr.x = 1: plr.y = Int(mapy / 2): Exit Sub
+gotomap mapjunk.maps(2): plr.X = 1: plr.Y = Int(mapy / 2): Exit Sub
 End If
 
-If plr.y + yplus > mapy And Not mapjunk.maps(3) = "" Then
+If plr.Y + yplus > mapy And Not mapjunk.maps(3) = "" Then
 fn = mapjunk.maps(3)
 monlev = checklevels(fn)
 If monlev > plr.level Then If MsgBox("The lowest level monster in that area is level " & monlev & ".  You are level " & plr.level & ".  Meaning you really don't want to go there.  Do you want to be a 'tard and go there anyway?", vbYesNo) = vbNo Then Exit Sub
-gotomap mapjunk.maps(3): plr.x = Int(mapx / 2): plr.y = 1: Exit Sub
+gotomap mapjunk.maps(3): plr.X = Int(mapx / 2): plr.Y = 1: Exit Sub
 End If
 
-If plr.x + xplus < 1 Or plr.x + xplus > mapx Or plr.y + yplus < 1 Or plr.y + yplus > mapy Then Exit Sub
-If map(plr.x + xplus, plr.y + yplus).blocked = 1 Then playsound "oof.wav": Exit Sub
-If map(plr.x + xplus, plr.y + yplus).monster >= 1 Then If mon(map(plr.x + xplus, plr.y + yplus).monster).owner = 0 Or Ccom = "EAT" Then plrattack map(plr.x + xplus, plr.y + yplus).monster: Exit Sub
-If takeobj(plr.x + xplus, plr.y + yplus, 0, dummyobj) Then xplus = 0: yplus = 0
+If plr.X + xplus < 1 Or plr.X + xplus > mapx Or plr.Y + yplus < 1 Or plr.Y + yplus > mapy Then Exit Sub
+If map(plr.X + xplus, plr.Y + yplus).blocked = 1 Then playsound "oof.wav": Exit Sub
+If map(plr.X + xplus, plr.Y + yplus).monster >= 1 Then If mon(map(plr.X + xplus, plr.Y + yplus).monster).owner = 0 Or Ccom = "EAT" Then plrattack map(plr.X + xplus, plr.Y + yplus).monster: Exit Sub
+If takeobj(plr.X + xplus, plr.Y + yplus, 0, dummyobj) Then xplus = 0: yplus = 0
 
-plr.x = plr.x + xplus: plr.y = plr.y + yplus
+plr.X = plr.X + xplus: plr.Y = plr.Y + yplus
 
 plr.xoff = getxoff(xplus, yplus)
 plr.yoff = getyoff(xplus, yplus)
@@ -2431,9 +2592,10 @@ End Function
 Function diff(ByVal v1, ByVal v2)
 'If v1 < 0 Then v1 = -v1
 'If v2 < 0 Then v2 = -v2
-v1 = v1 - v2
-If v1 < 0 Then v1 = -v1
-diff = v1
+diff = Abs(v1 - v2) 'm'' absolute
+'m'' v1 = v1 - v2
+'m'' If v1 < 0 Then v1 = -v1
+'m'' diff = v1
 End Function
 
 Sub monatk(monnum)
@@ -2447,9 +2609,9 @@ If skilltotal("Fire Aura", 1, 1) > 0 Then
     If mon(monnum).hp <= 0 Then Exit Sub
 End If
 
-If Not map(mon(monnum).x, mon(monnum).y).monster = monnum Then map(mon(monnum).x, mon(monnum).y).monster = monnum
+If Not map(mon(monnum).X, mon(monnum).Y).monster = monnum Then map(mon(monnum).X, mon(monnum).Y).monster = monnum
 
-getlitxy mon(monnum).x, mon(monnum).y, damx, damy, mongraphs(mon(monnum).type)
+getlitxy mon(monnum).X, mon(monnum).Y, damx, damy, mongraphs(mon(monnum).type)
 
 monz = montype(mon(monnum).type)
 'playsound "attack1.wav"
@@ -2490,8 +2652,8 @@ If aroll > succroll(getdex * ((plr.hp / gethpmax) + 1) * 2, 5) Or roll(20) = 1 O
 15      'gamemsg getswallow(monnum)
         plr.instomach = monnum
         If montype(mon(plr.instomach).type).eattype = 1 Then stomachlevel = 5
-        plr.xoff = getxoff(mon(monnum).x - plr.x, mon(monnum).y - plr.y)
-        plr.yoff = getyoff(mon(monnum).x - plr.x, mon(monnum).y - plr.y)
+        plr.xoff = getxoff(mon(monnum).X - plr.X, mon(monnum).Y - plr.Y)
+        plr.yoff = getyoff(mon(monnum).X - plr.X, mon(monnum).Y - plr.Y)
         
         mon(monnum).cell = 3
         mon(monnum).animdelay = 4
@@ -2591,57 +2753,57 @@ succroll = tot
 
 End Function
 
-Function randomchunk(ByVal sizeish, Optional ByVal x = 0, Optional ByVal y = 0, Optional ByVal tiletype = 1)
+Function randomchunk(ByVal sizeish, Optional ByVal X = 0, Optional ByVal Y = 0, Optional ByVal tiletype = 1)
 'Static totalrunning As Long
 'Debug.Print "Random Chunk " & x & ", " & y & " Total:" & totalrunning
 'totalrunning = totalrunning + 1
 sizeish = sizeish * sizeish
 
-2 If x = 0 Then x = roll(mapx)
-If y = 0 Then y = roll(mapy)
-3 If x < 1 Or x > mapx Or y < 1 Or y > mapy Then x = 0: y = 0: GoTo 2
-If map(x, y).tile = tiletype And tries < 100 Then x = x + roll(3) - 2: y = y + roll(3) - 2: tries = tries + 1: GoTo 3
+2 If X = 0 Then X = roll(mapx)
+If Y = 0 Then Y = roll(mapy)
+3 If X < 1 Or X > mapx Or Y < 1 Or Y > mapy Then X = 0: Y = 0: GoTo 2
+If map(X, Y).tile = tiletype And tries < 100 Then X = X + roll(3) - 2: Y = Y + roll(3) - 2: tries = tries + 1: GoTo 3
 If sizeish = 0 Then GoTo 5
 If tries >= 100 Then Exit Function
-map(x, y).tile = tiletype: sizeish = sizeish - 1: tries = 0
+map(X, Y).tile = tiletype: sizeish = sizeish - 1: tries = 0
 'Lava and water are impassable
-If tiletype = 8 Or tiletype = 18 Then map(x, y).blocked = 1 Else map(x, y).blocked = 0
+If tiletype = 8 Or tiletype = 18 Then map(X, Y).blocked = 1 Else map(X, Y).blocked = 0
 GoTo 3
 5
 
 End Function
 
-Function ovrchunk(ByVal sizeish, Optional ByVal x = 0, Optional ByVal y = 0, Optional ByVal tiletype = 1)
+Function ovrchunk(ByVal sizeish, Optional ByVal X = 0, Optional ByVal Y = 0, Optional ByVal tiletype = 1)
 'Static totalrunning As Long
 'Debug.Print "Random Chunk " & x & ", " & y & " Total:" & totalrunning
 'totalrunning = totalrunning + 1
 sizeish = sizeish * sizeish
 tries = 0
 
-2 If x = 0 Then x = roll(mapx)
-If y = 0 Then y = roll(mapy)
-3 If x < 1 Or x > mapx Or y < 1 Or y > mapy Then x = 0: y = 0: GoTo 2
+2 If X = 0 Then X = roll(mapx)
+If Y = 0 Then Y = roll(mapy)
+3 If X < 1 Or X > mapx Or Y < 1 Or Y > mapy Then X = 0: Y = 0: GoTo 2
 If tries > 250 Then Exit Function
-If map(x, y).ovrtile = tiletype Or map(x, y).blocked = 1 Then tries = tries + 1: x = x + roll(3) - 2: y = y + roll(3) - 2: GoTo 3
+If map(X, Y).ovrtile = tiletype Or map(X, Y).blocked = 1 Then tries = tries + 1: X = X + roll(3) - 2: Y = Y + roll(3) - 2: GoTo 3
 If sizeish <= 0 Then GoTo 5
 
-map(x, y).ovrtile = tiletype: sizeish = sizeish - 1: map(x, y).blocked = 1: If tiletype = 5 Or tiletype = 17 Or tiletype = 20 Then map(x, y).blocked = 0
+map(X, Y).ovrtile = tiletype: sizeish = sizeish - 1: map(X, Y).blocked = 1: If tiletype = 5 Or tiletype = 17 Or tiletype = 20 Then map(X, Y).blocked = 0
 GoTo 3
 5
 
 End Function
 
-Function createobj(ByVal typename, ByVal x, ByVal y, Optional ByVal name = "", Optional str = "", Optional str2 = "")
+Function createobj(ByVal typename, ByVal X, ByVal Y, Optional ByVal name = "", Optional str = "", Optional str2 = "")
 If typename = "" Then Exit Function
 objtotal = objtotal + 1
 ReDim Preserve objs(1 To objtotal) As aobject
 
-If x > 0 Then GoTo 6
-3 x = roll(mapx)
-y = roll(mapy)
-If map(x, y).blocked > 0 Or map(x, y).object > 0 Then GoTo 3
-6 If x = 0 Or y = 0 Or x > mapx Or y > mapy Then GoTo 3
-If map(x, y).blocked > 0 Or map(x, y).object > 0 Then x = x + roll(3) - 2: y = y + roll(3) - 2: GoTo 6
+If X > 0 Then GoTo 6
+3 X = roll(mapx)
+Y = roll(mapy)
+If map(X, Y).blocked > 0 Or map(X, Y).object > 0 Then GoTo 3
+6 If X = 0 Or Y = 0 Or X > mapx Or Y > mapy Then GoTo 3
+If map(X, Y).blocked > 0 Or map(X, Y).object > 0 Then X = X + roll(3) - 2: Y = Y + roll(3) - 2: GoTo 6
 
 If Val(typename) > 0 Then objs(objtotal).type = typename: GoTo 8
 For a = 1 To objts
@@ -2653,9 +2815,9 @@ If name = "" And Val(typename) = 0 Then name = typename
 objs(objtotal).name = name
 objs(objtotal).string = str
 objs(objtotal).string2 = str2
-objs(objtotal).x = x
-objs(objtotal).y = y
-map(x, y).object = objtotal
+objs(objtotal).X = X
+objs(objtotal).Y = Y
+map(X, Y).object = objtotal
 createobj = objtotal
 End Function
 
@@ -2783,7 +2945,7 @@ topclothes = a
 
 End Function
 
-Function takeobj(x, y, frominv, dobjtype As objecttype)
+Function takeobj(X, Y, frominv, dobjtype As objecttype)
 'True means kick the player back to the square she was in
 'If x is -1, then it will take the object from inventory slot #y
 'if dobjtype.name = "Mercenary Girl2" Then Stop
@@ -2793,21 +2955,21 @@ updatbonuses = 1
 Dim dobjt As objecttype
 takeobj = False
 On Error Resume Next
-If x = -1 And y > 0 Then dobjt = inv(y): dobj = y: invnum = y: GoTo 3
-If x = 0 And y = 0 And frominv = 0 Then dobjt = dobjtype
+If X = -1 And Y > 0 Then dobjt = inv(Y): dobj = Y: invnum = Y: GoTo 3
+If X = 0 And Y = 0 And frominv = 0 Then dobjt = dobjtype
 
-If x = 0 And y = 0 Then GoTo 2
-If map(x, y).object = 0 Then Exit Function
+If X = 0 And Y = 0 Then GoTo 2
+If map(X, Y).object = 0 Then Exit Function
 
-dobj = map(x, y).object
+dobj = map(X, Y).object
 dobjt = objtypes(objs(dobj).type)
-2 If Not dobjtype.name = "" Then dobjt = dobjtype: If x = 0 Then dobj = dobjt.name
+2 If Not dobjtype.name = "" Then dobjt = dobjtype: If X = 0 Then dobj = dobjt.name
 3
-If x > 0 And y > 0 And Ccom = "EAT" Then If eatobj(dobj) = False Then takeobj = True: Exit Function Else Exit Function
+If X > 0 And Y > 0 And Ccom = "EAT" Then If eatobj(dobj) = False Then takeobj = True: Exit Function Else Exit Function
 
 For a = 1 To 6
     If dobjt.effect(a, 1) = "GEM" Then Ccom = "GEM:" & dobj: gamemsg "Double-click on the item you want to add the gem to."
-    If dobjt.effect(a, 1) = "Pickup" Then If frominv = 0 Then playsound dobjt.effect(a, 2): getitem dobjt: If x > 0 Or y > 0 Then map(x, y).object = 0: Exit Function Else Exit Function
+    If dobjt.effect(a, 1) = "Pickup" Then If frominv = 0 Then playsound dobjt.effect(a, 2): getitem dobjt: If X > 0 Or Y > 0 Then map(X, Y).object = 0: Exit Function Else Exit Function
     If dobjt.effect(a, 1) = "Backup" Then takeobj = True
     If dobjt.effect(a, 1) = "Givestr" Then plr.str = plr.str + dobjt.effect(a, 2)
     If dobjt.effect(a, 1) = "Givedex" Then plr.dex = plr.dex + dobjt.effect(a, 2)
@@ -2829,10 +2991,23 @@ For a = 1 To 6
     End If
     
     If dobjt.effect(a, 1) = "Clothes" Then playsound "clothes1.wav"
-    If dobjt.effect(a, 1) = "Clothes" And Not (Ccom = "Gem" And x = -1) Then
+    If dobjt.effect(a, 1) = "Clothes" And Not (Ccom = "Gem" And X = -1) Then
         If invnum = Empty Then invnum = 50 'Or MsgBox("This will increase your total armor. Would you like to equip it?", vbYesNo) = vbYes
         'If findclothesmatch(dobjt.effect(a, 4), dobjt.effect(a, 5)) < Val(dobjt.effect(a, 3)) Then
-        If x = -1 Then killitem inv(invnum): destroy = 2: f = addclothes(dobjt.name, dobjt.effect(a, 2), Val(dobjt.effect(a, 3)), dobjt.effect(a, 4), dobjt.effect(a, 5), dobjt.r, dobjt.g, dobjt.b, dobjt.l, , getraster(dobjt)): clothes(f).obj = dobjt: checkclothes f: Form1.updatbody: GoTo 5 Else If frominv = 0 Then getitem dobjt: If x > 0 Then map(x, y).object = 0: GoTo 5 Else GoTo 5
+        
+        #If USELEGACY <> 1 Then
+        'm'' Naga class handler : it cant wear lowerpart clothes
+        If plr.Class = "Naga" And X = -1 Then 'm''
+            wr1 = dobjt.effect(a, 4) 'm''
+            wr2 = dobjt.effect(a, 5) 'm''
+            If wr1 = "Panties" Or wr1 = "Lower" Or wr2 = "Panties" Or wr2 = "Lower" Then 'm''
+                playsound "failed1.wav" 'm''
+                gamemsg "You can't wear that!" 'm''
+                GoTo 5 'm''
+            End If 'm''
+        End If
+        #End If
+        If X = -1 Then killitem inv(invnum): destroy = 2: F = addclothes(dobjt.name, dobjt.effect(a, 2), Val(dobjt.effect(a, 3)), dobjt.effect(a, 4), dobjt.effect(a, 5), dobjt.r, dobjt.g, dobjt.b, dobjt.l, , getraster(dobjt)): clothes(F).obj = dobjt: checkclothes F: Form1.updatbody: GoTo 5 Else If frominv = 0 Then getitem dobjt: If X > 0 Then map(X, Y).object = 0: GoTo 5 Else GoTo 5
         'If findclothesmatch(dobjt.effect(a, 4), dobjt.effect(a, 5)) >= Val(dobjt.effect(a, 3)) Then If MsgBox("This will weaken your total armor. Would you like to equip it anyway?", vbYesNo) = vbYes Then killitem inv(invnum): destroy = 2: f = addclothes(dobjt.name, dobjt.effect(a, 2), Val(dobjt.effect(a, 3)), dobjt.effect(a, 4), dobjt.effect(a, 5), dobjt.r, dobjt.g, dobjt.b, dobjt.l, , getraster(dobjt)): clothes(f).obj = dobjt: checkclothes f: Form1.updatbody Else If frominv = 0 Then getitem dobjt: If X > 0 Then map(X, Y).object = 0
     End If
     
@@ -2841,15 +3016,15 @@ For a = 1 To 6
     If dobjt.effect(a, 1) = "IfQuest" Then If Not ifquest(dobjt.effect(a, 2)) Then takeobj = True: Exit Function
     If dobjt.effect(a, 1) = "NotQuest" Then If ifquest(dobjt.effect(a, 2)) Then takeobj = True: Exit Function
     If dobjt.effect(a, 1) = "SetQuest" Then ifquest dobjt.effect(a, 2), 1
-    If dobjt.effect(a, 1) = "Destruct" Or destroy = 1 Then If Not x = 0 Then If x > -1 Then map(x, y).object = 0 Else killitem inv(invnum)
-    If destroy = 2 Then If Not x = 0 Then If x > -1 Then map(x, y).object = 0
-    If dobjt.effect(a, 1) = "Give" Then createobj dobjt.effect(a, 2), plr.x, plr.y: takeobj plr.x, plr.y, 0, dummyobj
-    If dobjt.effect(a, 1) = "Become" Then createobj dobjt.effect(a, 2), x, y, dobjt.effect(a, 3), dobjt.effect(a, 4), dobjt.effect(a, 5)
+    If dobjt.effect(a, 1) = "Destruct" Or destroy = 1 Then If Not X = 0 Then If X > -1 Then map(X, Y).object = 0 Else killitem inv(invnum)
+    If destroy = 2 Then If Not X = 0 Then If X > -1 Then map(X, Y).object = 0
+    If dobjt.effect(a, 1) = "Give" Then createobj dobjt.effect(a, 2), plr.X, plr.Y: takeobj plr.X, plr.Y, 0, dummyobj
+    If dobjt.effect(a, 1) = "Become" Then createobj dobjt.effect(a, 2), X, Y, dobjt.effect(a, 3), dobjt.effect(a, 4), dobjt.effect(a, 5)
     If dobjt.effect(a, 1) = "Heal" Then plrdamage transval(dobjt.effect(a, 2)) * -1
     If dobjt.effect(a, 1) = "Givemp" Then plr.mp = plr.mp + transval(dobjt.effect(a, 2)): If plr.mp > getmpmax Then plr.mp = getmpmax
     If dobjt.effect(a, 1) = "Spell" Then castspell dobjt.effect(a, 2), , 1
-    If dobjt.effect(a, 1) = "Teleport" Then plr.x = dobjt.effect(a, 2): plr.y = dobjt.effect(a, 3)
-    If dobjt.effect(a, 1) = "MapTeleport" Then If plr.instomach = 0 Then gotomap dobjt.effect(a, 2): plr.x = dobjt.effect(a, 3): plr.y = dobjt.effect(a, 4) Else gamemsg "You cannot leave while you're being digested!"
+    If dobjt.effect(a, 1) = "Teleport" Then plr.X = dobjt.effect(a, 2): plr.Y = dobjt.effect(a, 3)
+    If dobjt.effect(a, 1) = "MapTeleport" Then If plr.instomach = 0 Then gotomap dobjt.effect(a, 2): plr.X = dobjt.effect(a, 3): plr.Y = dobjt.effect(a, 4) Else gamemsg "You cannot leave while you're being digested!"
     If dobjt.effect(a, 1) = "Giveexp" Then plr.exp = plr.exp + dobjt.effect(a, 2)
     If dobjt.effect(a, 1) = "GiveGold" Then
         randsound "gold", 3
@@ -3004,7 +3179,7 @@ If Not target = 0 Or target2 = "Target" Then
         angleplus = Val(getfromstring(spell.target, 4))
         shots = Val(getfromstring(spell.target, 3))
         If shots = 0 Then shots = 1
-        radius = Val(getfromstring(spell.target, 5))
+        Radius = Val(getfromstring(spell.target, 5))
         bijdangt = Val(getfromstring(spell.target, 6))
         pierce = Val(getfromstring(spell.target, 7))
         'pierce = Val(getfromstring(spell.target, 5))
@@ -3017,11 +3192,11 @@ If Not target = 0 Or target2 = "Target" Then
         If spelltype = "OOZE" Then tt = 6
         If spelltype = "BOLT" Then tt = 7
         'If Not tt = 0 Then
-        shootat shotx, shoty, tt, "PLAYER:" & dmg & ":1:" & pierce & ":" & radius & ":" & bijdangt, , , shots * shotmult, angleplus, Val(getfromstring(spell.target, 7))
+        shootat shotx, shoty, tt, "PLAYER:" & dmg & ":1:" & pierce & ":" & Radius & ":" & bijdangt, , , shots * shotmult, angleplus, Val(getfromstring(spell.target, 7))
     End If
         
     If spelltype = "" And target > 0 Then
-    makebijdang mon(target).x, mon(target).y, 3
+    makebijdang mon(target).X, mon(target).Y, 3
     damagemon target, dmg
     End If
     
@@ -3041,8 +3216,8 @@ If Not target = 0 Or target2 = "Target" Then
     If spell.effect = "Teleport" Then
         If InStr(1, plr.curmap, "Thirshasvolcano.txt") > 0 Then gamemsg "You cannot teleport here.": Exit Function
         getXY shotx, shoty
-        plr.x = shotx: plr.y = shoty
-        makebijdang plr.x, plr.y, 3
+        plr.X = shotx: plr.Y = shoty
+        makebijdang plr.X, plr.Y, 3
         If plr.instomach > 0 Then mon(plr.instomach).cell = 1: plr.instomach = 0: plr.mp = Int(plr.mp / 2) 'Uses half of total MP to teleport out of stomachs
         playsound "spell1.wav"
     End If
@@ -3053,6 +3228,13 @@ End If
 If spell.effect = "Summon" Then
     summonmonster getfromstring(spell.target, 1), getfromstring(spell.target, 2), dmg2 + getint & ":" & getfromstring(origdmg, 2) & ":" & getfromstring(origdmg, 3), getfromstring(spell.target, 3), getfromstring(spell.target, 4), getfromstring(spell.target, 5), getfromstring(spell.target, 6), getfromstring(spell.target, 7), getfromstring(spell.target, 8), Val(getfromstring(spell.target, 9))
 End If
+
+'m'' "Dispell" summons, asked by some Eka's folk
+If spell.effect = "Revoke" Then 'm''
+    For a = 1 To totalmonsters 'm''
+        If mon(a).owner > 0 Then killmon a, 1 'm''
+    Next a 'm''
+End If 'm''
 
 If spell.target = "Player" Or spell.target = "" Then
 
@@ -3065,7 +3247,7 @@ If spell.target = "Player" Or spell.target = "" Then
     If spell.effect = "Giveint" Then gamemsg "You cast " & spell.name & " and your intelligence increases!": plr.int = plr.int - plr.intboost: plr.intboost = dmg2: plr.int = plr.int + plr.intboost: boostcount = 50
     If spell.effect = "Regen" Then gamemsg "You cast " & spell.name: plr.regen = dmg: boostcount = 50
 
-    If spell.effect = "Create" Then createobj spell.amount, plr.x, plr.y, spell.amount
+    If spell.effect = "Create" Then createobj spell.amount, plr.X, plr.Y, spell.amount
     If spell.effect = "Undigest" Then gamemsg "You cast " & spell.name & " to restore one piece of your armor.": undigest
     If spell.effect = "EWeapon" Then gamemsg "You cast a spell to enhance your weapon for as long as you're holding it!": wep.damage = wep.damage + dmg
     If spell.effect = "EArmor" Then gamemsg "You cast a spell to enhance your " & clothes(topclothes()).name & " for as long as you're wearing it!": clothes(topclothes()).armor = clothes(topclothes()).armor + dmg
@@ -3111,8 +3293,8 @@ If spell.target = "All" Then
     If spell.effect = "Damage" Then
     gamemsg "You cast " & spell.name & ", inflicting " & dmg & " damage on all creatures within your range."
     For a = 1 To totalmonsters
-        If mon(a).x = 0 Or mon(a).y = 0 Then GoTo 5
-        If diff(plr.x, mon(a).x) < 8 And diff(plr.y, mon(a).y) < 8 Then damagemon a, dmg
+        If mon(a).X = 0 Or mon(a).Y = 0 Then GoTo 5
+        If diff(plr.X, mon(a).X) < 8 And diff(plr.Y, mon(a).Y) < 8 Then damagemon a, dmg
 5    Next a
     End If
 End If
@@ -3284,7 +3466,7 @@ End Function
 Sub movobjs()
 For a = 1 To objtotal
     If objs(a).type = 0 Then GoTo 5
-    If objtypes(objs(a).type).effect(1, 1) = "Mobile" Then If roll(8) < objtypes(objs(a).type).effect(1, 2) Then targmove objs(a).x, objs(a).y, roll(3) - 2, roll(3) - 2, "Object" & a, objs(a).xoff, objs(a).yoff
+    If objtypes(objs(a).type).effect(1, 1) = "Mobile" Then If roll(8) < objtypes(objs(a).type).effect(1, 2) Then targmove objs(a).X, objs(a).Y, roll(3) - 2, roll(3) - 2, "Object" & a, objs(a).xoff, objs(a).yoff
 5 Next a
 
 End Sub
@@ -3297,7 +3479,7 @@ If (targy + yplus) < 1 Or (targy + yplus) > mapy Then Exit Sub
 If map(targx + xplus, targy + yplus).blocked = 1 Then Exit Sub
 If map(targx + xplus, targy + yplus).monster > 0 Then Exit Sub
 If map(targx + xplus, targy + yplus).object > 0 And Left(otype, 6) = "Object" Then Exit Sub
-If targx + xplus = plr.x Or targy + yplus = plr.y Then Exit Sub
+If targx + xplus = plr.X Or targy + yplus = plr.Y Then Exit Sub
 
 If Left(otype, 6) = "Object" Then map(targx, targy).object = 0
 
@@ -3354,32 +3536,32 @@ Next b
 Next a
 End Sub
 
-Sub createbuilding(Optional ByVal xsize = 0, Optional ByVal ysize = 0, Optional ByVal btype = "", Optional ByVal overlap = 1, Optional ByVal tile = 3, Optional ByVal ovrtile = 1, Optional ByVal x = 0, Optional ByVal y = 0, Optional ByVal multdoors = 1)
+Sub createbuilding(Optional ByVal xsize = 0, Optional ByVal ysize = 0, Optional ByVal btype = "", Optional ByVal overlap = 1, Optional ByVal tile = 3, Optional ByVal ovrtile = 1, Optional ByVal X = 0, Optional ByVal Y = 0, Optional ByVal multdoors = 1)
 5 bugger = bugger + 1: If bugger > 10 Then Exit Sub '(Only ten attempts will be made to place any particular building)
 If xsize = 0 Then xsize = 3 + roll(9)
 If ysize = 0 Then ysize = 3 + roll(9)
 
-2 If x <= 0 Or xsize + x > mapx Then x = roll((mapx - xsize) - 6) + 2: GoTo 2
-If y <= 0 Or ysize + y > mapy Then y = roll((mapy - ysize) - 6) + 2: GoTo 2
+2 If X <= 0 Or xsize + X > mapx Then X = roll((mapx - xsize) - 6) + 2: GoTo 2
+If Y <= 0 Or ysize + Y > mapy Then Y = roll((mapy - ysize) - 6) + 2: GoTo 2
 
 
 'checks spot
-For a = x To xsize + x
-For b = y To ysize + y
+For a = X To xsize + X
+For b = Y To ysize + Y
     If map(a, b).used = 1 Then used = 1: Exit For
 Next b
 If used = 1 Then Exit For
 Next a
 
-If used = 1 And overlap = 0 Then x = 0: y = 0: GoTo 5
+If used = 1 And overlap = 0 Then X = 0: Y = 0: GoTo 5
 
 'place building
 
-For a = x To xsize + x
-For b = y To ysize + y
+For a = X To xsize + X
+For b = Y To ysize + Y
     If map(a, b).used = 0 Or overlap > 0 Then map(a, b).ovrtile = 0: map(a, b).blocked = 0
-    If b = ysize + y Or b = y Then If map(a, b).used = 0 Or overlap = 1 And map(a, b).object = 0 Then map(a, b).ovrtile = ovrtile: map(a, b).blocked = 1
-    If a = xsize + x Or a = x Then If map(a, b).used = 0 Or overlap = 1 And map(a, b).object = 0 Then map(a, b).ovrtile = ovrtile: map(a, b).blocked = 1
+    If b = ysize + Y Or b = Y Then If map(a, b).used = 0 Or overlap = 1 And map(a, b).object = 0 Then map(a, b).ovrtile = ovrtile: map(a, b).blocked = 1
+    If a = xsize + X Or a = X Then If map(a, b).used = 0 Or overlap = 1 And map(a, b).object = 0 Then map(a, b).ovrtile = ovrtile: map(a, b).blocked = 1
     map(a, b).tile = tile
     
     map(a, b).used = 1
@@ -3393,10 +3575,10 @@ Dim doory As Integer
 For a = 1 To multdoors
 tries = 0
 7 doorside = roll(4): tries = tries + 1
-If doorside = 1 Then doorx = x + xsize / 2: doory = ysize + y: xp = 0: yp = 1
-If doorside = 2 Then doorx = x + xsize / 2: doory = y: xp = 0: yp = -1
-If doorside = 3 Then doory = y + ysize / 2: doorx = xsize + x: yp = 0: xp = 1
-If doorside = 4 Then doory = y + ysize / 2: doorx = x: yp = 0: xp = -1
+If doorside = 1 Then doorx = X + xsize / 2: doory = ysize + Y: xp = 0: yp = 1
+If doorside = 2 Then doorx = X + xsize / 2: doory = Y: xp = 0: yp = -1
+If doorside = 3 Then doory = Y + ysize / 2: doorx = xsize + X: yp = 0: xp = 1
+If doorside = 4 Then doory = Y + ysize / 2: doorx = X: yp = 0: xp = -1
 If map(doorx, doory).ovrtile = 0 And tries > 15 Then GoTo 7
 map(doorx, doory).ovrtile = 0: map(doorx, doory).blocked = 0
 
@@ -3425,8 +3607,8 @@ If Left(btype, 8) = "Treasure" Then
     If aroll > 10 Then aroll = roll(10)
     If aroll < worth / 10 Then aroll = Int(worth / 10)
     maxtries = 12
-8    xr = roll(xsize - 3) + x + 1
-    yr = roll(ysize - 3) + y + 1
+8    xr = roll(xsize - 3) + X + 1
+    yr = roll(ysize - 3) + Y + 1
     If worth <= 0 Or maxtries <= 0 Then GoTo 12
     If map(xr, yr).object > 0 Then maxtries = maxtries - 1: GoTo 8
     If map(xr, yr).blocked = 1 Then maxtries = maxtries - 1: GoTo 8
@@ -3445,8 +3627,8 @@ If Left(btype, 7) = "Clothes" Or Left(btype, 5) = "Armor" Then
     aroll = Int(worth)
     If aroll < 1 Then aroll = 1
     'worth = worth Mod 4: If worth = 0 Then worth = 4
-15  xr = roll(xsize - 2) + x + 1
-    yr = roll(ysize - 2) + y + 1
+15  xr = roll(xsize - 2) + X + 1
+    yr = roll(ysize - 2) + Y + 1
     If worth <= 0 Or maxtries <= 0 Then GoTo 16
     If map(xr, yr).object > 0 Then maxtries = maxtries - 1: GoTo 15
     If map(xr, yr).blocked = 1 Then maxtries = maxtries - 1: GoTo 15
@@ -3465,8 +3647,8 @@ If Left(btype, 6) = "Potion" Then
     If aroll < worth / 10 Then aroll = Int(worth / 10)
     If aroll <= 0 Then aroll = 1
     maxtries = 12
-19    xr = roll(xsize - 3) + x + 1
-    yr = roll(ysize - 3) + y + 1
+19    xr = roll(xsize - 3) + X + 1
+    yr = roll(ysize - 3) + Y + 1
     If aroll <= 0 Then aroll = 1
     If worth <= 0 Or maxtries <= 0 Then GoTo 20
     If map(xr, yr).object > 0 Then maxtries = maxtries - 1: GoTo 19
@@ -3483,8 +3665,8 @@ If Left(btype, 9) = "Objective" Then
     maxtries = 12
     stuffamt = 3
 21
-    xr = roll(xsize - 3) + x + 1
-    yr = roll(ysize - 3) + y + 1
+    xr = roll(xsize - 3) + X + 1
+    yr = roll(ysize - 3) + Y + 1
     If aroll <= 0 Then aroll = 1
     If worth <= 0 Or maxtries <= 0 Then GoTo 22
     If map(xr, yr).object > 0 Then maxtries = maxtries - 1: GoTo 21
@@ -3498,15 +3680,15 @@ End If
 
 
 If Left(btype, 4) = "SELL" Then
-    f = createobjtype(getstr2(btype, 1), getstr2(btype, 2), roll(255), roll(255), roll(255), roll(10) / 10, 2)
-    addeffect f, getstr2(btype, 0), getstr2(btype, 3), getstr2(btype, 4)
-    createobj objtypes(f).name, x + Int(xsize / 2), y + Int(ysize / 2), objtypes(f).name
+    F = createobjtype(getstr2(btype, 1), getstr2(btype, 2), roll(255), roll(255), roll(255), roll(10) / 10, 2)
+    addeffect F, getstr2(btype, 0), getstr2(btype, 3), getstr2(btype, 4)
+    createobj objtypes(F).name, X + Int(xsize / 2), Y + Int(ysize / 2), objtypes(F).name
 End If
 
 
 End Sub
 
-Function randarmor(Optional worth As Byte = 0, Optional ByRef cost, Optional ByVal forceworth = 0) As objecttype
+Function randarmor(Optional worth As Byte = 0, Optional ByRef Cost, Optional ByVal forceworth = 0) As objecttype
 
 Dim buyarmor As clothesT
 
@@ -3573,7 +3755,7 @@ If wear1 = "Arms" Then gold = gold * 2
 
 gold = gold * materialtypes(matnum).goldmult
 
-cost = Int(gold)
+Cost = Int(gold)
 'buyarmor.wear1 = wear1
 'buyarmor.wear2 = wear2
 'buyarmor.graph = graph
@@ -3586,7 +3768,7 @@ addeffect2 cobjt, materialtypes(matnum).effects(1, 1), materialtypes(matnum).eff
 addeffect2 cobjt, materialtypes(matnum).effects(2, 1), materialtypes(matnum).effects(2, 2), materialtypes(matnum).effects(2, 3)
 addeffect2 cobjt, materialtypes(matnum).effects(3, 1), materialtypes(matnum).effects(3, 2), materialtypes(matnum).effects(3, 3)
 
-cost = getworth(cobjt)
+Cost = getworth(cobjt)
 
 'addeffect2 cobjt, "GRAPH", "clothes.bmp", r, g, b
 'addeffect2 cobjt, "Pickup"
@@ -3652,7 +3834,7 @@ randarmortype = armn
 
 End Function
 
-Function randclothes(Optional colorname = "", Optional r, Optional g, Optional b, Optional l, Optional ByVal worth As Byte = 0, Optional ByRef cost, Optional reqwear1 = "", Optional reqwear2 = "") As objecttype
+Function randclothes(Optional colorname = "", Optional r, Optional g, Optional b, Optional l, Optional ByVal worth As Byte = 0, Optional ByRef Cost, Optional reqwear1 = "", Optional reqwear2 = "") As objecttype
 Dim buyarmor As clothesT
 Dim cobjt As objecttype
 cobjt.graphname = "clothes.bmp": cobjt.graphloaded = 0
@@ -3763,7 +3945,7 @@ gold = gold * materialtypes(matnum).goldmult
 'buyarmor.wear1 = wear1
 'buyarmor.wear2 = wear2
 'buyarmor.graph = graph
-cost = Int(gold)
+Cost = Int(gold)
 cobjt.name = colorname & buyarmor.name
 
 addeffect2 cobjt, "Clothes", graph, Int(basarm), wear1, wear2
@@ -3776,7 +3958,7 @@ cobjt.g = g
 cobjt.b = b
 cobjt.l = l
 
-cost = getworth(cobjt)
+Cost = getworth(cobjt)
 
 randclothes = cobjt
 
@@ -4012,12 +4194,12 @@ If yz2 = 0 Then yz2 = mapy - 6
 
 For a = 1 To num
     If mtype = "ALL" Then wch = roll(lastmontype) Else wch = mtype
-5     x = roll(xz2 - xz) + xz
-    y = roll(yz2 - yz) + yz
-    If map(x, y).blocked = 1 Or map(x, y).tile = 0 Then GoTo 5
-    If x < 8 Or x > mapx - 8 Or y < 8 Or y > mapy - 8 Then GoTo 5
+5     X = roll(xz2 - xz) + xz
+    Y = roll(yz2 - yz) + yz
+    If map(X, Y).blocked = 1 Or map(X, Y).tile = 0 Then GoTo 5
+    If X < 8 Or X > mapx - 8 Or Y < 8 Or Y > mapy - 8 Then GoTo 5
     'Or map(x, y).used = 1
-    createmonster wch, x, y
+    createmonster wch, X, Y
 Next a
 
 End Function
@@ -4076,7 +4258,7 @@ Next a
 Form4.addtxt vbCrLf
 
 For a = 1 To objtotal
-    Form4.addtxt "#CREATEOBJ, " & objtypes(objs(a).type).name & ", " & objs(a).x & ", " & objs(a).y & ", " & objs(a).name & ", " & objs(a).string & ", " & swaptxt(swaptxt(objs(a).string2, Chr(34), "$"), ",", "/") & vbCrLf
+    Form4.addtxt "#CREATEOBJ, " & objtypes(objs(a).type).name & ", " & objs(a).X & ", " & objs(a).Y & ", " & objs(a).name & ", " & objs(a).string & ", " & swaptxt(swaptxt(objs(a).string2, Chr(34), "$"), ",", "/") & vbCrLf
 Next a
 
 Form4.Show
@@ -4116,7 +4298,7 @@ If noupdt = 0 Then Form1.updatbody
 End Sub
 
 
-Function randwep(Optional worth As Byte = 0, Optional ByRef cost, Optional ByVal weptype = "") As objecttype
+Function randwep(Optional worth As Byte = 0, Optional ByRef Cost, Optional ByVal weptype = "") As objecttype
 
 If worth = 0 Then worth = Int(averagelevel / 5)
 
@@ -4199,7 +4381,7 @@ gold = gold * 10
 
 If wear2 = "Bow" Then gold = gold * 1.5
 
-cost = Int(gold)
+Cost = Int(gold)
 'buyarmor.wear1 = wear1
 'buyarmor.wear2 = wear2
 'buyarmor.graph = graph
@@ -4214,7 +4396,7 @@ cobjt.r = r
 cobjt.g = g
 cobjt.b = b
 cobjt.l = l
-cost = getworth(cobjt)
+Cost = getworth(cobjt)
 randwep = cobjt
 
 End Function
@@ -4375,8 +4557,8 @@ For a = 1 To objtotal
     Write #1, objs(a).string
     Write #1, objs(a).string2
     Write #1, objs(a).type
-    Write #1, objs(a).x
-    Write #1, objs(a).y
+    Write #1, objs(a).X
+    Write #1, objs(a).Y
     Write #1, objs(a).xoff
     Write #1, objs(a).yoff
 Next a
@@ -4404,8 +4586,8 @@ For a = 1 To totalmonsters
     Write #1, mon(a).hp
     Write #1, mon(a).owner
     Write #1, mon(a).type
-    Write #1, mon(a).x
-    Write #1, mon(a).y
+    Write #1, mon(a).X
+    Write #1, mon(a).Y
     Write #1, mon(a).instomach
 Next a
 
@@ -4609,8 +4791,8 @@ For a = 1 To objtotal
     Input #1, objs(a).string
     Input #1, objs(a).string2
     Input #1, objs(a).type
-    Input #1, objs(a).x
-    Input #1, objs(a).y
+    Input #1, objs(a).X
+    Input #1, objs(a).Y
     Input #1, objs(a).xoff
     Input #1, objs(a).yoff
     
@@ -4648,8 +4830,8 @@ For a = 1 To totalmonsters
     Input #1, mon(a).hp
     Input #1, mon(a).owner
     Input #1, mon(a).type
-    Input #1, mon(a).x
-    Input #1, mon(a).y
+    Input #1, mon(a).X
+    Input #1, mon(a).Y
     Input #1, mon(a).instomach
 Next a
 
@@ -4758,10 +4940,10 @@ End Function
 Function sprinkleovr(ByVal num, ByVal tt)
 
 For a = 1 To num
-3   x = roll(mapx)
-    y = roll(mapy)
-    If map(x, y).used = 1 Then GoTo 3
-    map(x, y).ovrtile = tt: map(x, y).blocked = 1: If tt = 5 Or tt = 17 Or tt = 20 Then map(x, y).blocked = 0
+3   X = roll(mapx)
+    Y = roll(mapy)
+    If map(X, Y).used = 1 Then GoTo 3
+    map(X, Y).ovrtile = tt: map(X, Y).blocked = 1: If tt = 5 Or tt = 17 Or tt = 20 Then map(X, Y).blocked = 0
 Next a
 
 End Function
@@ -4769,9 +4951,9 @@ End Function
 Function sprinkle(ByVal num, ByVal tt)
 
 For a = 1 To num
-3   x = roll(mapx)
-    y = roll(mapy)
-    If Not map(x, y).used = 1 Then map(x, y).tile = tt Else GoTo 3
+3   X = roll(mapx)
+    Y = roll(mapy)
+    If Not map(X, Y).used = 1 Then map(X, Y).tile = tt Else GoTo 3
 Next a
 
 End Function
@@ -4835,169 +5017,169 @@ End Function
 
 Sub loadtreasuretypes()
 
-f = createobjtype("Treasure Bag (Orange)", "treasure2.bmp", 200, 140, 0, 0.5)
-addeffect f, "GiveGold", "25"
-addeffect f, "Destruct"
+F = createobjtype("Treasure Bag (Orange)", "treasure2.bmp", 200, 140, 0, 0.5)
+addeffect F, "GiveGold", "25"
+addeffect F, "Destruct"
 
-f = createobjtype("Treasure Bag (Green)", "treasure2.bmp", 0, 180, 0, 0.5)
-addeffect f, "GiveGold", "50"
-addeffect f, "Destruct"
+F = createobjtype("Treasure Bag (Green)", "treasure2.bmp", 0, 180, 0, 0.5)
+addeffect F, "GiveGold", "50"
+addeffect F, "Destruct"
 
-f = createobjtype("Treasure Bag (Red)", "treasure2.bmp", 230, 0, 0, 0.5)
-addeffect f, "GiveGold", "100"
-addeffect f, "Destruct"
+F = createobjtype("Treasure Bag (Red)", "treasure2.bmp", 230, 0, 0, 0.5)
+addeffect F, "GiveGold", "100"
+addeffect F, "Destruct"
 
-f = createobjtype("Treasure Bag (Blue)", "treasure2.bmp", 0, 0, 255, 0.5)
-addeffect f, "GiveGold", "200"
-addeffect f, "Destruct"
+F = createobjtype("Treasure Bag (Blue)", "treasure2.bmp", 0, 0, 255, 0.5)
+addeffect F, "GiveGold", "200"
+addeffect F, "Destruct"
 
-f = createobjtype("Treasure Bag (Black)", "treasure2.bmp", 55, 55, 55, 0.3)
-addeffect f, "GiveGold", "500"
-addeffect f, "Destruct"
+F = createobjtype("Treasure Bag (Black)", "treasure2.bmp", 55, 55, 55, 0.3)
+addeffect F, "GiveGold", "500"
+addeffect F, "Destruct"
 
-f = createobjtype("Treasure Chest (Orange)", "treasure1.bmp", 200, 140, 0, 0.5)
-addeffect f, "GiveGold", "100"
-addeffect f, "Destruct"
+F = createobjtype("Treasure Chest (Orange)", "treasure1.bmp", 200, 140, 0, 0.5)
+addeffect F, "GiveGold", "100"
+addeffect F, "Destruct"
 
-f = createobjtype("Treasure Chest (Green)", "treasure1.bmp", 0, 180, 0, 0.5)
-addeffect f, "GiveGold", "250"
-addeffect f, "Destruct"
+F = createobjtype("Treasure Chest (Green)", "treasure1.bmp", 0, 180, 0, 0.5)
+addeffect F, "GiveGold", "250"
+addeffect F, "Destruct"
 
-f = createobjtype("Treasure Chest (Red)", "treasure1.bmp", 230, 0, 0, 0.5)
-addeffect f, "GiveGold", "500"
-addeffect f, "Destruct"
+F = createobjtype("Treasure Chest (Red)", "treasure1.bmp", 230, 0, 0, 0.5)
+addeffect F, "GiveGold", "500"
+addeffect F, "Destruct"
 
-f = createobjtype("Treasure Chest (Blue)", "treasure1.bmp", 0, 0, 255, 0.5)
-addeffect f, "GiveGold", "1000"
-addeffect f, "Destruct"
+F = createobjtype("Treasure Chest (Blue)", "treasure1.bmp", 0, 0, 255, 0.5)
+addeffect F, "GiveGold", "1000"
+addeffect F, "Destruct"
 
-f = createobjtype("Treasure Chest (Black)", "treasure1.bmp", 55, 55, 55, 0.3)
-addeffect f, "GiveGold", "2000"
-addeffect f, "Destruct"
+F = createobjtype("Treasure Chest (Black)", "treasure1.bmp", 55, 55, 55, 0.3)
+addeffect F, "GiveGold", "2000"
+addeffect F, "Destruct"
 
-f = createobjtype("Lesser Healing Potion", "potion1.bmp", 255, 0, 255, 0.4)
+F = createobjtype("Lesser Healing Potion", "potion1.bmp", 255, 0, 255, 0.4)
 'addeffect f, "Pickup"
-addeffect f, "Lifepotion", "1"
-addeffect f, "Destruct"
+addeffect F, "Lifepotion", "1"
+addeffect F, "Destruct"
 
-f = createobjtype("Healing Potion", "potion1.bmp", 255, 30, 255, 0.5)
+F = createobjtype("Healing Potion", "potion1.bmp", 255, 30, 255, 0.5)
 'addeffect f, "Pickup"
-addeffect f, "Lifepotion", "2"
-addeffect f, "Destruct"
+addeffect F, "Lifepotion", "2"
+addeffect F, "Destruct"
 
-f = createobjtype("Greater Healing Potion", "potion1.bmp", 255, 30, 255, 0.7)
+F = createobjtype("Greater Healing Potion", "potion1.bmp", 255, 30, 255, 0.7)
 'addeffect f, "Pickup"
-addeffect f, "Lifepotion", "3"
-addeffect f, "Destruct"
+addeffect F, "Lifepotion", "3"
+addeffect F, "Destruct"
 
-f = createobjtype("Full Healing Potion", "potion1.bmp", 255, 160, 255, 1)
-addeffect f, "Pickup"
-addeffect f, "Heal", "10000"
-addeffect f, "Destruct"
+F = createobjtype("Full Healing Potion", "potion1.bmp", 255, 160, 255, 1)
+addeffect F, "Pickup"
+addeffect F, "Heal", "10000"
+addeffect F, "Destruct"
 
-f = createobjtype("Fountain of Healing", "Fountain1.bmp", 255, 160, 255, 1)
-addeffect f, "Heal", "10000"
-addeffect f, "Givemp", "10000"
-addeffect f, "Backup"
-addeffect f, "NoEat"
+F = createobjtype("Fountain of Healing", "Fountain1.bmp", 255, 160, 255, 1)
+addeffect F, "Heal", "10000"
+addeffect F, "Givemp", "10000"
+addeffect F, "Backup"
+addeffect F, "NoEat"
 
-f = createobjtype("Potion of Strength (Permanent)", "potion1.bmp", 255, 255, 0, 1)
-addeffect f, "Pickup"
-addeffect f, "Givestr", "1"
-addeffect f, "Destruct"
+F = createobjtype("Potion of Strength (Permanent)", "potion1.bmp", 255, 255, 0, 1)
+addeffect F, "Pickup"
+addeffect F, "Givestr", "1"
+addeffect F, "Destruct"
 
-f = createobjtype("Potion of Dexterity (Permanent)", "potion1.bmp", 155, , 155, 0.3)
-addeffect f, "Pickup"
-addeffect f, "Givedex", "1"
-addeffect f, "Destruct"
+F = createobjtype("Potion of Dexterity (Permanent)", "potion1.bmp", 155, , 155, 0.3)
+addeffect F, "Pickup"
+addeffect F, "Givedex", "1"
+addeffect F, "Destruct"
 
-f = createobjtype("Potion of Intelligence (Permanent)", "potion1.bmp", 0, 0, 255, 0.5)
-addeffect f, "Pickup"
-addeffect f, "Giveint", "1"
-addeffect f, "Destruct"
+F = createobjtype("Potion of Intelligence (Permanent)", "potion1.bmp", 0, 0, 255, 0.5)
+addeffect F, "Pickup"
+addeffect F, "Giveint", "1"
+addeffect F, "Destruct"
 
-f = createobjtype("Potion of Experience", "potion1.bmp", 255, 155, 0, 0.3)
-addeffect f, "Pickup"
-addeffect f, "Giveexp", "1000"
-addeffect f, "Destruct"
+F = createobjtype("Potion of Experience", "potion1.bmp", 255, 155, 0, 0.3)
+addeffect F, "Pickup"
+addeffect F, "Giveexp", "1000"
+addeffect F, "Destruct"
 
-f = createobjtype("Greater Potion of Experience", "potion1.bmp", 255, 155, 0, 0.6)
-addeffect f, "Pickup"
-addeffect f, "Giveexp", "10000"
-addeffect f, "Destruct"
+F = createobjtype("Greater Potion of Experience", "potion1.bmp", 255, 155, 0, 0.6)
+addeffect F, "Pickup"
+addeffect F, "Giveexp", "10000"
+addeffect F, "Destruct"
 
-f = createobjtype("Mega Potion of Experience", "potion1.bmp", 255, 155, 0, 1)
-addeffect f, "Pickup"
-addeffect f, "Giveexp", "100000"
-addeffect f, "Destruct"
+F = createobjtype("Mega Potion of Experience", "potion1.bmp", 255, 155, 0, 1)
+addeffect F, "Pickup"
+addeffect F, "Giveexp", "100000"
+addeffect F, "Destruct"
 
-f = createobjtype("Lesser Mana Potion", "potion1.bmp", 0, 0, 255, 0.3)
+F = createobjtype("Lesser Mana Potion", "potion1.bmp", 0, 0, 255, 0.3)
 'addeffect f, "Pickup"
-addeffect f, "Manapotion", "1"
-addeffect f, "Destruct"
+addeffect F, "Manapotion", "1"
+addeffect F, "Destruct"
 
-f = createobjtype("Mana Potion", "potion1.bmp", 0, 0, 255, 0.5)
+F = createobjtype("Mana Potion", "potion1.bmp", 0, 0, 255, 0.5)
 'addeffect f, "Pickup"
-addeffect f, "Manapotion", "2"
-addeffect f, "Destruct"
+addeffect F, "Manapotion", "2"
+addeffect F, "Destruct"
 
-f = createobjtype("Greater Mana Potion", "potion1.bmp", 0, 0, 255, 0.7)
+F = createobjtype("Greater Mana Potion", "potion1.bmp", 0, 0, 255, 0.7)
 'addeffect f, "Pickup"
-addeffect f, "Manapotion", "3"
-addeffect f, "Destruct"
+addeffect F, "Manapotion", "3"
+addeffect F, "Destruct"
 
 createobjtype "Shit", "poo1small.bmp"
 
-f = createobjtype("Blaze Scroll", "scroll.bmp", 250, 150, 0, 0.5)
-addeffect f, "Pickup"
-addeffect f, "Spell", "Blaze"
-addeffect f, "Destruct"
+F = createobjtype("Blaze Scroll", "scroll.bmp", 250, 150, 0, 0.5)
+addeffect F, "Pickup"
+addeffect F, "Spell", "Blaze"
+addeffect F, "Destruct"
 
-f = createobjtype("Teleportation Scroll", "scroll.bmp", 150, 150, 150, 0.5)
-addeffect f, "Pickup"
-addeffect f, "Spell", "Teleport"
-addeffect f, "Destruct"
+F = createobjtype("Teleportation Scroll", "scroll.bmp", 150, 150, 150, 0.5)
+addeffect F, "Pickup"
+addeffect F, "Spell", "Teleport"
+addeffect F, "Destruct"
 
-f = createobjtype("Lightning Storm Scroll", "scroll.bmp", 0, 150, 250, 0.5)
-addeffect f, "Pickup"
-addeffect f, "Spell", "Lightning Storm"
-addeffect f, "Destruct"
+F = createobjtype("Lightning Storm Scroll", "scroll.bmp", 0, 150, 250, 0.5)
+addeffect F, "Pickup"
+addeffect F, "Spell", "Lightning Storm"
+addeffect F, "Destruct"
 
-f = createobjtype("Supernova Scroll", "scroll.bmp", 250, 150, 0, 0.5)
-addeffect f, "Pickup"
-addeffect f, "Spell", "Supernova"
-addeffect f, "Destruct"
+F = createobjtype("Supernova Scroll", "scroll.bmp", 250, 150, 0, 0.5)
+addeffect F, "Pickup"
+addeffect F, "Spell", "Supernova"
+addeffect F, "Destruct"
 
-f = createobjtype("Greater Strength Scroll", "scroll.bmp", 250, 150, 0, 0.5)
-addeffect f, "Pickup"
-addeffect f, "Spell", "Greater Strength"
-addeffect f, "Destruct"
+F = createobjtype("Greater Strength Scroll", "scroll.bmp", 250, 150, 0, 0.5)
+addeffect F, "Pickup"
+addeffect F, "Spell", "Greater Strength"
+addeffect F, "Destruct"
 
-f = createobjtype("Greater Dexterity Scroll", "scroll.bmp", 150, 0, 250, 0.5)
-addeffect f, "Pickup"
-addeffect f, "Spell", "Greater Dexterity"
-addeffect f, "Destruct"
+F = createobjtype("Greater Dexterity Scroll", "scroll.bmp", 150, 0, 250, 0.5)
+addeffect F, "Pickup"
+addeffect F, "Spell", "Greater Dexterity"
+addeffect F, "Destruct"
 
-f = createobjtype("All-Dye Scroll", "scroll.bmp", 150, 0, 250, 0.5)
-addeffect f, "Pickup"
-addeffect f, "Spell", "All-Dye"
-addeffect f, "Destruct"
+F = createobjtype("All-Dye Scroll", "scroll.bmp", 150, 0, 250, 0.5)
+addeffect F, "Pickup"
+addeffect F, "Spell", "All-Dye"
+addeffect F, "Destruct"
 
-f = createobjtype("Small Gold Pile", "gold4.bmp")
-addeffect f, "Mongold"
-addeffect f, "Destruct"
+F = createobjtype("Small Gold Pile", "gold4.bmp")
+addeffect F, "Mongold"
+addeffect F, "Destruct"
 
-f = createobjtype("Medium Gold Pile", "gold3.bmp")
-addeffect f, "Mongold"
-addeffect f, "Destruct"
+F = createobjtype("Medium Gold Pile", "gold3.bmp")
+addeffect F, "Mongold"
+addeffect F, "Destruct"
 
-f = createobjtype("Large Gold Pile", "gold2.bmp")
-addeffect f, "Mongold"
-addeffect f, "Destruct"
+F = createobjtype("Large Gold Pile", "gold2.bmp")
+addeffect F, "Mongold"
+addeffect F, "Destruct"
 
-f = createobjtype("Huge Gold Pile", "gold1.bmp")
-addeffect f, "Mongold"
-addeffect f, "Destruct"
+F = createobjtype("Huge Gold Pile", "gold1.bmp")
+addeffect F, "Mongold"
+addeffect F, "Destruct"
 
 End Sub
 
@@ -5017,29 +5199,29 @@ loadsummons = lastmontype
 'isloaded = 1
 End Function
 
-Function createtreasure(ByVal worth, x, y)
+Function createtreasure(ByVal worth, X, Y)
 
 If roll(3) = 1 Then
     broll = roll(3)
-    If broll = 3 Then createobj "Huge Gold Pile", x, y, , rolldice(averagelevel + 3, averagelevel + 8)
-    If broll = 2 Then createobj "Medium Gold Pile", x, y, , rolldice(averagelevel, averagelevel + 6)
-    If broll = 1 Then createobj "Small Gold Pile", x, y, , rolldice(averagelevel, averagelevel + 2)
+    If broll = 3 Then createobj "Huge Gold Pile", X, Y, , rolldice(averagelevel + 3, averagelevel + 8)
+    If broll = 2 Then createobj "Medium Gold Pile", X, Y, , rolldice(averagelevel, averagelevel + 6)
+    If broll = 1 Then createobj "Small Gold Pile", X, Y, , rolldice(averagelevel, averagelevel + 2)
 End If
 
-If worth = 1 Then createobj "Treasure Bag (Orange)", x, y
-If worth = 2 Then createobj "Treasure Bag (Green)", x, y
-If worth = 3 Then createobj "Treasure Bag (Red)", x, y
-If worth = 4 Then createobj "Treasure Chest (Orange)", x, y
-If worth = 5 Then createobj "Treasure Bag (Blue)", x, y
-If worth = 6 Then createobj "Treasure Chest (Green)", x, y
-If worth = 7 Then createobj "Treasure Bag (Black)", x, y
-If worth = 8 Then createobj "Treasure Chest (Red)", x, y
-If worth = 9 Then createobj "Treasure Chest (Blue)", x, y
-If worth = 10 Then createobj "Treasure Chest (Black)", x, y
+If worth = 1 Then createobj "Treasure Bag (Orange)", X, Y
+If worth = 2 Then createobj "Treasure Bag (Green)", X, Y
+If worth = 3 Then createobj "Treasure Bag (Red)", X, Y
+If worth = 4 Then createobj "Treasure Chest (Orange)", X, Y
+If worth = 5 Then createobj "Treasure Bag (Blue)", X, Y
+If worth = 6 Then createobj "Treasure Chest (Green)", X, Y
+If worth = 7 Then createobj "Treasure Bag (Black)", X, Y
+If worth = 8 Then createobj "Treasure Chest (Red)", X, Y
+If worth = 9 Then createobj "Treasure Chest (Blue)", X, Y
+If worth = 10 Then createobj "Treasure Chest (Black)", X, Y
 
 End Function
 
-Function createclothes(ByVal worth As Byte, x, y, Optional buytype = "", Optional magicchance = 5)
+Function createclothes(ByVal worth As Byte, X, Y, Optional buytype = "", Optional magicchance = 5)
 
 mylev = averagelevel
 If mylev > worth Then worth = mylev
@@ -5050,7 +5232,7 @@ If buytype = "" Then c = makeobjtype(randclothes(, , , , , worth + 1))
 
 If roll(magicchance) = 1 Then makemagicitem objtypes(c), , buytype
 
-createobj objtypes(c).name, x, y
+createobj objtypes(c).name, X, Y
 
 '    randclothes 1, worth
 '    If buytype = "Armor" Then randarmor 1, worth
@@ -5070,13 +5252,13 @@ createobj objtypes(c).name, x, y
 
 End Function
 
-Function createdungeon(ByVal tt, ByVal ot, ByVal x, ByVal y, ByVal x2, ByVal y2, Optional treasureon = 0)
+Function createdungeon(ByVal tt, ByVal ot, ByVal X, ByVal Y, ByVal x2, ByVal y2, Optional treasureon = 0)
 
-If x = 0 Then x = 1: If x2 = 0 Then x2 = mapx
-If y = 0 Then y = 1: If y2 = 0 Then y2 = mapy
+If X = 0 Then X = 1: If x2 = 0 Then x2 = mapx
+If Y = 0 Then Y = 1: If y2 = 0 Then y2 = mapy
 
-For a = x To x2
-For b = y To y2
+For a = X To x2
+For b = Y To y2
     map(a, b).tile = tt
     map(a, b).ovrtile = ot
     map(a, b).blocked = 1
@@ -5084,7 +5266,7 @@ Next b
 Next a
 
 'If eside = 0 Then eside = roll(4)
-For a = 1 To ((x2 - x) / 9) * ((y2 - y) / 9)
+For a = 1 To ((x2 - X) / 9) * ((y2 - Y) / 9)
     trstr = ""
     troll = roll(60)
     If troll <= 4 Then trstr = "Treasure" & wildroll(12) * treasureon
@@ -5092,7 +5274,7 @@ For a = 1 To ((x2 - x) / 9) * ((y2 - y) / 9)
     If troll = 7 Then trstr = "Clothes" & wildroll(2) * treasureon
     If troll = 8 Then trstr = "Armor" & wildroll(1) * treasureon
     If treasureon = 0 Then trstr = ""
-    createbuilding , , trstr, , tt, ot, roll(x2) + x - 10, roll(y2) + y - 10, roll(2) + 2
+    createbuilding , , trstr, , tt, ot, roll(x2) + X - 10, roll(y2) + Y - 10, roll(2) + 2
 Next a
 
 'Create objective room
@@ -5112,15 +5294,15 @@ wildroll = lowestlevel
 'wildroll = total
 End Function
 
-Function createpotion(ByVal worth, x, y)
+Function createpotion(ByVal worth, X, Y)
 
-If worth = 1 Then createobj "Lesser Healing Potion", x, y
-If worth = 2 Then createobj "Healing Potion", x, y
-If worth = 3 Then createobj "Greater Healing Potion", x, y
+If worth = 1 Then createobj "Lesser Healing Potion", X, Y
+If worth = 2 Then createobj "Healing Potion", X, Y
+If worth = 3 Then createobj "Greater Healing Potion", X, Y
 
 End Function
 
-Function createobjective(ByRef worth, x, y)
+Function createobjective(ByRef worth, X, Y)
 
 aroll = roll(8)
 'If aroll = 1 Then
@@ -5129,12 +5311,12 @@ aroll = roll(8)
 'If worth >= 3 Then createobj "Mega Potion of Experience", X, Y: worth = worth - 3
 'End If
 
-If aroll = 2 Then createobj "Potion of Strength (Permanent)", x, y: worth = worth - 1
-If aroll = 3 Then createobj "Potion of Dexterity (Permanent)", x, y: worth = worth - 1
-If aroll = 4 Then createobj "Potion of Intelligence (Permanent)", x, y: worth = worth - 1
-If aroll = 5 Or aroll = 1 Then createclothes worth * 2, x, y, , 1
-If aroll = 6 Then createclothes worth * 1, x, y, "Armor", 1
-If aroll = 7 Or aroll = 8 Then createclothes worth * 2, x, y, "Weapon", 1
+If aroll = 2 Then createobj "Potion of Strength (Permanent)", X, Y: worth = worth - 1
+If aroll = 3 Then createobj "Potion of Dexterity (Permanent)", X, Y: worth = worth - 1
+If aroll = 4 Then createobj "Potion of Intelligence (Permanent)", X, Y: worth = worth - 1
+If aroll = 5 Or aroll = 1 Then createclothes worth * 2, X, Y, , 1
+If aroll = 6 Then createclothes worth * 1, X, Y, "Armor", 1
+If aroll = 7 Or aroll = 8 Then createclothes worth * 2, X, Y, "Weapon", 1
 
 
 End Function
@@ -5159,8 +5341,8 @@ Next a
 End Function
 
 Function clearside(side, tile)
-doorx = x
-doory = y
+doorx = X
+doory = Y
 If side = 1 Then xp = 0: yp = 1: doorx = Int(mapx / 2): doory = 1
 If side = 2 Then xp = -1: yp = 0: doorx = mapx: doory = Int(mapy / 2)
 If side = 3 Then xp = 0: yp = -1: doorx = Int(mapx / 2): doory = mapy
@@ -5592,7 +5774,7 @@ For c = 1 To 16
 '    takeobj -1, 1
     a = getobjslot(inv(1), "Clothes")
     If a = Empty Then GoTo 17
-    f = addclothes(inv(1).name, inv(1).effect(a, 2), Val(inv(1).effect(a, 3)), inv(1).effect(a, 4), inv(1).effect(a, 5), inv(1).r, inv(1).g, inv(1).b, inv(1).l): clothes(f).obj = inv(1): checkclothes f ': destroy = 1: Form1.updatbody
+    F = addclothes(inv(1).name, inv(1).effect(a, 2), Val(inv(1).effect(a, 3)), inv(1).effect(a, 4), inv(1).effect(a, 5), inv(1).r, inv(1).g, inv(1).b, inv(1).l): clothes(F).obj = inv(1): checkclothes F ': destroy = 1: Form1.updatbody
     inv(1).name = ""
 
 17 Next c
@@ -5629,6 +5811,7 @@ If conf = 1 Then If MsgBox("Are you sure you want to make a new character?", vbO
 
 loadgame = 0
 15 Form6.Show '1
+DoEvents 'm'' an infinite loop to avoid
 16
 If plr.Class = "" Then If loadgame = 0 Then DoEvents: GoTo 16 Else GoTo 15
 If loadgame > 0 Then Exit Sub
@@ -5647,6 +5830,7 @@ If Not plr.classskills(1) = "" Then GoTo 5
 
 
 If plr.Class = "Naga" Then
+    
     plr.classskills(1) = "Giant Stomach"
     plr.classskills(2) = "Gluttony"
     plr.classskills(3) = "Water Magic"
@@ -5663,6 +5847,13 @@ If plr.Class = "Naga" Then
     addskill "Mana Regeneration", 0
     addskill "Super Acid", 0
     
+    #If USELEGACY = 1 Then
+    'm'' nothing
+    #Else
+    'm'' Following Naga class description, Giant Stomach should be at lvl 1
+    addskill "Giant Stomach" 'm''
+    #End If
+
 
 End If
 
@@ -5699,10 +5890,13 @@ If plr.Class = "Succubus" Then
     addskill "Mana Mastery", 0
     addskill "Critical Strike", 0
     addskill "Deathblow", 0
+    #If USELEGACY = 1 Then
     addskill "Giant Stomach", 1
+    #Else
+    addskill "Giant Stomach", 0 'm'' Duam have set it to 1, but description says it should be 0
+    #End If
     addskill "Super Acid", 0
     addskill "Gluttony", 0
-
 
 End If
 
@@ -6073,7 +6267,8 @@ For a = 1 To 16
 End Function
 
 Sub loadbijdang()
-Static isloaded
+Static isloaded As Long 'm'' added type
+
 makesprite bijdang(1).cS, Form1.Picture1, "slash.bmp", wep.r, wep.g, wep.b, wep.l, 5
 If wep.r = 0 And wep.g = 0 And wep.b = 0 Then makesprite bijdang(1).cS, Form1.Picture1, "slash.bmp", 255, 250, 245, 0.1, 5
 Set bijdang(1).sprite = New cSprite
@@ -6082,8 +6277,6 @@ bijdang(1).sprite.Create cStage.hDC
 bijdang(1).sprite.cell = 5
 
 If isloaded = 1 Then Exit Sub 'do not load death animations more than once
-
-
 
 Set bijdang(2).cS = New cSpriteBitmaps
 bijdang(2).cS.CreateFromFile "kablooie.bmp", 5, 2, , RGB(0, 0, 0)
@@ -6136,16 +6329,16 @@ End Sub
 Sub drawbijdangold()
 
 If bijdang(1).sprite.cell < 6 Then
-x = bijdang(1).x
-y = bijdang(1).y
-dorkx = (x - plr.x - y + plr.y) * 48 + 400 - plr.xoff - (bijdang(1).cS.CellWidth / 2) + xoff
+X = bijdang(1).X
+Y = bijdang(1).Y
+dorkx = (X - plr.X - Y + plr.Y) * 48 + 400 - plr.xoff - (bijdang(1).cS.CellWidth / 2) + xoff
 'If dorkx < -40 Or dorkx > 750 Then Exit Sub
-dorky = (x + y - plr.x - plr.y) * 24 - plr.yoff + 300 - (bijdang(1).cS.CellHeight - 48) - (midtile * 24) + yoff
+dorky = (X + Y - plr.X - plr.Y) * 24 - plr.yoff + 300 - (bijdang(1).cS.CellHeight - 48) - (midtile * 24) + yoff
 dorkx = Int(dorkx)
 
 dorky = Int(dorky) '+ smurg
-bijdang(1).sprite.x = dorkx
-bijdang(1).sprite.y = dorky '- smurg * 10
+bijdang(1).sprite.X = dorkx
+bijdang(1).sprite.Y = dorky '- smurg * 10
 'If Not bijdang(1).sprite.Cell = 1 Then bijdang(1).sprite.RestoreBackground cStage.hdc
 'bijdang(1).sprite.StoreBackground cStage.hdc, dorkx, dorky + smurg
 'bijdang(1).sprite.TransparentDraw Form1.hDC, dorkx, dorky + offset, bijdang(1).sprite.cell, True
@@ -6155,16 +6348,16 @@ End If
 
 For a = 2 To UBound(bijdang)
 If bijdang(a).sprite.cell < 11 Then
-x = bijdang(a).x
-y = bijdang(a).y
-dorkx = (x - plr.x - y + plr.y) * 48 + 400 - plr.xoff - (bijdang(a).cS.CellWidth / 2) + xoff
+X = bijdang(a).X
+Y = bijdang(a).Y
+dorkx = (X - plr.X - Y + plr.Y) * 48 + 400 - plr.xoff - (bijdang(a).cS.CellWidth / 2) + xoff
 'If dorkx < -40 Or dorkx > 750 Then Exit Sub
-dorky = (x + y - plr.x - plr.y) * 24 - plr.yoff + 300 - (bijdang(a).cS.CellHeight - 48) - (midtile * 24) + yoff
+dorky = (X + Y - plr.X - plr.Y) * 24 - plr.yoff + 300 - (bijdang(a).cS.CellHeight - 48) - (midtile * 24) + yoff
 
 dorkx = Int(dorkx)
 dorky = Int(dorky) '+ smurg
-bijdang(a).sprite.x = dorkx
-bijdang(a).sprite.y = dorky
+bijdang(a).sprite.X = dorkx
+bijdang(a).sprite.Y = dorky
 If Not bijdang(a).sprite.cell = 1 Then bijdang(a).sprite.RestoreBackground Form1.hDC
 bijdang(a).sprite.StoreBackground cStage.hDC, dorkx, dorky
 'bijdang(a).sprite.TransparentDraw Form1.hDC, dorkx, dorky + offset, bijdang(a).sprite.cell, True
@@ -6188,16 +6381,16 @@ If Form1.Visible = False Then bijdrawing = 0: Exit Sub
 
 For a = 1 To 50
     If bijdangs(a).Active = 1 Then
-    x = bijdangs(a).x
-    y = bijdangs(a).y
-    dorkx = (x - plr.x - y + plr.y) * 48 + 400 - plr.xoff - (bijdang(bijdangs(a).graphnum).cS.CellWidth / 2) + xoff
+    X = bijdangs(a).X
+    Y = bijdangs(a).Y
+    dorkx = (X - plr.X - Y + plr.Y) * 48 + 400 - plr.xoff - (bijdang(bijdangs(a).graphnum).cS.CellWidth / 2) + xoff
     'If dorkx < -40 Or dorkx > 750 Then Exit Sub
-    dorky = (x + y - plr.x - plr.y) * 24 - plr.yoff + 300 - (bijdang(bijdangs(a).graphnum).cS.CellHeight - 48) - (midtile * 24) + yoff
+    dorky = (X + Y - plr.X - plr.Y) * 24 - plr.yoff + 300 - (bijdang(bijdangs(a).graphnum).cS.CellHeight - 48) - (midtile * 24) + yoff
     dorkx = Int(dorkx)
 
     dorky = Int(dorky) '+ smurg
-    bijdang(bijdangs(a).graphnum).sprite.x = dorkx
-    bijdang(bijdangs(a).graphnum).sprite.y = dorky '- smurg * 10
+    bijdang(bijdangs(a).graphnum).sprite.X = dorkx
+    bijdang(bijdangs(a).graphnum).sprite.Y = dorky '- smurg * 10
     'If Not bijdang(1).sprite.Cell = 1 Then bijdang(1).sprite.RestoreBackground cStage.hdc
     'bijdang(1).sprite.StoreBackground cStage.hdc, dorkx, dorky + smurg
     
@@ -6223,7 +6416,7 @@ blt Form1.Picture7
 
 End Sub
 
-Sub makebijdang(ByVal x As Integer, ByVal y As Integer, ByVal wch As Integer)
+Sub makebijdang(ByVal X As Integer, ByVal Y As Integer, ByVal wch As Integer)
 'm'' declarations. bijdang are the animated sprites
 Dim a As Long 'm''
 
@@ -6233,8 +6426,8 @@ If wch = 7 Then playsound "1lightninggun.wav"
 
 For a = 1 To 50
     If bijdangs(a).Active = 0 Then
-    bijdangs(a).x = x
-    bijdangs(a).y = y
+    bijdangs(a).X = X
+    bijdangs(a).Y = Y
     bijdangs(a).graphnum = wch
     bijdangs(a).cell = 1
     bijdangs(a).Active = 1
@@ -6398,10 +6591,10 @@ Next a
 For a = 1 To totalmonsters
 '    On Error GoTo 15
  '   killmon a, 1
-    If mon(a).type > lastmontype Or mon(a).x < 1 Or mon(a).x > mapx Or mon(a).y < 1 Or mon(a).y > mapy Then killmon a, 1: GoTo 3
+    If mon(a).type > lastmontype Or mon(a).X < 1 Or mon(a).X > mapx Or mon(a).Y < 1 Or mon(a).Y > mapy Then killmon a, 1: GoTo 3
     If mon(a).hp > 0 Then
-    If mon(a).x > mapx Then killmon a: GoTo 3
-    map(mon(a).x, mon(a).y).monster = a
+    If mon(a).X > mapx Then killmon a: GoTo 3
+    map(mon(a).X, mon(a).Y).monster = a
     Else:
     'map(mon(a).x, mon(a).y).monster = 0
     mon(a).type = 0
@@ -6456,7 +6649,14 @@ Close #1
 End If
 
 showform10 "Win", 1, "Win1.jpg"
+
+#If USELEGACY = 1 Then
 End
+#Else
+'m'' let's continue the game if we won
+rep = MsgBox("You've reached the original End of the game. Do you want to continue playing?", vbYesNo + vbInformation, "Duamutef's VRPG Modded edition") 'm''
+If rep = vbNo Then Debugger.Quitting 'm''
+#End If
 End Sub
 
 Sub dispatk(mont As monstertype, hp)
@@ -6485,18 +6685,18 @@ End Sub
 
 Function summonmonster(monname, filen, level, r, g, b, l, boss, caneat, Optional maxmonsters = 0)
 
-f = getsummons(monname)
-If f = 0 Then
+F = getsummons(monname)
+If F = 0 Then
 '    If monname = "Kari" Then filen = "kari1.bmp": r = 200: g = 50: b = 0: l = 0.6
-    f = loadsummons(monname, level, filen, r, g, b, l, boss)
+    F = loadsummons(monname, level, filen, r, g, b, l, boss)
 End If
 
-5 x = plr.x + roll(7) - 4
-y = plr.y + roll(7) - 4
-If x > mapx Or x < 1 Then GoTo 5
-If y > mapx Or y < 1 Then GoTo 5
-If map(x, y).blocked = 1 Or map(x, y).monster > 0 Then GoTo 5
-z = createmonster(f, x, y)
+5 X = plr.X + roll(7) - 4
+Y = plr.Y + roll(7) - 4
+If X > mapx Or X < 1 Then GoTo 5
+If Y > mapx Or Y < 1 Then GoTo 5
+If map(X, Y).blocked = 1 Or map(X, Y).monster > 0 Then GoTo 5
+z = createmonster(F, X, Y)
 mon(z).owner = caneat
 
 If maxmonsters > 0 Then killextrasummons monname, maxmonsters
@@ -6579,7 +6779,7 @@ Function genworld(worldname, maxx, maxy, Optional maxlevel = 50) As String
 
 End Function
 
-Function genmap(ByVal worldname As String, ByVal level As Byte, ByVal x, ByVal y, Optional mapnorth = "", Optional mapeast = "", Optional mapsouth = "", Optional mapwest = "", Optional same = 0, Optional maxlevel = 50) As String
+Function genmap(ByVal worldname As String, ByVal level As Byte, ByVal X, ByVal Y, Optional mapnorth = "", Optional mapeast = "", Optional mapsouth = "", Optional mapwest = "", Optional same = 0, Optional maxlevel = 50) As String
 'Generate a random map--returns the map name
 worlddir = worldname
 
@@ -6654,7 +6854,7 @@ mnum = 1
 If Not Dir(lname & " " & mnum & ".txt") = "" Then mnum = mnum + 1: GoTo 7
 lname = lname & " " & mnum
 
-genmaps(x, y) = lname
+genmaps(X, Y) = lname
 
 Open lname & ".txt" For Output As #lastfile
 
@@ -6792,14 +6992,14 @@ Write #lastfile, "#RANDOMMONSTERS", "ALL", 500 + roll(500), 0, 0, 0, 0
 
 If mapy < UBound(genmaps(), 2) Then mapnorth = genmaps(mapx, mapy + 1)
 If mapx < UBound(genmaps(), 1) Then mapeast = genmaps(mapx + 1, mapy)
-If mapx > 1 Then mapwest = genmaps(x - 1, y)
-If mapy > 1 Then mapsouth = genmaps(x, y - 1)
+If mapx > 1 Then mapwest = genmaps(X - 1, Y)
+If mapy > 1 Then mapsouth = genmaps(X, Y - 1)
 
-If level < maxlevel And x < UBound(genmaps(), 1) And y < UBound(genmaps(), 2) And x > 1 And y > 1 Then
-    If mapnorth = "" Then mapnorth = genmap(worldname, level + 4 + roll(6), x, y + 1, , , lname & ".txt", , roll(1), maxlevel)
-    If mapsouth = "" Then mapsouth = genmap(worldname, level + 4 + roll(6), x, y - 1, lname & ".txt", , , , roll(1), maxlevel)
-    If mapeast = "" Then mapeast = genmap(worldname, level + 4 + roll(6), x + 1, y, , , , lname & ".txt", roll(1), maxlevel)
-    If mapwest = "" Then mapwest = genmap(worldname, level + 4 + roll(6), x - 1, y, , lname & ".txt", , , roll(1), maxlevel)
+If level < maxlevel And X < UBound(genmaps(), 1) And Y < UBound(genmaps(), 2) And X > 1 And Y > 1 Then
+    If mapnorth = "" Then mapnorth = genmap(worldname, level + 4 + roll(6), X, Y + 1, , , lname & ".txt", , roll(1), maxlevel)
+    If mapsouth = "" Then mapsouth = genmap(worldname, level + 4 + roll(6), X, Y - 1, lname & ".txt", , , , roll(1), maxlevel)
+    If mapeast = "" Then mapeast = genmap(worldname, level + 4 + roll(6), X + 1, Y, , , , lname & ".txt", roll(1), maxlevel)
+    If mapwest = "" Then mapwest = genmap(worldname, level + 4 + roll(6), X - 1, Y, , lname & ".txt", , , roll(1), maxlevel)
 End If
 
 Write #lastfile, "#SETMAPS", mapnorth, mapeast, mapsouth, mapwest
@@ -7178,7 +7378,7 @@ Form1.updatbody
 playsound "burp" & roll(5) & ".wav"
 playsound "stomach" & roll(4) & ".wav"
 displasteatstr
-If plr.foodinbelly = 0 Then Form1.updatbody: playsound "fart57.wav": createobj "Shit", plr.x, plr.y: gamemsg "Your " & getbelly("") & " has diligently " & getabsorb & "ed everything you have put in it."
+If plr.foodinbelly = 0 Then Form1.updatbody: playsound "fart57.wav": createobj "Shit", plr.X, plr.Y: gamemsg "Your " & getbelly("") & " has diligently " & getabsorb & "ed everything you have put in it."
 End If
 
 
@@ -7215,10 +7415,10 @@ plr.foodinbelly = plr.foodinbelly + 1
 End If
 
 playsound "swallow1.wav"
-map(objs(dobj).x, objs(dobj).y).object = 0
+map(objs(dobj).X, objs(dobj).Y).object = 0
 objs(dobj).name = ""
-objs(dobj).x = 0
-objs(dobj).y = 0
+objs(dobj).X = 0
+objs(dobj).Y = 0
 objs(dobj).type = 0
 plr.foodinbelly = plr.foodinbelly + 1
 
@@ -7272,13 +7472,13 @@ If turncount Mod 15 = 0 Or force > 0 Then
     If mon.hp > 0 Then playsound "stomach" & roll(4) & ".wav"
     If mon.hp <= 0 Then
     gamemsg "You have utterly digested the " & mont.name & "!" '  It's strength is now yours."
-    createobj "Shit", plr.x, plr.y
+    createobj "Shit", plr.X, plr.Y
     If ifmonstereaten(montype(mon.type).name) = False Then gamemsg "You have gained a skill point from digesting a new monster!"
     playsound "burp" & roll(5) & ".wav"
     plrdamage -(mont.hp / 10)
     plr.exp = plr.exp + mont.exp
     If Val(mont.level) > plr.level Then plr.exp = plr.exp + mont.exp * 2
-    movemon monnum, plr.x, plr.y
+    movemon monnum, plr.X, plr.Y
     killmon monnum
     If plr.monsinbelly > 0 Then plr.monsinbelly = plr.monsinbelly - 1
     If plr.foodinbelly > 0 Then plr.foodinbelly = plr.foodinbelly - 1
@@ -7294,7 +7494,7 @@ If turncount Mod 15 = 0 Or force > 0 Then
         randsound "escape", 4
         plr.monsinbelly = plr.monsinbelly - 1
         plr.foodinbelly = plr.foodinbelly - 1
-        mon.x = plr.x: mon.y = plr.y
+        mon.X = plr.X: mon.Y = plr.Y
         monmove monnum, roll(3) - 2, roll(3) - 2
         'movemon monnum, roll(3) - 2 + plr.x, roll(3) - 2 + plr.y
         Form1.updatbody
@@ -7309,9 +7509,9 @@ End Function
 Function ifnpcsaw() As Boolean
 On Error Resume Next
 Dim tobj As objecttype
-For a = plr.x - 6 To plr.x + 6
+For a = plr.X - 6 To plr.X + 6
     If a < 1 Or a > mapx Then GoTo 6
-    For b = plr.y - 6 To plr.y + 6
+    For b = plr.Y - 6 To plr.Y + 6
         If b > mapy Or b < 1 Then GoTo 5
         If map(a, b).object > 0 Then
             objn = map(a, b).object
@@ -7455,8 +7655,8 @@ Function createshooty(xplus, yplus, stype, shootyis As String, Optional startx =
             If shooties(a).frame <= 0 Then shooties(a).frame = 1
             shooties(a).graphnum = Val(stype)
             shooties(a).is = shootyis
-            shooties(a).x = startx
-            shooties(a).y = starty
+            shooties(a).X = startx
+            shooties(a).Y = starty
             shooties(a).Active = 1
             shooties(a).Time = 60
             shooties(a).xplus = xplus * 10
@@ -7472,19 +7672,19 @@ If a > 100 Then shooties(1).Active = False: GoTo 4
 
 End Function
 
-Function shootat(x, y, stype, shootyis As String, Optional ByVal shootfromx = 0, Optional ByVal shootfromy = 0, Optional ByVal multiple = 1, Optional ByVal multangle = 10, Optional ByVal pierce = 0, Optional ByVal tiletargeting = 0)
+Function shootat(X, Y, stype, shootyis As String, Optional ByVal shootfromx = 0, Optional ByVal shootfromy = 0, Optional ByVal multiple = 1, Optional ByVal multangle = 10, Optional ByVal pierce = 0, Optional ByVal tiletargeting = 0)
 'Shootyis = Owner:dice:damage:pierce:radius:bijdang
 'If Not getfromstring(shootyis, 1) = "ENEMY" Then x = x - 400: y = y - 300 Else x = x - shootfromx: y = y - shootfromy
 'x = x - 399: y = y - 300
 
-If tiletargeting = 1 Then getlitxy2 x, y, x, y
+If tiletargeting = 1 Then getlitxy2 X, Y, X, Y
 If tiletargeting = 1 Then getlitxy2 shootfromx, shootfromy, shootfromx, shootfromy
 
 Dim zod As Double
 If Not pierce = 0 Then pierce = ":" & pierce Else pierce = ""
 'If x = Empty Then x = 0
 'If y = Empty Then y = 0
-zim = greater(posit(x), posit(y))
+zim = greater(posit(X), posit(Y))
 'zurg = lesser(posit(x), posit(y))
 If zim = 0 Then zim = 1
 zod = 1# / zim
@@ -7501,22 +7701,22 @@ If stype = 7 Then playsound "spellzap2.wav": speed = 16
 
 If shootfromx = 0 Then shootfromx = 400: shootfromy = 300
 If Not Val(pierce) = 0 Then replaceinstr shootyis, 4, pierce
-a = createshooty(zod * x, zod * y, stype, shootyis, shootfromx, shootfromy)
+a = createshooty(zod * X, zod * Y, stype, shootyis, shootfromx, shootfromy)
 
 
 'If Not IsMissing(shootfromx) Then
-calcangle shootfromx, shootfromy, x, y, shooties(a).xplus, shooties(a).yplus, speed, shooties(a).frame, 18
+calcangle shootfromx, shootfromy, X, Y, shooties(a).xplus, shooties(a).yplus, speed, shooties(a).frame, 18
 
 'If IsMissing(shootfromx) Then createshooty zod * x, zod * y, stype, shootyis 'Else
 If multiple > 1 Then
     If multangle = 0 Then multangle = 10
     If multiple > 36 Then multiple = 36
     For c = 2 To multiple
-        a = createshooty(zod * x, zod * y, stype, shootyis, shootfromx, shootfromy)
+        a = createshooty(zod * X, zod * Y, stype, shootyis, shootfromx, shootfromy)
         If c Mod 2 = 0 Then
-        calcangle shootfromx, shootfromy, x, y, shooties(a).xplus, shooties(a).yplus, speed, shooties(a).frame, 18, multangle * Int(c / 2)
+        calcangle shootfromx, shootfromy, X, Y, shooties(a).xplus, shooties(a).yplus, speed, shooties(a).frame, 18, multangle * Int(c / 2)
         Else:
-        calcangle shootfromx, shootfromy, x, y, shooties(a).xplus, shooties(a).yplus, speed, shooties(a).frame, 18, -multangle * Int(c / 2)
+        calcangle shootfromx, shootfromy, X, Y, shooties(a).xplus, shooties(a).yplus, speed, shooties(a).frame, 18, -multangle * Int(c / 2)
         End If
     Next c
 
@@ -7530,25 +7730,25 @@ Function drawshooties()
 
 For a = 1 To 100
     If shooties(a).Active = 1 Then
-        shooties(a).x = shooties(a).x + shooties(a).xplus
-        shooties(a).y = shooties(a).y + shooties(a).yplus
+        shooties(a).X = shooties(a).X + shooties(a).xplus
+        shooties(a).Y = shooties(a).Y + shooties(a).yplus
         If shooties(a).graphnum >= 1 Then
         If shooties(a).graphnum = 1 Or shooties(a).graphnum = 6 Then
-        shootygraphs(shooties(a).graphnum).TransparentDraw picBuffer, shooties(a).x - shootygraphs(shooties(a).graphnum).CellWidth / 2, shooties(a).y - 30 + offset - shootygraphs(shooties(a).graphnum).CellHeight / 2, shooties(a).frame, True
+        shootygraphs(shooties(a).graphnum).TransparentDraw picBuffer, shooties(a).X - shootygraphs(shooties(a).graphnum).CellWidth / 2, shooties(a).Y - 30 + offset - shootygraphs(shooties(a).graphnum).CellHeight / 2, shooties(a).frame, True
         Else:
-        shootygraphs(shooties(a).graphnum).TransparentDraw picBuffer, shooties(a).x - shootygraphs(shooties(a).graphnum).CellWidth / 2, shooties(a).y - 30 + offset - shootygraphs(shooties(a).graphnum).CellHeight / 2, shooties(a).frame
+        shootygraphs(shooties(a).graphnum).TransparentDraw picBuffer, shooties(a).X - shootygraphs(shooties(a).graphnum).CellWidth / 2, shooties(a).Y - 30 + offset - shootygraphs(shooties(a).graphnum).CellHeight / 2, shooties(a).frame
         End If
         End If
         
         shooties(a).Time = shooties(a).Time - 1
         If shooties(a).Time <= 0 Then shooties(a).Active = False
         
-        x2 = shooties(a).x: y2 = shooties(a).y
+        x2 = shooties(a).X: y2 = shooties(a).Y
         getXY x2, y2
         If x2 > mapx Or x2 < 1 Or y2 > mapy Or y2 < 1 Then shooties(a).Active = False: GoTo 6
         If map(x2, y2).blocked > 0 And map(x2, y2).ovrtile > 0 Then shooties(a).Active = False: GoTo 6
         If getfromstring(shooties(a).is, 1) = "ENEMY" Then
-            If plr.x = x2 And plr.y = y2 And plr.instomach = 0 Then
+            If plr.X = x2 And plr.Y = y2 And plr.instomach = 0 Then
             If HasSkill("Reflection") And spendsp(3) Then
                 gamemsg "You reflect the projectile!"
                 shooties(a).xplus = -shooties(a).xplus
@@ -7587,7 +7787,7 @@ For a = 1 To 100
                     shooties(a).xhit = x2: shooties(a).yhit = y2
                     targ = closemon(x2, y2, 8)
                     'If roll(8) = 1 Or targ = 0 Then x3 = plr.x: y3 = plr.y Else
-                    If targ > 0 Then x3 = mon(targ).x: y3 = mon(targ).y
+                    If targ > 0 Then x3 = mon(targ).X: y3 = mon(targ).Y
                     If x3 = 0 Or y3 = 0 Or targ = 0 Then shooties(a).Active = False
                     calcangle x2, y2, x3, y3, shooties(a).xplus, shooties(a).yplus, 14, shooties(a).frame, 18, , 1
                 End If
@@ -7611,53 +7811,53 @@ If raindensity > 0 Then drawrain
 
 End Function
 
-Function outofbounds(ByVal x, ByVal y)
+Function outofbounds(ByVal X, ByVal Y)
 outofbounds = False
-If x > mapx Or x < 1 Then outofbounds = True
-If y > mapy Or y < 1 Then outofbounds = True
+If X > mapx Or X < 1 Then outofbounds = True
+If Y > mapy Or Y < 1 Then outofbounds = True
 End Function
 
-Function radiusdamage(radius, x, y, damage, Optional bijdangnum = 0)
+Function radiusdamage(Radius, X, Y, damage, Optional bijdangnum = 0)
 
-For a = -radius To radius
-    For b = -radius To radius
-    If outofbounds(x + a, y + b) Then GoTo 5
-    If map(x + a, y + b).monster > 0 Then
+For a = -Radius To Radius
+    For b = -Radius To Radius
+    If outofbounds(X + a, Y + b) Then GoTo 5
+    If map(X + a, Y + b).monster > 0 Then
         divis = greater(diff(0, a), diff(0, b))
-        damagemon map(x + a, y + b).monster, damage
+        damagemon map(X + a, Y + b).monster, damage
     End If
     
     
 5     Next b
 Next a
 
-If bijdangnum > 0 Then makebijdang x, y, bijdangnum
+If bijdangnum > 0 Then makebijdang X, Y, bijdangnum
 
 End Function
 
-Function getXY(ByRef x, ByRef y)
+Function getXY(ByRef X, ByRef Y)
 'converts pixels to tile positions
 
-y = y + -offset
+Y = Y + -offset
 
-orgX = x
-x = Int((x - 12) / 96 + (y - 12) / 48) + plr.x - 10
-y = Int(y / 48 - orgX / 96) + plr.y - 2
+orgX = X
+X = Int((X - 12) / 96 + (Y - 12) / 48) + plr.X - 10
+Y = Int(Y / 48 - orgX / 96) + plr.Y - 2
 
 End Function
 
-Function revgetXY2(ByRef x, ByRef y)
+Function revgetXY2(ByRef X, ByRef Y)
 'converts tile positions to pixels
 'I'm not sure if this function works yet
 
 'y = y + -offset
 
-dorkx = (x - plr.x - y + plr.y) * 48 + 400 - plr.xoff - (50) + xoff
+dorkx = (X - plr.X - Y + plr.Y) * 48 + 400 - plr.xoff - (50) + xoff
 'If dorkx < -40 Or dorkx > 750 Then Exit Sub
-dorky = (x + y - plr.x - plr.y) * 24 - plr.yoff + 300 - (50 - 48) - (midtile * 24) + yoff
+dorky = (X + Y - plr.X - plr.Y) * 24 - plr.yoff + 300 - (50 - 48) - (midtile * 24) + yoff
 
-x = dorkx
-y = dorky + offset
+X = dorkx
+Y = dorky + offset
 
 'orgX = x
 'x = Int((x - 12) / 96 + (y - 12) / 48) + plr.x - 10
@@ -7665,25 +7865,25 @@ y = dorky + offset
 
 End Function
 
-Function revgetXY(ByRef x, ByRef y)
+Function revgetXY(ByRef X, ByRef Y)
 'converts tile positions to pixels
 'I'm not sure if this function works yet
 
 'y = y + -offset
 
-dorkx = (x * 48) - (y * 24)
+dorkx = (X * 48) - (Y * 24)
 
 'dorkx = (x - y) * 48 + 400 - plr.xoff - 50
 'dorkx = (x - plr.x - y + plr.y) * 48 + 400 - plr.xoff - (50) + xoff
 'If dorkx < -40 Or dorkx > 750 Then Exit Sub
 
-dorky = (x + y) * 24
+dorky = (X + Y) * 24
 
 'dorky = (x + y) * 24 - plr.yoff + 300 - 2 - midtile * 24
 'dorky = (x + y - plr.x - plr.y) * 24 - plr.yoff + 300 - (50 - 48) - (midtile * 24) + yoff
 
-x = dorkx
-y = dorky + offset
+X = dorkx
+Y = dorky + offset
 
 'orgX = x
 'x = Int((x - 12) / 96 + (y - 12) / 48) + plr.x - 10
@@ -8811,14 +9011,14 @@ inv(objnum).b = (zimb + zimb + zimb + inv(gemnum).b) / 4
 End Function
 
 
-Function creategem(Optional ByVal x = 0, Optional ByVal y = 0, Optional ByVal worth = 0)
+Function creategem(Optional ByVal X = 0, Optional ByVal Y = 0, Optional ByVal worth = 0)
 
 If worth <= 0 Then worth = averagelevel + 1
-If x = 0 Then x = roll(mapx): y = roll(mapy)
+If X = 0 Then X = roll(mapx): Y = roll(mapy)
 
-f = createobjtype("Bug")
-makegem objtypes(f), worth
-createobj objtypes(f).name, x, y
+F = createobjtype("Bug")
+makegem objtypes(F), worth
+createobj objtypes(F).name, X, Y
 
 End Function
 
@@ -8876,7 +9076,7 @@ End Function
 
 Function getworth(obj As objecttype) As Double
 
-cost = 0
+Cost = 0
 totalmult = 1
 
 weight = 1
@@ -8887,35 +9087,35 @@ Next a
 For a = 1 To 6
     sign = Sgn(Val(obj.effect(a, 2)))
     genjunk = (Val(obj.effect(a, 2))) * Val(obj.effect(a, 2)) * sign
-    If obj.effect(a, 1) = "BONDEX" Then cost = cost + genjunk * 100
-    If obj.effect(a, 1) = "BONSTR" Then cost = cost + genjunk * 100
-    If obj.effect(a, 1) = "BONINT" Then cost = cost + genjunk * 75
-    If obj.effect(a, 1) = "BONHP" Then cost = cost + obj.effect(a, 2) * 25
-    If obj.effect(a, 1) = "BONMP" Then cost = cost + obj.effect(a, 2) * 20
-    If obj.effect(a, 1) = "BONSKILL" Then cost = cost + genjunk * 125
-    If obj.effect(a, 1) = "BONDICE" Then cost = cost + obj.effect(a, 2) * 500
-    If obj.effect(a, 1) = "BONDAMAGE" Then cost = cost + obj.effect(a, 2) * 500
-    If obj.effect(a, 1) = "BONUSDAMAGE" Then cost = cost + obj.effect(a, 2) * 50
-    If obj.effect(a, 1) = "BONUNDIG" Then cost = cost * (1 + obj.effect(a, 2) / 200)
+    If obj.effect(a, 1) = "BONDEX" Then Cost = Cost + genjunk * 100
+    If obj.effect(a, 1) = "BONSTR" Then Cost = Cost + genjunk * 100
+    If obj.effect(a, 1) = "BONINT" Then Cost = Cost + genjunk * 75
+    If obj.effect(a, 1) = "BONHP" Then Cost = Cost + obj.effect(a, 2) * 25
+    If obj.effect(a, 1) = "BONMP" Then Cost = Cost + obj.effect(a, 2) * 20
+    If obj.effect(a, 1) = "BONSKILL" Then Cost = Cost + genjunk * 125
+    If obj.effect(a, 1) = "BONDICE" Then Cost = Cost + obj.effect(a, 2) * 500
+    If obj.effect(a, 1) = "BONDAMAGE" Then Cost = Cost + obj.effect(a, 2) * 500
+    If obj.effect(a, 1) = "BONUSDAMAGE" Then Cost = Cost + obj.effect(a, 2) * 50
+    If obj.effect(a, 1) = "BONUNDIG" Then Cost = Cost * (1 + obj.effect(a, 2) / 200)
     'Weapons cost dice * damage * 10, +1% per damage max
     If obj.effect(a, 1) = "Weapon" Then
         wepcost = (obj.effect(a, 3) * obj.effect(a, 4)) * 10 * (1 + (obj.effect(a, 3) * obj.effect(a, 4)) / 10)
         If obj.effect(a, 5) = "Bow" Then wepcost = wepcost * 3
-        cost = cost + wepcost
+        Cost = Cost + wepcost
     End If
     If obj.effect(a, 1) = "Clothes" Then
         If obj.effect(a, 5) = "" Then
-        cost = cost + greater(1, (obj.effect(a, 3) + 1 - weight)) ^ 3
+        Cost = Cost + greater(1, (obj.effect(a, 3) + 1 - weight)) ^ 3
         Else:
-        cost = cost + greater(1, ((obj.effect(a, 3) + 1 - weight) / 2.2)) ^ 3
+        Cost = Cost + greater(1, ((obj.effect(a, 3) + 1 - weight) / 2.2)) ^ 3
         End If
         'cost = cost + obj.effect(a, 3) ^ 3 * (1 - (weight / 100)) ' (obj.effect(a, 3) * obj.effect(a, 3)) * 10 * ((obj.effect(a, 3) * obj.effect(a, 3)) / weight)
     End If
     If obj.effect(a, 1) = "GEM" Then totalmult = 2
 Next a
 
-cost = cost * totalmult
-getworth = Int(greater(cost, 1))
+Cost = Cost * totalmult
+getworth = Int(greater(Cost, 1))
 
 End Function
 
@@ -8968,16 +9168,16 @@ Next b
 Next a
 5
 'subcheck 1, 1
-For x = 1 To mapx
-For y = 1 To mapy
-    If dmap(x, y) = 0 And map(x, y).blocked = 0 Then
+For X = 1 To mapx
+For Y = 1 To mapy
+    If dmap(X, Y) = 0 And map(X, Y).blocked = 0 Then
     ay2 = 0: ax2 = 0
-    If x - 1 > 0 Then If map(x - 1, y).blocked = 1 Then ax2 = -1: GoTo 6
-    If x + 1 < mapx Then If map(x + 1, y).blocked = 1 Then ax2 = 1: GoTo 6
-    If y - 1 > 0 Then If map(x, y - 1).blocked = 1 Then ay2 = -1: GoTo 6
-    If y + 1 < mapy Then If map(x, y + 1).blocked = 1 Then ay2 = 1: GoTo 6
+    If X - 1 > 0 Then If map(X - 1, Y).blocked = 1 Then ax2 = -1: GoTo 6
+    If X + 1 < mapx Then If map(X + 1, Y).blocked = 1 Then ax2 = 1: GoTo 6
+    If Y - 1 > 0 Then If map(X, Y - 1).blocked = 1 Then ay2 = -1: GoTo 6
+    If Y + 1 < mapy Then If map(X, Y + 1).blocked = 1 Then ay2 = 1: GoTo 6
 
-6             ax = x: ay = y
+6             ax = X: ay = Y
             Do While (1)
                 ax = ax + ax2: ay = ay + ay2
                 If ax2 = 0 And ay2 = 0 Then Exit Do
@@ -8987,21 +9187,21 @@ For y = 1 To mapy
             Loop
         If ax2 <> 0 Or ay2 <> 0 Then blarg = 1
     End If
-Next y
-Next x
+Next Y
+Next X
 If blarg = 1 Then GoTo 4
 
 End Sub
 
-Sub subcheck(ByVal x As Integer, ByVal y As Integer, Optional ByVal ctile)
+Sub subcheck(ByVal X As Integer, ByVal Y As Integer, Optional ByVal ctile)
 
-If map(x, y).blocked = 1 Then dmap(x, y) = 2: Exit Sub
-dmap(x, y) = 1
-If Not IsMissing(ctile) Then map(x, y).tile = ctile
-If x + 1 < mapx Then If dmap(x + 1, y) = 0 Then subcheck x + 1, y, ctile
-If x - 1 > 0 Then If dmap(x - 1, y) = 0 Then subcheck x - 1, y, ctile
-If y + 1 < mapy Then If dmap(x, y + 1) = 0 Then subcheck x, y + 1, ctile
-If y - 1 > 0 Then If dmap(x, y - 1) = 0 Then subcheck x, y - 1, ctile
+If map(X, Y).blocked = 1 Then dmap(X, Y) = 2: Exit Sub
+dmap(X, Y) = 1
+If Not IsMissing(ctile) Then map(X, Y).tile = ctile
+If X + 1 < mapx Then If dmap(X + 1, Y) = 0 Then subcheck X + 1, Y, ctile
+If X - 1 > 0 Then If dmap(X - 1, Y) = 0 Then subcheck X - 1, Y, ctile
+If Y + 1 < mapy Then If dmap(X, Y + 1) = 0 Then subcheck X, Y + 1, ctile
+If Y - 1 > 0 Then If dmap(X, Y - 1) = 0 Then subcheck X, Y - 1, ctile
 
 
 End Sub
@@ -9011,7 +9211,7 @@ Sub dropitem(obj As objecttype)
 If obj.graphname = "" Then obj.graphname = "clothes.bmp"
 obj.graphloaded = 0
 makeobjtype obj
-createobj obj.name, plr.x, plr.y
+createobj obj.name, plr.X, plr.Y
 obj.name = ""
 'updatinv
 End Sub
@@ -9105,8 +9305,8 @@ If stilldrawing = 0 And bijdrawing = 0 Then drawall
 
 If plr.xoff <> 0 Or plr.yoff <> 0 Then
 For a = 1 To 100
-    If diff(plr.xoff, 0) >= 24 Then shooties(a).x = shooties(a).x + plr.xoff
-    If diff(plr.yoff, 0) >= 24 Then shooties(a).y = shooties(a).y + plr.yoff
+    If diff(plr.xoff, 0) >= 24 Then shooties(a).X = shooties(a).X + plr.xoff
+    If diff(plr.yoff, 0) >= 24 Then shooties(a).Y = shooties(a).Y + plr.yoff
 Next a
 End If
 
@@ -9140,8 +9340,8 @@ If stilldrawing <= 0 And bijdrawing < 2 Then stilldrawing = stilldrawing + 1: dr
 
 If plr.xoff <> 0 Or plr.yoff <> 0 Then
 For a = 1 To 100
-    If diff(plr.xoff, 0) >= 24 Then shooties(a).x = shooties(a).x + plr.xoff
-    If diff(plr.yoff, 0) >= 24 Then shooties(a).y = shooties(a).y + plr.yoff
+    If diff(plr.xoff, 0) >= 24 Then shooties(a).X = shooties(a).X + plr.xoff
+    If diff(plr.yoff, 0) >= 24 Then shooties(a).Y = shooties(a).Y + plr.yoff
 Next a
 End If
 
@@ -9173,6 +9373,10 @@ Public Sub Timer2Z()
 'Call Form1.TimerH2
 'DoEvents
 Static lasttick As Long
+
+#If USELEGACY <> 1 Then 'm''
+    If lasttick = 0 Then lasttick = GetTickCount() 'm'' fix to avoid unloaded dx game
+#End If 'm''
 
 If Not GetTickCount() > lasttick + plr.timerspeed Then Exit Sub
 lasttick = GetTickCount()
@@ -9624,7 +9828,7 @@ If geteff(obj1, "Translucent", 2) > 0 Then getraster = vbSrcAnd
 
 End Function
 
-Function loadseg(ByVal segfilen As String, x, y, rotation, tilet, ovrtile, Optional salesobj As String = "", Optional signobj As String = "", Optional bij1 As String = "", Optional bij2 As String = "", Optional doorobj As String = "", Optional stealobj As String = "")
+Function loadseg(ByVal segfilen As String, X, Y, rotation, tilet, ovrtile, Optional salesobj As String = "", Optional signobj As String = "", Optional bij1 As String = "", Optional bij2 As String = "", Optional doorobj As String = "", Optional stealobj As String = "")
 
 If Dir(segfilen) = "" Then ChDir App.Path: If Dir(segfilen) = "" Then gamemsg "Segment file '" & segfilen & "' not found": Exit Function
 filenum = FreeFile
@@ -9673,11 +9877,11 @@ End If
 
 'Put segment on map
 For a = 1 To segx: For b = 1 To segy
-    map(a + x, b + y) = munkee(a, b)
+    map(a + X, b + Y) = munkee(a, b)
 Next b: Next a
 
 'Replace objects on actual map
-For a = x To x + segx: For b = y To y + segy
+For a = X To X + segx: For b = Y To Y + segy
     map(a, b).tile = tilet
     If map(a, b).ovrtile = 25 Then map(a, b).ovrtile = 0: map(a, b).blocked = 0: If Not signobj = "" Then createobj signobj, a, b, signobj & roll(3000)
     If map(a, b).ovrtile = 24 Then map(a, b).ovrtile = ovrtile
@@ -9705,9 +9909,9 @@ End Sub
 
 Sub loadstationobjs()
 
-f = createobjtype("Treasure Bag (Green)", "treasure2.bmp", 0, 180, 0, 0.5)
-addeffect f, "GiveGold", "50"
-addeffect f, "Destruct"
+F = createobjtype("Treasure Bag (Green)", "treasure2.bmp", 0, 180, 0, 0.5)
+addeffect F, "GiveGold", "50"
+addeffect F, "Destruct"
 
 
 End Sub
@@ -9799,39 +10003,39 @@ For a = 1 To UBound(drawtxts()) 'To 1 Step -1 'Draw in reverse order
     'picBuffer.SetFont Font
     
     picBuffer.SetForeColor RGB(r / 2, g / 2, b / 2)
-    lX_CT = drawtxts(a).x + xadd + 1 'm'' VB will correctly convert the result
-    lY_CT = drawtxts(a).y + yadd + 1 'm'' VB will correctly convert the result
+    lX_CT = drawtxts(a).X + xadd + 1 'm'' VB will correctly convert the result
+    lY_CT = drawtxts(a).Y + yadd + 1 'm'' VB will correctly convert the result
     picBuffer.drawtext lX_CT, lY_CT, drawtxts(a).txt, False
     'Main Text
     picBuffer.SetForeColor RGB(r, g, b)
-    picBuffer.drawtext drawtxts(a).x + xadd, drawtxts(a).y + yadd, drawtxts(a).txt, False
+    picBuffer.drawtext drawtxts(a).X + xadd, drawtxts(a).Y + yadd, drawtxts(a).txt, False
 
     
     
     
-    drawtxts(a).y = drawtxts(a).y - 2
+    drawtxts(a).Y = drawtxts(a).Y - 2
     drawtxts(a).age = drawtxts(a).age - 1
     If drawtxts(a).age <= 0 Then drawtxts(a).txt = ""
 5 Next a
 
 End Sub
 
-Sub drawtext(text, x, y, r, g, b, Optional bold = False)
-    x = Int(x)
+Sub drawtext(text, X, Y, r, g, b, Optional bold = False)
+    X = Int(X)
     
     xadd = 400: yadd = 400
     picBuffer.SetForeColor RGB(r / 2, g / 2, b / 2)
-    picBuffer.drawtext x + xadd + 2, y + yadd + 2, text, False
+    picBuffer.drawtext X + xadd + 2, Y + yadd + 2, text, False
     'Main Text
     picBuffer.SetForeColor RGB(r, g, b)
-    picBuffer.drawtext x + xadd, y + yadd, text, False
+    picBuffer.drawtext X + xadd, Y + yadd, text, False
 
 End Sub
 
-Sub addtext(ByVal txt, Optional ByVal x = 300, Optional ByVal y = 200, Optional ByVal r = 250, Optional ByVal g = 250, Optional ByVal b = 250, Optional ByVal age = 30, Optional ByVal textid As String = "", Optional ByVal r2 = -1, Optional ByVal g2 = -1, Optional ByVal b2 = -1)
+Sub addtext(ByVal txt, Optional ByVal X = 300, Optional ByVal Y = 200, Optional ByVal r = 250, Optional ByVal g = 250, Optional ByVal b = 250, Optional ByVal age = 30, Optional ByVal textid As String = "", Optional ByVal r2 = -1, Optional ByVal g2 = -1, Optional ByVal b2 = -1)
 
-If spaceon = 1 Then x = x + 400 - plrship.x + sxoff
-If spaceon = 1 Then y = y + 300 - plrship.y + syoff
+If spaceon = 1 Then X = X + 400 - plrship.X + sxoff
+If spaceon = 1 Then Y = Y + 300 - plrship.Y + syoff
 
 'If textid = "plrshields" Then Stop
 
@@ -9841,10 +10045,10 @@ For a = 1 To UBound(drawtxts())
     GoTo 3
     End If
     
-    If drawtxts(a).x = x Then If diff(drawtxts(a).y, y) < 5 Then drawtxts(a).y = drawtxts(a).y - 10
+    If drawtxts(a).X = X Then If diff(drawtxts(a).Y, Y) < 5 Then drawtxts(a).Y = drawtxts(a).Y - 10
     If drawtxts(a).age = 0 Then
-3   drawtxts(a).x = x
-    drawtxts(a).y = y
+3   drawtxts(a).X = X
+    drawtxts(a).Y = Y
     drawtxts(a).highr = r
     drawtxts(a).highg = g
     drawtxts(a).highb = b
@@ -10196,24 +10400,24 @@ plr.fatigue = plr.fatigue - amt: If plr.fatigue < 0 Then plr.fatigue = 0
 
 End Function
 
-Function drawstatbars(x, y)
+Function drawstatbars(X, Y)
 
 Static statbarsloaded As Byte
 
 If statbarsloaded = 0 Then loadstatbars: statbarsloaded = 1
 
-bars.empty.TransparentDraw picBuffer, x, y, 1
-If plr.hplost < gethpmax Then bars.life.TransparentDraw picBuffer, x, y, 1, , , , ((gethpmax - plr.hplost) / gethpmax) * 240
-If plrhpgain > 0 Then bars.fatigue.TransparentDraw picBuffer, x, y, 1, , , , ((plr.hp + plrhpgain) / gethpmax) * 240
-If plr.hp > 1 Then bars.life2.TransparentDraw picBuffer, x, y, 1, , , , (plr.hp / gethpmax) * 240
+bars.empty.TransparentDraw picBuffer, X, Y, 1
+If plr.hplost < gethpmax Then bars.life.TransparentDraw picBuffer, X, Y, 1, , , , ((gethpmax - plr.hplost) / gethpmax) * 240
+If plrhpgain > 0 Then bars.fatigue.TransparentDraw picBuffer, X, Y, 1, , , , ((plr.hp + plrhpgain) / gethpmax) * 240
+If plr.hp > 1 Then bars.life2.TransparentDraw picBuffer, X, Y, 1, , , , (plr.hp / gethpmax) * 240
 
 If plr.mpmax < 1 Then GoTo 5
-bars.empty.TransparentDraw picBuffer, x, y + 10, 1
-If plr.mp > 0 Then bars.mana.TransparentDraw picBuffer, x, y + 10, 1, , , , (plr.mp / plr.mpmax) * 240
+bars.empty.TransparentDraw picBuffer, X, Y + 10, 1
+If plr.mp > 0 Then bars.mana.TransparentDraw picBuffer, X, Y + 10, 1, , , , (plr.mp / plr.mpmax) * 240
 
 5
-bars.empty.TransparentDraw picBuffer, x, y + 20, 1
-If plr.fatigue < plr.fatiguemax Then bars.fatigue.TransparentDraw picBuffer, x, y + 20, 1, , , , 240 - lesser((plr.fatigue / plr.fatiguemax) * 240, 240)
+bars.empty.TransparentDraw picBuffer, X, Y + 20, 1
+If plr.fatigue < plr.fatiguemax Then bars.fatigue.TransparentDraw picBuffer, X, Y + 20, 1, , , , 240 - lesser((plr.fatigue / plr.fatiguemax) * 240, 240)
 
 
 End Function
@@ -10285,7 +10489,7 @@ For a = 1 To UBound(auras())
     If auras(a).loaded = 1 Then
         If addcell = 1 Then auras(a).cell = auras(a).cell + 1
         If auras(a).cell > auras(a).graphs.cells Then auras(a).cell = 1
-        drawobj auras(a).graphs, plr.x, plr.y, auras(a).cell, , (plr.xoff), (plr.yoff) + -((a - 1) * 3)
+        drawobj auras(a).graphs, plr.X, plr.Y, auras(a).cell, , (plr.xoff), (plr.yoff) + -((a - 1) * 3)
         If turncount Mod 10 = 0 Then auras(a).duration = auras(a).duration - 1: If auras(a).duration < 1 Then auras(a).loaded = 0: updatbonuses = 1
         End If
 Next a
@@ -10381,9 +10585,9 @@ tilespr.LockMe
 For a = 1 To mapx
     For b = 1 To mapy
         tilet = map(a, b).tile - 1
-        x = (tilet Mod 5) * 96 + 48
-        y = Int(tilet / 5) * 52 + 27
-        col = tilespr.DXS.GetLockedPixel(x, y)
+        X = (tilet Mod 5) * 96 + 48
+        Y = Int(tilet / 5) * 52 + 27
+        col = tilespr.DXS.GetLockedPixel(X, Y)
         If map(a, b).blocked > 0 Then col = RGB(100, 100, 100)
         'If map(a, b).object > 0 Then col = RGB(objtypes(objs(map(a, b).object).type).b, objtypes(objs(map(a, b).object).type).g, objtypes(objs(map(a, b).object).type).r)
         'If a = plr.x Or b = plr.y Then col = RGB(250, 250, 10)
@@ -10419,8 +10623,8 @@ For a = 1 To mapx
         drawex = 0 'Draws a big X for plot stuff
         drawyes = 0
         tilet = map(a, b).tile - 1
-        x = (tilet Mod 5) * 96 + 48
-        y = Int(tilet / 5) * 52 + 27
+        X = (tilet Mod 5) * 96 + 48
+        Y = Int(tilet / 5) * 52 + 27
         'col = tilespr.DXS.GetLockedPixel(x, y)
         'If map(a, b).blocked > 0 Then col = RGB(100, 100, 100)
         If map(a, b).object > 0 Then col = RGB(objtypes(objs(map(a, b).object).type).b, objtypes(objs(map(a, b).object).type).g, objtypes(objs(map(a, b).object).type).r): drawyes = 1
@@ -10438,9 +10642,10 @@ For a = 1 To mapx
             drawex = 0
         End If
                 
-        If a = plr.x Or b = plr.y Then col = RGB(250, 250, 10): drawyes = 1
+        If a = plr.X Or b = plr.Y Then col = RGB(250, 250, 10): drawyes = 1
         If map(a, b).monster > 0 Then
-        If mon(map(a, b).monster).owner > 0 Then map(a, b).monster = 0: GoTo 72
+        'm'' line below let avoid drawing friendly monster on minimap, but it makes flicker them on main map
+        'm'' If mon(map(a, b).monster).owner > 0 Then map(a, b).monster = 0: GoTo 72 'm''
         If mon(map(a, b).monster).type = 0 Then GoTo 72
         col = RGB(0, 0, 250): drawyes = 1
         If mon(map(a, b).monster).owner > 0 Then col = RGB(0, 250, 0)
@@ -10767,18 +10972,18 @@ Next a
 
 End Function
 
-Function subdmap2(ByVal x, ByVal y)
+Function subdmap2(ByVal X, ByVal Y)
 
 For a = 1 To mapx
     For b = 1 To mapy
-        dmap(x, y) = 1
+        dmap(X, Y) = 1
     Next b
 Next a
 
 End Function
 
 
-Function subdmap3(ByVal x, ByVal y)
+Function subdmap3(ByVal X, ByVal Y)
 'Uses a fill algorithm of sorts
 'probably isn't fast, but will work.
 
@@ -10808,7 +11013,7 @@ End If
 
 End Function
 
-Function subdmap(ByVal x, ByVal y)
+Function subdmap(ByVal X, ByVal Y)
 
 Static iterations
 
@@ -10817,10 +11022,10 @@ iterations = iterations + 1
 'If iterations > 15 Then Stop
 If iterations > 1000 Then iterations = iterations - 1:  Exit Function
 
-If map(x, y).tile = 0 Then iterations = iterations - 1: Exit Function
+If map(X, Y).tile = 0 Then iterations = iterations - 1: Exit Function
 
 'map(x, y).tile = 1
-If dmap(x, y) = 1 Then iterations = iterations - 1: Exit Function
+If dmap(X, Y) = 1 Then iterations = iterations - 1: Exit Function
 
 
 
@@ -10829,8 +11034,8 @@ If dmap(x, y) = 1 Then iterations = iterations - 1: Exit Function
 '5 Stop: End
 '10
 
-If map(x, y).blocked > 0 Then subdmap = -1: iterations = iterations - 1: Exit Function ':Stop
-dmap(x, y) = 1: subdmap = 1
+If map(X, Y).blocked > 0 Then subdmap = -1: iterations = iterations - 1: Exit Function ':Stop
+dmap(X, Y) = 1: subdmap = 1
 
 
 GoTo 7
@@ -10895,10 +11100,10 @@ GoTo 7
 7
 
 
-If x + 1 < mapx Then If map(x + 1, y).blocked = 0 And dmap(x + 1, y) = 0 Then subdmap x + 1, y
-If x - 1 > 1 Then If map(x - 1, y).blocked = 0 And dmap(x - 1, y) = 0 Then subdmap x - 1, y
-If y - 1 > 1 Then If map(x, y - 1).blocked = 0 And dmap(x, y - 1) = 0 Then subdmap x, y - 1
-If y + 1 < mapy Then If map(x, y + 1).blocked = 0 And dmap(x, y + 1) = 0 Then subdmap x, y + 1
+If X + 1 < mapx Then If map(X + 1, Y).blocked = 0 And dmap(X + 1, Y) = 0 Then subdmap X + 1, Y
+If X - 1 > 1 Then If map(X - 1, Y).blocked = 0 And dmap(X - 1, Y) = 0 Then subdmap X - 1, Y
+If Y - 1 > 1 Then If map(X, Y - 1).blocked = 0 And dmap(X, Y - 1) = 0 Then subdmap X, Y - 1
+If Y + 1 < mapy Then If map(X, Y + 1).blocked = 0 And dmap(X, Y + 1) = 0 Then subdmap X, Y + 1
 
 
 iterations = iterations - 1
@@ -10935,7 +11140,7 @@ carrymonsters(b).numeach = 0
 Next b
 
 5 For a = 1 To UBound(mon())
-    If mon(a).owner > 0 And mon(a).type > 0 And mon(a).hp > 0 And mon(a).x > 0 Then
+    If mon(a).owner > 0 And mon(a).type > 0 And mon(a).hp > 0 And mon(a).X > 0 Then
         For b = 1 To 10
         If montype(mon(a).type).name = carrymonsters(b).montype.name Then carrymonsters(b).numeach = carrymonsters(b).numeach + 1: killmon a, 1: Exit For
         If carrymonsters(b).montype.name = "" Then carrymonsters(b).montype = montype(mon(a).type): carrymonsters(b).numeach = carrymonsters(b).numeach + 1: killmon a, 1: Exit For
@@ -10956,7 +11161,7 @@ For b = 1 To 10
     getrgb carrymonsters(b).montype.color, r, g, bl
     mtnum = createmontype(carrymonsters(b).montype.name, carrymonsters(b).montype.gfile, carrymonsters(b).montype.level, r, g, bl, carrymonsters(b).montype.light)
     For c = 1 To carrymonsters(b).numeach
-    mnum = createmonster(mtnum, plr.x, plr.y)
+    mnum = createmonster(mtnum, plr.X, plr.Y)
     mon(mnum).owner = 1
     Next c
     
@@ -11024,12 +11229,22 @@ If plr.fatigue = 0 And montype(mon(plr.instomach).type).eattype = 1 And adddiffi
 End If
 
 'Struggling costs fatigue, whether you succeed or not, but doesn't penalize you as much if it's really hard to do
+addfatigue greater(8 - (adddifficulty * 1.5), 0) 'm'' alternate formula from other source code
+Exit Function 'm''
+
 'm'' the original formula may go wrong, so i added a little correction
 Dim Mlevel As Long 'm''
 If plr.instomach = 0 Then Exit Function 'm'' plants dont have stomach ...
-Mlevel = Val(montype(mon(plr.instomach).type).level) 'm''
+dp = InStrRev(montype(mon(plr.instomach).type).level, ":", , vbBinaryCompare) 'm''
+If dp > 0 Then 'm''
+    Mlevel = Val(Mid(montype(mon(plr.instomach).type).level, dp + 1)) 'm''
+Else 'm''
+    Mlevel = Val(montype(mon(plr.instomach).type).level) 'm''
+End If 'm''
+
 If Val(Mlevel) = 0 Then Stop 'm''
 'm''If Not escaped = 1 Then addfatigue greater(montype(mon(plr.instomach).type).level \ 2 - (adddifficulty * 1.5), 1) Else addfatigue greater(plr.level - (adddifficulty * 1.5), 1)
+
 If Not escaped = 1 Then addfatigue greater(Mlevel \ 2 - (adddifficulty * 1.5), 1) Else addfatigue greater(plr.level - (adddifficulty * 1.5), 1)
 
 End Function
@@ -11257,18 +11472,18 @@ txt = putstr
 
 End Function
 
-Function closemon(x, y, maxdist)
+Function closemon(X, Y, maxdist)
 
 closemon = 0
 xdist = maxdist
 ydist = maxdist
 For a = 1 To UBound(mon())
     If mon(a).type = 0 Then GoTo 5
-    If mon(a).x = x Or mon(a).y = y Then GoTo 5
-    If diff(x, mon(a).x) > xdist Then GoTo 5
-    If diff(y, mon(a).y) > ydist Then GoTo 5
-    xdist = diff(x, mon(a).x)
-    ydist = diff(y, mon(a).y)
+    If mon(a).X = X Or mon(a).Y = Y Then GoTo 5
+    If diff(X, mon(a).X) > xdist Then GoTo 5
+    If diff(Y, mon(a).Y) > ydist Then GoTo 5
+    xdist = diff(X, mon(a).X)
+    ydist = diff(Y, mon(a).Y)
     closemon = a
 5 Next a
 
@@ -11400,6 +11615,9 @@ If Not Dir("plrdat.tmp") = "" Then Kill "plrdat.tmp"
 fname = getfile("plrdat.tmp", FilD.FileName)
 
 fname2 = getfile("curgame.dat", FilD.FileName, , 1)
+
+'m'' error 75 avoid
+If fname = "" Or fname2 = "" Then Exit Function
 Name fname2 As "curgame.dat"
 
 floadchar fname
@@ -11412,9 +11630,9 @@ End Function
 
 Function killobj(wobj As aobject)
 
-If wobj.x > 0 And wobj.y > 0 Then map(wobj.x, wobj.y).object = 0
-wobj.x = 0
-wobj.y = 0
+If wobj.X > 0 And wobj.Y > 0 Then map(wobj.X, wobj.Y).object = 0
+wobj.X = 0
+wobj.Y = 0
 
 End Function
 
@@ -11429,7 +11647,17 @@ End Function
 Function dbmsg(txt)
 'Debug Messager
 
-If debugmessageson = 1 Then MsgBox txt
+#If USELEGACY = 1 Then
+    If debugmessageson = 1 Then MsgBox txt 'm'' original behavior
+#Else
+    'm'' new behavior to output debug messages
+    Dim fp As Integer
+    fp = FreeFile
+    Open "debug.log" For Append As #fp
+    Print #fp, Date & " " & Timer, txt
+    Close #fp
+#End If
+
 
 End Function
 

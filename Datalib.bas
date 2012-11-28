@@ -30,7 +30,7 @@ datinited = 1
 
 End Function
 
-Function addallfiles(pakfile As String, Optional ByRef addstatus, Optional ByRef totalfiles, Optional ByRef endwhendone = 0)
+Function addallfiles(PakFile As String, Optional ByRef addstatus, Optional ByRef totalfiles, Optional ByRef endwhendone = 0)
 
 On Error GoTo 3
 Dim dursnaw(1 To 5000) As String
@@ -47,8 +47,8 @@ Next a
 
 3 filen = dursnaw(lastfile)
 If filen = "" Then GoTo 5
-If Not filen = pakfile And Not Right(filen, 4) = ".exe" Then
-addfile filen, pakfile, 1
+If Not filen = PakFile And Not Right(filen, 4) = ".exe" Then
+addfile filen, PakFile, 1
 End If
 lastfile = lastfile + 1
 If Not IsMissing(addstatus) Then addstatus = lastfile: DoEvents
@@ -58,7 +58,7 @@ GoTo 3
 
 End Function
 
-Function getfileold(ByVal filen As String, Optional ByVal pakfile As String = "Data.pak", Optional ByVal add As Byte = 0, Optional extract As Byte = 0, Optional noerr = 0) As String
+Function getfileold(ByVal filen As String, Optional ByVal PakFile As String = "Data.pak", Optional ByVal add As Byte = 0, Optional extract As Byte = 0, Optional noerr = 0) As String
 'Creates a file in the directory from a file in a datafile; returns the filename created
 '(So that we don't overwrite existing files with data file stuff--that would be bad, especially
 'since it probably won't work right at first)
@@ -72,15 +72,15 @@ If Not Dir(filen) = "" Then getfileold = filen: Exit Function 'Use file if it's 
 
 If Left(filen, 6) = "VTDATA" Then filen = Right(filen, Len(filen) - 6): If Not Dir(filen) = "" Then getfileold = filen: Exit Function 'Check both with and without VTDATA at front
 
-If Dir(pakfile) = "" And add = 0 Then getfileold = filen: ''debug.print "Pak file " & pakfile & " not found.": Exit Function
-If Dir(pakfile) = "" Then createpak filen, pakfile
+If Dir(PakFile) = "" And add = 0 Then getfileold = filen: ''debug.print "Pak file " & pakfile & " not found.": Exit Function
+If Dir(PakFile) = "" Then createpak filen, PakFile
 
 destext = Right(filen, 4) 'Get file extension
 dfilen = "VTDATA" & filen 'Destination filename = "VTDATA" & origional filename
 'dfilen = "VTDATA" & fileinstance & destext
 If extract = 1 Then dfilen = filen
 paknum = FreeFile
-Open pakfile For Binary As paknum
+Open PakFile For Binary As paknum
 Dim header As FILEHEADER
 'paknum = FreeFile
 Get paknum, 1, header
@@ -108,9 +108,9 @@ Next a
 
 Close paknum 'Close both files, because we're done
 
-If Not found = 1 Then If add = 1 And Not Dir(filen) = "" Then addfile filen, pakfile Else getfileold = "" 'Add to data file if not found
-If Not found = 1 And Not Dir(filen) = "" Then addfile filen, pakfile: dfilen = filen  'If it wasn't found in the datafile, use the actual file if possible
-If Not found = 1 And add = 0 And noerr = 0 And Dir(filen) = "" Then MsgBox "File not found in " & pakfile & ": " & filen 'If not, return an error
+If Not found = 1 Then If add = 1 And Not Dir(filen) = "" Then addfile filen, PakFile Else getfileold = "" 'Add to data file if not found
+If Not found = 1 And Not Dir(filen) = "" Then addfile filen, PakFile: dfilen = filen  'If it wasn't found in the datafile, use the actual file if possible
+If Not found = 1 And add = 0 And noerr = 0 And Dir(filen) = "" Then MsgBox "File not found in " & PakFile & ": " & filen 'If not, return an error
 
 If found = 1 Then getfileold = dfilen
 
@@ -122,7 +122,7 @@ Loop
 'instance = instance - 1
 End Function
 
-Function addfile(ByVal filen As String, ByVal pakfile As String, Optional replace = 0)
+Function addfile(ByVal filen As String, ByVal PakFile As String, Optional replace = 0)
 
 If datinited = 0 Then MsgBox "MPQ control not initialized.  Call Initdat to provide an mpq control reference.": End
 
@@ -130,22 +130,30 @@ If datinited = 0 Then MsgBox "MPQ control not initialized.  Call Initdat to prov
 'mpf = mpq.mOpenMpq(pakfile) ': opened = 1
 
 'mpq.mAddFile mpf, filen, "", 1
-mpq.addfile pakfile, filen, filen, 1
+mpq.addfile PakFile, filen, filen, 1
 
 'mpq.mCloseMpq mpf
 'Stop
 End Function
 
-Function getfile(ByVal filen As String, Optional ByVal pakfile As String = "Data.pak", Optional ByVal add As Byte = 0, Optional extract As Byte = 0, Optional noerr = 0, Optional pakfileonly = 0) As String
+Function getfile(ByVal filen As String, Optional ByVal PakFile As String = "Data.pak", Optional ByVal add As Byte = 0, Optional extract As Byte = 0, Optional noerr = 0, Optional pakfileonly = 0) As String
 
 ChDir App.Path
 
 getfile = ""
 
+#If USELEGACY <> 1 Then
+    'm'' alternate getfile procedure
+    If PakFile = "Data.pak" Or PakFile = "" Then 'm'' may be a gamesave
+        getfile = Debugger.getfile_mod(filen) 'm''
+        Exit Function 'm''
+    End If 'm''
+#End If
+
 On Error GoTo 3
 GoTo 10
-3 zerk = "Error in Getfile function while attempting to unpack " & filen & " from " & pakfile & "." & vbCrLf & "Application path is " & App.Path & "."
-If Dir(pakfile) = "" Then zerk = zerk & vbCrLf & "Pak file was not found." Else zerk = zerk & vbCrLf & "Pak file was found, but internal file could not be accessed."
+3 zerk = "Error in Getfile function while attempting to unpack " & filen & " from " & PakFile & "." & vbCrLf & "Application path is " & App.Path & "."
+If Dir(PakFile) = "" Then zerk = zerk & vbCrLf & "Pak file was not found." Else zerk = zerk & vbCrLf & "Pak file was found, but internal file could not be accessed."
 MsgBox zerk
 Exit Function
 10
@@ -158,12 +166,12 @@ If Left(filen, 6) = "VTDATA" Then filen = Right(filen, Len(filen) - 6)
 
 If datinited = 0 Then MsgBox "MPQ control not initialized.  Call Initdat to provide an mpq control reference.": End
 
-If mpq.FileExists(pakfile, filen) = False Then
+If mpq.FileExists(PakFile, filen) = False Then
     If Right(filen, 4) = ".bmp" Then filen = Left(filen, Len(filen) - 4) & ".gif"
-    If mpq.FileExists(pakfile, filen) = False Then getfile = "": Exit Function ' MsgBox "File not found:" & filen: Stop: Exit Function
+    If mpq.FileExists(PakFile, filen) = False Then getfile = "": Exit Function ' MsgBox "File not found:" & filen: Stop: Exit Function
 End If
 
-mpq.getfile pakfile, filen, App.Path, False
+mpq.getfile PakFile, filen, App.Path, False
 'mpq.getfile pakfile, filen, "", True
 If Not Dir("VTDATA" & filen) = "" Then GoTo 5
 ChDir App.Path
@@ -181,15 +189,15 @@ If Dir("VTDATA" & filen) = "" And Dir(filen) = "" Then MsgBox "File not found:" 
 
 End Function
 
-Function addfileold(ByVal filen As String, ByVal pakfile As String, Optional replace = 0)
+Function addfileold(ByVal filen As String, ByVal PakFile As String, Optional replace = 0)
 
 If Left(filen, 6) = "VTDATA" Then MsgBox "Error #1 in addfileold function.": filen = Right(filen, Len(filen) - 6)
 paknum = FreeFile
 If Dir(filen) = "" Then Debug.Print "Addfile:  File not found: " & filen: Exit Function
-If Dir(pakfile) = "" Then createpak filen, pakfile: Exit Function
+If Dir(PakFile) = "" Then createpak filen, PakFile: Exit Function
 
 
-Open pakfile For Binary As paknum
+Open PakFile For Binary As paknum
 
 Dim header As FILEHEADER
 
@@ -273,13 +281,13 @@ Close paknum
 
 End Function
 
-Function createpak(ByVal filen As String, ByVal pakfile As String)
+Function createpak(ByVal filen As String, ByVal PakFile As String)
 
 If Dir(filen) = "" Then Exit Function
 
-If Not Dir(pakfile) = "" Then Exit Function
+If Not Dir(PakFile) = "" Then Exit Function
 paknum = FreeFile
-Open pakfile For Binary As paknum
+Open PakFile For Binary As paknum
 filenum = FreeFile
 Open filen For Binary As filenum
 
@@ -310,7 +318,7 @@ Close paknum
 
 End Function
 
-Function loadbinpic(picfile As String, pakfile As String) As StdPicture
+Function loadbinpic(picfile As String, PakFile As String) As StdPicture
 
 'zark = getfile(picfile, pakfile, 1)
 'loadbinpic = LoadPicture(zark)
@@ -319,12 +327,12 @@ Stop
 
 End Function
 
-Function openbinfile(ByVal filen As String, ByVal pakfile As String, Optional ByVal filenum) As Integer
+Function openbinfile(ByVal filen As String, ByVal PakFile As String, Optional ByVal filenum) As Integer
 'Directly replaces 'open' command by doing everything necessary to extract and open a file
 
 If IsMissing(filenum) Then filenum = FreeFile
 
-zarf = getfile(filen, pakfile, 1)
+zarf = getfile(filen, PakFile, 1)
 Open zarf For Binary As filenum
 
 openbinfile = filenum
@@ -337,7 +345,7 @@ If Not Dir("VTDATA*.*") = "" Then Kill "VTDATA*.*"
 
 End Function
 
-Function findfile(ByVal filen As String, ByVal pakfile As String) As Boolean
+Function findfile(ByVal filen As String, ByVal PakFile As String) As Boolean
 
 'Sees if the requested file is actually in the datafile
 
@@ -346,12 +354,12 @@ findfile = False
 fileinstance = fileinstance + 1
 If fileinstance > 100 Then fileinstance = 1
 
-If Dir(pakfile) = "" Then Debug.Print "Pak file " & pakfile & " not found.": findfile = False: Exit Function
+If Dir(PakFile) = "" Then Debug.Print "Pak file " & PakFile & " not found.": findfile = False: Exit Function
 
 destext = Right(filen, 4) 'Get file extension
 dfilen = "VTDATA" & fileinstance & destext
 paknum = FreeFile
-Open pakfile For Binary As paknum
+Open PakFile For Binary As paknum
 Dim header As FILEHEADER
 'paknum = FreeFile
 Get paknum, 1, header

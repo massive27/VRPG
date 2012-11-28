@@ -571,7 +571,7 @@ Ccom = ""
 If inv(List1.ItemData(List1.ListIndex)).graphname = "" Then inv(List1.ItemData(List1.ListIndex)).graphname = "clothes.bmp"
 inv(List1.ItemData(List1.ListIndex)).graphloaded = 0
 makeobjtype inv(List1.ItemData(List1.ListIndex))
-createobj inv(List1.ItemData(List1.ListIndex)).name, plr.x, plr.y
+createobj inv(List1.ItemData(List1.ListIndex)).name, plr.X, plr.Y
 inv(List1.ItemData(List1.ListIndex)).name = ""
 updatinv
 End Sub
@@ -670,6 +670,10 @@ If InStr(1, curcheatword, "specialrecipe") Then Ccom = "": curcheatword = "": pl
 
 If InStr(1, curcheatword, "oopsie") Then Ccom = "": curcheatword = "": killallmonsters
 
+#If USELEGACY <> 1 Then
+If InStr(1, curcheatword, "slayer") Then Ccom = "": curcheatword = "": Debugger.killallmonster_butboss 'm'' added to do a minion wipe
+#End If
+
 If InStr(1, curcheatword, "laxative") Then
     Ccom = "": curcheatword = ""
     gamemsg getesc
@@ -681,13 +685,13 @@ If InStr(1, curcheatword, "laxative") Then
     stomachlevel = 0
 End If
 
-If InStr(1, curcheatword, "allaboutallia") Then Ccom = "": curcheatword = "": plr.x = 5: plr.y = 5: gotomap "Allia.txt"
-If InStr(1, curcheatword, "firebaby") Then Ccom = "": curcheatword = "": plr.x = 5: plr.y = 5: gotomap "skinbane.txt"
-If InStr(1, curcheatword, "wormygurgle") Then Ccom = "": curcheatword = "": plr.x = 5: plr.y = 5: gotomap "cityofwormgut.txt"
-If InStr(1, curcheatword, "sexyinblack") Then Ccom = "": curcheatword = "": plr.x = 5: plr.y = 5: gotomap "blackscourge.txt"
-If InStr(1, curcheatword, "ihaveadeathwish") Then Ccom = "": curcheatword = "": plr.x = 5: plr.y = 5: gotomap "thirshaslair.txt"
-If InStr(1, curcheatword, "iwannagohome") Then Ccom = "": curcheatword = "": plr.x = 5: plr.y = 5: gotomap "VRPGData.txt"
-If InStr(1, curcheatword, "angelsaretasty") Then Ccom = "": curcheatword = "": plr.x = 5: plr.y = 5: gotomap "cityofangels.txt"
+If InStr(1, curcheatword, "allaboutallia") Then Ccom = "": curcheatword = "": plr.X = 5: plr.Y = 5: gotomap "Allia.txt"
+If InStr(1, curcheatword, "firebaby") Then Ccom = "": curcheatword = "": plr.X = 5: plr.Y = 5: gotomap "skinbane.txt"
+If InStr(1, curcheatword, "wormygurgle") Then Ccom = "": curcheatword = "": plr.X = 5: plr.Y = 5: gotomap "cityofwormgut.txt"
+If InStr(1, curcheatword, "sexyinblack") Then Ccom = "": curcheatword = "": plr.X = 5: plr.Y = 5: gotomap "blackscourge.txt"
+If InStr(1, curcheatword, "ihaveadeathwish") Then Ccom = "": curcheatword = "": plr.X = 5: plr.Y = 5: gotomap "thirshaslair.txt"
+If InStr(1, curcheatword, "iwannagohome") Then Ccom = "": curcheatword = "": plr.X = 5: plr.Y = 5: gotomap "VRPGData.txt"
+If InStr(1, curcheatword, "angelsaretasty") Then Ccom = "": curcheatword = "": plr.X = 5: plr.Y = 5: gotomap "cityofangels.txt"
 
 KeyAscii = 0
 End Sub
@@ -794,6 +798,11 @@ If KeyCode = vbKeyL And Shift = 3 And cheaton = 1 Then For a = 1 To 20: gainleve
 
 If KeyCode = vbKeyA And Shift = 3 And cheaton = 1 Then loadseg "10shop8.seg", 2, 2, 3, 22, 29, "Cyberbody", "Cyberlegs", "Cyberarms", "Cyberarms", "Black Cotton Bra", "Black Cotton Panties"
 If KeyCode = vbKeyS And Shift = 3 And cheaton = 1 Then updatbody 1
+
+#If USELEGACY <> 1 Then
+'m'' cheat key to add mana pot
+If KeyCode = vbKeyM And Shift = 2 And cheaton = 1 Then plr.mpotions = 100  'm''
+#End If
 
 'If plr.plrdead = 1 And cheaton = 1 Then turnthing: Exit Sub
 'If plr.plrdead = 1 Then Exit Sub
@@ -903,7 +912,7 @@ Me.caption = "Duamutef's Glorious Vore RPG, V" & curversion
 
 'SetTimer Me.hwnd, 51, 75, AddressOf TimerHandler1
 'm''SetTimer Me.hwnd, 52, 15, AddressOf TimerHandler2
-Debugger.API_Timer_Handle = SetTimer(Me.hwnd, 52, 15, AddressOf TimerHandler2)
+'Debugger.API_Timer_Handle = SetTimer(Me.hwnd, 52, 15, AddressOf TimerHandler2)
 
 If editon = 0 Then edit.Visible = False
 ' Parameters - handle, ID
@@ -914,45 +923,45 @@ If editon = 0 Then edit.Visible = False
 
 End Sub
 
-Sub Form_MouseMove(Button As Integer, Shift As Integer, x As Single, y As Single)
+Sub Form_MouseMove(Button As Integer, Shift As Integer, X As Single, Y As Single)
 
-dorkx = Int((x - 12) / 96 + (y - 12) / 48) + plr.x - 10
-dorky = Int(y / 48 - x / 96) + plr.y - 2
+dorkx = Int((X - 12) / 96 + (Y - 12) / 48) + plr.X - 10
+dorky = Int(Y / 48 - X / 96) + plr.Y - 2
 
-getXY x, y
+getXY X, Y
 
 
 'dorkx = (X - plr.X - Y + plr.Y) / 48 + 400 - plr.xoff
 'dorkY = (X + Y - plr.X - plr.Y) * 24 - plr.yoff + 300 - (obj.CellHeight - 48) - (midtile * 24)
 
-If Command1.Visible = True Then Command1.caption = "X:" & x & " Y:" & y
+If Command1.Visible = True Then Command1.caption = "X:" & X & " Y:" & Y
 
-If x < 1 Or x > mapx Then Exit Sub
-If y < 1 Or y > mapy Then Exit Sub
+If X < 1 Or X > mapx Then Exit Sub
+If Y < 1 Or Y > mapy Then Exit Sub
 
-If map(x, y).monster > 0 Then dispatk montype(mon(map(x, y).monster).type), mon(map(x, y).monster).hp
+If map(X, Y).monster > 0 Then dispatk montype(mon(map(X, Y).monster).type), mon(map(X, Y).monster).hp
 
 
-If editon = 1 And Button = 1 And x > 0 And y > 0 Then
-If Shift = 0 Then map(x, y).tile = edittile: map(x, y).blocked = Check1.Value * 2 Else map(x, y).ovrtile = edittile: map(x, y).blocked = Check2.Value
-If Shift = 1 And edittile = 0 Then map(x, y).blocked = 0
+If editon = 1 And Button = 1 And X > 0 And Y > 0 Then
+If Shift = 0 Then map(X, Y).tile = edittile: map(X, Y).blocked = Check1.Value * 2 Else map(X, Y).ovrtile = edittile: map(X, Y).blocked = Check2.Value
+If Shift = 1 And edittile = 0 Then map(X, Y).blocked = 0
 
 End If
 
-If editon = 1 And Button = 2 And x > 0 And y > 0 Then
-If Shift = 1 Then map(x, y).blocked = 0: map(x, y).ovrtile = 0 Else map(x, y).tile = 0
+If editon = 1 And Button = 2 And X > 0 And Y > 0 Then
+If Shift = 1 Then map(X, Y).blocked = 0: map(X, Y).ovrtile = 0 Else map(X, Y).tile = 0
 End If
 
 End Sub
 
 
 
-Sub Form_MouseUp(Button As Integer, Shift As Integer, x As Single, y As Single)
-y = y - offset
-x2 = x: y2 = y
-getXY x, y
-If x < 1 Or x > mapx Then Exit Sub
-If y < 1 Or y > mapy Then Exit Sub
+Sub Form_MouseUp(Button As Integer, Shift As Integer, X As Single, Y As Single)
+Y = Y - offset
+x2 = X: y2 = Y
+getXY X, Y
+If X < 1 Or X > mapx Then Exit Sub
+If Y < 1 Or Y > mapy Then Exit Sub
 If plr.plrdead = 1 Then Exit Sub
 'Shift-Rightclick copies an object, CTRL-rightclick makes a new one, ALT-rightclick
 'pastes an object or edits it's strings
@@ -1013,7 +1022,7 @@ If Left(Ccom, 5) = "SPELL" Then Call castspell(getnum(Ccom), , , x2, y2) ' Then 
 If Left(Ccom, 6) = "SCROLL" Then Call castspell(getnum(Ccom), , 1, x2, y2) ' Then turnthing
                                 'Spells were costing two turns (castspell calls turnthing), so turnthing is commented out
 'If Button = 2 Then Stop
-If Button = 2 And Not Combo1.ListIndex < 0 Then Call castspell(Combo1.ItemData(Combo1.ListIndex), map(x, y).monster, , x2, y2) ' Then turnthing
+If Button = 2 And Not Combo1.ListIndex < 0 Then Call castspell(Combo1.ItemData(Combo1.ListIndex), map(X, Y).monster, , x2, y2) ' Then turnthing
 
 End Sub
 
@@ -1093,6 +1102,10 @@ Picture6.Left = Form1.ScaleWidth - Picture6.Width
 
 Command4.Top = Form1.ScaleHeight - 112
 Command4.Left = Form1.ScaleWidth - Command4.Width
+
+#If USELEGACY <> 1 Then
+    Check3.Top = Command5.Top 'm'' move the sound checkbox when resizing
+#End If
 
 End Sub
 
@@ -1186,12 +1199,12 @@ FileD.ShowOpen
 If FileD.FileName = "*.seg" Or FileD.FileName = "" Then Exit Sub
 Call loadmapseg(FileD.FileTitle)
 'loadseg FileD.FileTitle, 1, 1, 1, 1, 1
-plr.x = Int(mapx / 2)
-plr.y = Int(mapy / 2)
+plr.X = Int(mapx / 2)
+plr.Y = Int(mapy / 2)
 End Sub
 
 Private Sub MpqControl1_GotMessage(ByVal text As String)
-Debug.Print text
+Debug.Print text 'm'' useless, let's ignore
 End Sub
 
 Private Sub newcharmen_Click()
@@ -1238,7 +1251,7 @@ makesprite waterspr, Form1.Picture1, "underwater1.bmp", 0, 0, 255, 1
 
 loaddata "VRPGData.txt"
 
-plr.x = 25: plr.y = 25
+plr.X = 25: plr.Y = 25
 'soundon = 1
 'MsgBox "Welcome to Duamutef's Glorious Vore RPG! Click on the Help menu if you don't know how to play."
 'MsgBox "You step into your home town, relieved to be back among the people of your own clan. For weeks you have been hearing stories of a horrible dragon. This dragon, Thirsha, lives in a volcano to the far North. Seers prophesy that soon she will sweep through and kill everyone in the region, including you. You must find the three dragon keys and gain entrance to her lair--it is said that if you are able to do so, you can destroy her."
@@ -1262,15 +1275,15 @@ Next a
 
 ReDim mon(1 To 1)
 totalmonsters = 0
-plr.x = 5
-plr.y = 5
+plr.X = 5
+plr.Y = 5
 End Sub
 
 Private Sub opmaped_Click()
 Form5.Show
 End Sub
 
-Private Sub Picture1_MouseUp(Button As Integer, Shift As Integer, x As Single, y As Single)
+Private Sub Picture1_MouseUp(Button As Integer, Shift As Integer, X As Single, Y As Single)
 Randomize
 '        col = Picture1.Point(X, Y)
 '        redd = col Mod 256
@@ -1282,16 +1295,16 @@ Randomize
 'spritemaps(1).cmap.CreateFromPicture Picture1.Picture, 1, 1, , RGB(0, 0, 0)
 End Sub
 
-Private Sub Picture7_MouseMove(Button As Integer, Shift As Integer, x As Single, y As Single)
-x = x * 800 / Picture7.ScaleWidth + 1
-y = y * 600 / Picture7.ScaleHeight + 1
-Form_MouseMove Button, Shift, x, y
+Private Sub Picture7_MouseMove(Button As Integer, Shift As Integer, X As Single, Y As Single)
+X = X * 800 / Picture7.ScaleWidth + 1
+Y = Y * 600 / Picture7.ScaleHeight + 1
+Form_MouseMove Button, Shift, X, Y
 End Sub
 
-Private Sub Picture7_MouseUp(Button As Integer, Shift As Integer, x As Single, y As Single)
-x = x * 800 / Picture7.ScaleWidth + 1
-y = y * 600 / Picture7.ScaleHeight + 1
-Form_MouseUp Button, Shift, x, y
+Private Sub Picture7_MouseUp(Button As Integer, Shift As Integer, X As Single, Y As Single)
+X = X * 800 / Picture7.ScaleWidth + 1
+Y = Y * 600 / Picture7.ScaleHeight + 1
+Form_MouseUp Button, Shift, X, Y
 End Sub
 
 Private Sub randomworldmen_Click()
@@ -1390,8 +1403,8 @@ If turnswitch >= 7 Then turnswitch = 0: turnthing
 If stilldrawing = 0 Then drawall
 If plr.xoff <> 0 Or plr.yoff <> 0 Then
 For a = 1 To 100
-    If diff(plr.xoff, 0) >= 24 Then shooties(a).x = shooties(a).x + plr.xoff
-    If diff(plr.yoff, 0) >= 24 Then shooties(a).y = shooties(a).y + plr.yoff
+    If diff(plr.xoff, 0) >= 24 Then shooties(a).X = shooties(a).X + plr.xoff
+    If diff(plr.yoff, 0) >= 24 Then shooties(a).Y = shooties(a).Y + plr.yoff
 Next a
 End If
 
