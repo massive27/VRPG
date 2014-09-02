@@ -1,0 +1,126 @@
+Allia
+
+#TERSTR, Now entering the City of Allia...
+
+#RANDOMSEED, 246999
+#MAPSIZE, 60, 60
+#FILLMAP, 14
+/Mapchunk, type, size-ish
+MAPCHUNK, 8, 12
+MAPCHUNK, 8, 15
+
+BUILDING, 5, 5, 0, 0, 12, 10, Treasure8
+BUILDING, 8, 8, 0, 0, 12, 10, Treasure4
+#MULTBUILDING, 2, 0, 0, 0, 0, 20, 6, SELLARMOR:Velvet Intestine Armor:girl7.bmp:7:6
+#MULTBUILDING, 1, 0, 0, 0, 0, 20, 6, SELLARMOR:Blue Adamant Armor:girl7.bmp:49:6
+#MULTBUILDING, 2, 0, 0, 0, 0, 20, 6, SELLCLOTHES:Velvet Intestine Clothes:girl9.bmp:42:8
+#MULTBUILDING, 2, 0, 0, 0, 0, 20, 6, Treasure6
+#MULTBUILDING, 1, 0, 0, 0, 0, 20, 6, SELLWEAPONS:Velvet Intestine Weapons:girl10.bmp:49:4
+#BUILDING, 0, 0, 0, 0, 14, 6, Objective2
+BUILDING, 5, 3, 0, 0, 3, 1, Treasure5
+BUILDING, 6, 5, 0, 0, 12, 9, Armor19
+BUILDING, 5, 5, 0, 0, 15, 10, Armor8
+BUILDING, 16, 15, 0, 0, 12, 9, Treasure12
+BUILDING, 0,0,0,0,3,1,Treasure30
+
+#SPRINKLEOVR, 125, 18
+#SPRINKLEOVR, 85, 19
+
+SPRINKLEOVR, 75, 8
+SPRINKLE, 525, 13
+#SETMAPS, glorymarsh.txt, Jungleofpain.txt, Jungleofpain2.txt, Lakelands2.txt
+
+/MONTYPE, Name, Graphic, Swallowtype, HP, Skill, Dice, Damage, Eatskill, Exp, move, acid, Red/"Clan", Green/Clannumber, Blue, Lightness
+
+MONTYPE, Velvet Intestine Clan Girl, girl6.bmp, , 800, 12, 6, 8, 14, 800, 8, 6, 230, 0, 250, .4
+MONTYPE, Dark Kari, kari1.bmp, ,1250, 12, 7, 8, 12, 400, 4, 8, 80, 80, 80, .3
+MONTYPE, Red Naga, snakewoman2.bmp, ,150, 6, 2, 6, 6, 50, 4, 3, 150, 20, 0,.3
+MONTYPE, Fire Naga, snakewoman2.bmp, ,950, 9, 6, 6, 7, 200, 4, 6, 255, 120, 0,.3
+MONTYPE, Giant Snake, snake1.bmp, ,40, 6, 1, 8, 8, 25, 4, 3, 40, 120, 10,.5
+MONTYPE, Marsh Serpent, snake1.bmp, ,125, 8, 2, 8, 9, 55, 5, 3, 20, 80, 0,.4
+MONTYPE, Giant Worm, worm1.bmp, ,600, 8, 3, 6, 9, 90, 6, 3, 150, 150, 0,.3
+MONTYPE, Desert Worm, worm1.bmp, ,800, 8, 4, 6, 9, 110, 5, 3, 100, 90, 80,.3
+MONTYPE, Fire Grub, worm1.bmp, ,900, 12, 7, 12, 11, 250, 5, 8, 230, 50, 0,.4
+MONTYPE, Nightvines, tendrils1.bmp, Plant,380, 10, 8, 12, 5, 155, 3, 12, 40, 40, 40,.4
+MONTYPE, Girlcrunch Plant, venus1.bmp, Plant,120, 8, 1, 4, 18, 80, 1, 6, 50, 100, 10,.5
+MONTYPE, Giant Frog, frog1.bmp, ,25, 4, 1, 4, 12, 15, 4, 2, 100, 160, 10,.5,
+MONTYPE, Slime, slime1.bmp, 40, ,6, 2, 6, 6, 80, 4, 3, 200, 160, 0,.5,
+MONTYPE, Centauress, centauress1.bmp ,,350, 9, 4, 8, 8, 100, 6, 3, 120, 90, 0, 0.5
+MONTYPE, Fireshrike, harpy1.bmp ,,475, 12, 5, 8, 8, 90, 7, 3, 180, 90, 0, 0.5
+MONTYPE, Sprite, sprite1.bmp, , 60, 8, 4, 8, 9, 40, 7, 3, 150, 100, 250,.8
+MONTYPE, Golden Serpent, snake1.bmp, ,255, 10, 3, 10, 14, 75, 5, 4, 240, 200, 0,.5
+MONTYPE, Succubus, succubus1.bmp, , 1500, 15, 8, 8, 10, 500, 5, 8, 255, 0, 0, .3
+
+FAVMONSTER, Velvet Intestine Clan Girl, 8
+
+/RANDOMMONSTERS, Type (Or ALL), number, x zone start, y zone start, x end, y end
+
+RANDOMMONSTERS, ALL, 50, 0,0,0,0
+RANDOMMONSTERS, Fire Grub, 100, 0,0,0,0
+RANDOMMONSTERS, Firevines, 50, 0,0,0,0
+
+#MULTCREATEOBJ, 1, Fountain of Healing, 0, 0, , ,
+
+#OBJTYPE, Healer
+#EFFECT, NPC, , , ,
+#EFFECT, Heal, 10000, , ,
+#EFFECT, SELLPOTIONS, , , , ,
+EFFECT, SELL, Lesser Healing Potion, 40,,
+#GRAPH, girl10.bmp, 2, 155,0,255,.5
+
+#CREATEOBJ, Healer, 0, 0, Abbey, NPC1.bmp, $You want some potions?$
+
+#OBJTYPE, NPC
+#EFFECT, Mobile, 4, , , ,
+#EFFECT, NPC, , , , ,
+#GRAPH, girl6.bmp, 2, 75,0,155,.5
+
+#CREATEOBJ, NPC, 0,0, Lillith, NPC1.bmp, $My name is Lillith. The Velvet Intestine clan welcomes you to Allia.$
+
+#CREATEOBJ, NPC, 0,0, Andrea, NPC2.bmp, $I'm surprised you made it this far. Most girls from the west end up squirted out of a succubus' backside long before they reach the pass.$
+
+CREATEOBJ, NPC, 0,0, Alyta, NPC1.bmp, $You plan on fighting Thirsha? I wish we could help you/ but you need three keys to enter her lair. Sadly/ one of the keys is no more--the girl who carried it was swallowed whole by the biggest groundmaw we've ever seen. Surely she's been digested by now. The groundmaw is in the Jungle of Pain to the east. If you don't want to end up slowly digesting inside the groundmaw/ don't go that way.$
+
+CREATEOBJ, NPC, 0,0, Tamma, NPC1.bmp, $There is a dungeon to the South called the Dungeon of Wallows. In the center of it is a very powerful weapon that used to belong to our clan/ but it's full of dangerous and hungry monsters.$
+
+#CREATEOBJ, NPC, 0,0, Ramanna, NPC1.bmp, $We're much more civilized than the other clans. Even a girl as deliciously digestible as you should be safe here/ provided you return the same courtesy.$
+
+#OBJTYPE, Velvet Intestine Mercenary
+#EFFECT, Pickup,,,,
+#EFFECT, Spell, MercenaryL30,,,
+#EFFECT, Destruct,,,,
+
+#OBJTYPE, Mercenary Girl
+#EFFECT, SELL, Velvet Intestine Mercenary, 15000, , ,
+#GRAPH, merc1.bmp, 3, 200, 30, 250, .6
+
+#CREATEOBJ, Mercenary Girl, 30, 30, Velvet Intestine Warrior, NPC1.bmp, ,
+
+#OBJTYPE, Lialyta
+#EFFECT, Mobile, 2, , , ,
+#EFFECT, Conversation, Lialyta, portrait-lialyta.jpg, , ,
+#EFFECT, NoEat, , , ,
+#GRAPH, girl12.bmp, 2, 150, 0, 250, 1
+#CREATEOBJ, Lialyta, 0, 0, Lialyta, , , ,
+
+#OBJTYPE, Vonirea
+#EFFECT, Mobile, 2, , , ,
+#EFFECT, Conversation, Vonirea, portrait-vonirea.jpg, , ,
+#EFFECT, NoEat, , , ,
+#GRAPH, girl11.bmp, 2, 15, 15, 35, 1
+#CREATEOBJ, Vonirea, 0, 0, Vonirea, , , ,
+
+#OBJTYPE, Allia Portal Gem
+#EFFECT, Pickup,,,,
+#EFFECT, MapTeleport, Allia.txt, 5, 5, , , ,
+#EFFECT, NoEat, , , , ,
+#GRAPH, Gem5.bmp, 1, 15, 150, 150, .5
+
+#CREATEOBJ, Allia Portal Gem, 5, 5, , , ,
+
+
+
+
+
+
+

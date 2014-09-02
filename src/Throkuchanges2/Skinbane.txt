@@ -1,0 +1,167 @@
+Skinbane
+
+#TERSTR, Now entering the City of Skinbane...
+
+#RANDOMSEED, 24645
+#MAPSIZE, 60, 60
+#FILLMAP, 14
+/Mapchunk, type, size-ish
+#MAPCHUNK, 16, 8
+#MAPCHUNK, 16, 8
+#MAPCHUNK, 17, 8
+#MAPCHUNK, 18, 15
+OVRCHUNK, 13, 15
+OVRCHUNK, 13, 15
+OVRCHUNK, 13, 10
+OVRCHUNK, 13, 10
+OVRCHUNK, 8, 10
+
+BUILDING, 5, 5, 0, 0, 12, 10, Treasure8
+BUILDING, 8, 8, 0, 0, 12, 10, Treasure4
+#MULTBUILDING, 2, 0, 0, 0, 0, 24, 7, SELLARMOR:Firebelly Armor:girl7.bmp:7:6
+#MULTBUILDING, 1, 0, 0, 0, 0, 24, 7, SELLARMOR:Bloodsteel Armor:girl7.bmp:42:6
+#MULTBUILDING, 2, 0, 0, 0, 0, 24, 7, SELLCLOTHES:Firebelly Clothes:girl9.bmp:35:8
+#MULTBUILDING, 2, 0, 0, 0, 0, 24, 7, Treasure6
+#MULTBUILDING, 1, 0, 0, 0, 0, 24, 7, SELLWEAPONS:Firebelly Weapons:girl10.bmp:42:4
+BUILDING, 3, 5, 0, 0, 3, 7, Treasure5
+BUILDING, 5, 3, 0, 0, 3, 1, Treasure5
+BUILDING, 6, 5, 0, 0, 12, 9, Armor19
+BUILDING, 5, 5, 0, 0, 15, 10, Armor8
+BUILDING, 16, 15, 0, 0, 12, 9, Treasure12
+BUILDING, 0,0,0,0,3,1,Treasure30
+
+#SPRINKLEOVR, 85, 14
+SPRINKLEOVR, 75, 8
+SPRINKLE, 525, 13
+#SETMAPS, , , Volcanic3.txt, Volcanic2.txt
+
+/MONTYPE, Name, Graphic, Swallowtype, HP, Skill, Dice, Damage, Eatskill, Exp, move, acid, Red/"Clan", Green/Clannumber, Blue, Lightness
+
+MONTYPE, Hungry Firebelly, girl7.bmp, , 500, 8, 6, 8, 14, 800, 8, 6, 255, 10, 0, .4
+MONTYPE, Dark Kari, kari1.bmp, ,1250, 12, 7, 8, 12, 400, 4, 8, 80, 80, 80, .3
+MONTYPE, Red Naga, snakewoman2.bmp, ,150, 6, 2, 6, 6, 50, 4, 3, 150, 20, 0,.3
+MONTYPE, Fire Naga, snakewoman2.bmp, ,950, 9, 6, 6, 7, 200, 4, 6, 255, 120, 0,.3
+MONTYPE, Giant Snake, snake1.bmp, ,40, 6, 1, 8, 8, 25, 4, 3, 40, 120, 10,.5
+MONTYPE, Marsh Serpent, snake1.bmp, ,125, 8, 2, 8, 9, 55, 5, 3, 20, 80, 0,.4
+MONTYPE, Giant Worm, worm1.bmp, ,600, 8, 3, 6, 9, 90, 6, 3, 150, 150, 0,.3
+MONTYPE, Desert Worm, worm1.bmp, ,800, 8, 4, 6, 9, 110, 5, 3, 100, 90, 80,.3
+MONTYPE, Fire Grub, worm1.bmp, ,900, 12, 7, 12, 11, 250, 5, 8, 230, 50, 0,.4
+MONTYPE, Nightvines, tendrils1.bmp, Plant,380, 10, 8, 12, 5, 155, 3, 12, 40, 40, 40,.4
+MONTYPE, Girlcrunch Plant, venus1.bmp, Plant,120, 8, 1, 4, 18, 80, 1, 6, 50, 100, 10,.5
+MONTYPE, Giant Frog, frog1.bmp, ,25, 4, 1, 4, 12, 15, 4, 2, 100, 160, 10,.5,
+MONTYPE, Slime, slime1.bmp, 40, ,6, 2, 6, 6, 80, 4, 3, 200, 160, 0,.5,
+MONTYPE, Centauress, centauress1.bmp ,,350, 9, 4, 8, 8, 100, 6, 3, 120, 90, 0, 0.5
+MONTYPE, Fireshrike, harpy1.bmp ,,475, 12, 5, 8, 8, 90, 7, 3, 180, 90, 0, 0.5
+MONTYPE, Sprite, sprite1.bmp, , 60, 8, 4, 8, 9, 40, 7, 3, 150, 100, 250,.8
+MONTYPE, Golden Serpent, snake1.bmp, ,255, 10, 3, 10, 14, 75, 5, 4, 240, 200, 0,.5
+MONTYPE, Succubus, succubus1.bmp, , 1500, 15, 8, 8, 10, 500, 5, 8, 255, 0, 0, .3
+
+FAVMONSTER, Hungry Firebelly, 8
+
+/RANDOMMONSTERS, Type (Or ALL), number, x zone start, y zone start, x end, y end
+
+RANDOMMONSTERS, ALL, 50, 0,0,0,0
+RANDOMMONSTERS, Fire Grub, 100, 0,0,0,0
+RANDOMMONSTERS, Firevines, 50, 0,0,0,0
+
+#MULTCREATEOBJ, 1, Fountain of Healing, 0, 0, , ,
+
+#OBJTYPE, Questgirl
+#EFFECT, NPC, , , ,
+#EFFECT, IfQuest, Demongut Queen,,,,'if the player has invaded Castle Demongut
+#EFFECT, GiveGold, 10000, , ,
+#EFFECT, Lifeplus, 1, , ,
+EFFECT, Message, $I hope you swallowed that demonic bitch. Here's your money/ and if anyone around here gives you any trouble/ just come and see me...$,,,,
+#EFFECT, Destruct,,,,
+#GRAPH, girl5.bmp, 2, 205,50,30,.5
+
+#OBJTYPE, Lifeplus
+#EFFECT, Lifeplus, 1, , ,
+
+#OBJTYPE, NPC
+#EFFECT, Mobile, 4, , , ,
+#EFFECT, NPC, , , , ,
+#GRAPH, girl7.bmp, 2, 230,30,10,.5
+
+#OBJTYPE, NPC1
+#EFFECT, Mobile, 4, , , ,
+#EFFECT, Conversation, Oni Lytia, portrait-onilytia.jpg, , ,
+#GRAPH, girl7.bmp, 2, 230,30,10,.5
+
+#OBJTYPE, NPC2
+#EFFECT, Mobile, 4, , , ,
+#EFFECT, Conversation, Torga, portrait-torga.jpg, , ,
+#GRAPH, girl7.bmp, 2, 230,30,10,.5
+
+#OBJTYPE, Vulkuca
+#EFFECT, Mobile, 4, , , ,
+#EFFECT, Conversation, Vulkuca, portrait-vulkuca.jpg, , ,
+#GRAPH, girl7.bmp, 2, 10,10,10,.5
+
+OBJTYPE, Vulkuca2
+EFFECT, Mobile, 4, , , ,
+EFFECT, SELL, Fire Mountain Portal Gem, 1000, , ,
+GRAPH, girl7.bmp, 2, 10,10,10,.5
+
+#CREATEOBJ, Vulkuca, 0, 0, Vulkuca, ,
+
+#CREATEOBJ, NPC2, 0, 0, Torga, ,
+
+#CREATEOBJ, NPC, 0, 0, Rulan, NPC1.bmp, $Watch your step around here/ or you might just end up swimming down acid canyon without a canoe/ if you know what I mean. Practically anyone around here would love to feel those lovely legs slithering down their throat.$
+
+#CREATEOBJ, NPC, 0, 0, Annara, NPC1.bmp, $This is Firebelly territory. You can visit/ so long as you don't cause any trouble--but cross us and I'll swallow you whole.$
+
+#CREATEOBJ, NPC1, 0, 0, Oni Lytia, , 
+
+#CREATEOBJ, NPC, 0, 0, Latyndra, NPC1.bmp, $I may look mean/ but I'm much nicer once you get to know me inside...care to find out exactly what I mean?$
+
+CREATEOBJ, NPC, 0, 0, Venudra, NPC1.bmp, $You'd best keep in mind/ Firebellies hate Demonguts and Demonguts hate Firebellies.$
+
+CREATEOBJ, Questgirl, 0, 0, Addza, NPC1.bmp, $We've been having some problems with that accursed Clan Demongut. Their castle is far west of here/ just north of the Shadow Mountain. If you can go in there and kill their queen/ there will be a significant reward in it for you. We would love to do it ourselves...but the Darkswallows own that region/ and we can't exactly eat them both.$
+
+#OBJTYPE, Healer
+#EFFECT, NPC, , , ,
+#EFFECT, Heal, 10000, , ,
+#EFFECT, SELLPOTIONS, , , , ,
+EFFECT, SELL, Lesser Healing Potion, 40,,
+#GRAPH, girl10.bmp, 2, 255,255,0,.7
+
+#CREATEOBJ, Healer, 0, 0, Irda, NPC1.bmp, $Buy something or get out of here.$
+
+
+#OBJTYPE, Firebelly Mercenary
+#EFFECT, Pickup,,,,
+#EFFECT, Spell, MercenaryL20,,,
+#EFFECT, Destruct,,,,
+
+#OBJTYPE, Mercenary Girl
+#EFFECT, SELL, Firebelly Mercenary, 15000, , ,
+GRAPH, merc1.bmp, 3, 230, 30, 30, .4
+
+#OBJTYPE, Rayszia
+#EFFECT, Conversation, Rayszia, portrait-rayszia.jpg, , ,
+#EFFECT, NoEat, , , , ,
+#GRAPH, merc1.bmp, 3, 230, 0, 0, .3
+
+#OBJTYPE, Skinbane Portal Gem
+#EFFECT, Pickup,,,,
+#EFFECT, MapTeleport, Skinbane.txt, 5, 5, , , ,
+#EFFECT, NoEat, , , , ,
+#GRAPH, Gem5.bmp, 1, 255, 10, 5, .5
+
+#CREATEOBJ, Skinbane Portal Gem, 5, 5, , , ,
+
+#OBJTYPE, Fire Mountain Portal Gem
+#EFFECT, Pickup,,,,
+#EFFECT, MapTeleport, Firemountain.txt, 5, 5, , , ,
+#EFFECT, NoEat, , , , ,
+#GRAPH, Gem5.bmp, 1, 10, 255, 5, .5
+
+#CREATEOBJ, Rayszia, 18, 18, Firebelly Warrior, NPC1.bmp, ,
+
+OBJTYPE, Portal
+EFFECT, MapTeleport, Firemountain.txt, 25, 55, , ,
+EFFECT, NoEat, , , , ,
+GRAPH, groundmaw1.bmp, 1, 150,150,0,.5
+
+CREATEOBJ, Portal, 59, 2, , ,

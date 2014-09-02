@@ -1,0 +1,122 @@
+Dungeon of Wallows
+
+#TERSTR, Now entering the Dungeon of Wallows...
+
+#RANDOMSEED, 32198
+#MAPSIZE, 80, 80
+FILLMAP, 13
+/Mapchunk, type, size-ish
+MAPCHUNK, 9, 50
+MAPCHUNK, 9, 30
+MAPCHUNK, 8, 30
+MAPCHUNK, 8, 30
+MAPCHUNK, 12, 30
+MAPCHUNK, 12, 35
+OVRCHUNK, 11, 15
+OVRCHUNK, 8, 10
+OVRCHUNK, 11, 10
+MULTBUILDING, 5, 0, 0, 0, 0, 13, 10, SELLCLOTHES:Gurglemeister Clothing:girl9.bmp:4:8
+MULTBUILDING, 2, 0, 0, 0, 0, 13, 10, SELLARMOR:Gurglemeister Armor:girl8.bmp:5:6
+BUILDING, 0, 0, 0, 0, 12, 9, SELLWEAPONS:Gurglemeister Weapons:girl8.bmp:5:8
+#DUNGEON, 1,1,80,80,19,1,4
+
+BUILDING, 5, 5, 0, 0, 3, 10, Treasure8
+BUILDING, 8, 8, 0, 0, 13, 10, Treasure4
+
+BUILDING, 5, 3, 0, 0, 12, 9, Treasure5
+BUILDING, 6, 5, 0, 0, 12, 9, Treasure12
+#BUILDING, 5, 5, 0, 0, 15, 10, Armor20
+BUILDING, 16, 15, 0, 0, 12, 9, Treasure12
+BUILDING, 0,0,0,0,3,11,Treasure30
+
+SPRINKLEOVR, 635, 8
+#SPRINKLEOVR, 825, 14
+SPRINKLE, 525, 13
+#SETMAPS, Jungleofpain2.txt, , , 
+
+/MONTYPE, Name, Graphic, Swallowtype, HP, Skill, Dice, Damage, Eatskill, Exp, move, acid, Red/"Clan", Green/Clannumber, Blue, Lightness
+
+MONTYPE, Gold Naga, snakewoman2.bmp, ,1500, 14, 14, 6, 12, 50, 4, 16, 230, 200, 20,.5
+MONTYPE, Silver Naga, snakewoman2.bmp, ,1500, 16, 14, 6, 10, 50, 4, 16, 150, 150, 170,.5
+MONTYPE, Naga, snakewoman2.bmp, ,350, 8, 4, 6, 7, 80, 4, 4, 60, 150, 0,.5
+MONTYPE, Royal Naga, snakewoman1.bmp, ,550, 9, 4, 6, 7, 80, 4, 4, 0, 0, 150,.3
+MONTYPE, Naga Queen, snakewoman1.bmp, ,5550, 10, 4, 6, 7, 1000, 4, 4, 150, 0, 150,.7
+MONTYPE, Naga, snakewoman2.bmp, ,40, 6, 2, 6, 6, 80, 4, 3, 40, 50, 210,.1
+MONTYPE, Giant Snake, snake1.bmp, ,40, 6, 1, 8, 8, 25, 4, 3, 40, 120, 10,.5
+MONTYPE, Marsh Serpent, snake1.bmp, ,125, 8, 2, 8, 9, 55, 5, 3, 20, 80, 0,.4
+MONTYPE, Golden Serpent, snake1.bmp, ,255, 10, 3, 10, 14, 75, 5, 4, 240, 200, 0,.5
+
+MONTYPE, Giant Worm, worm1.bmp, ,600, 8, 3, 6, 9, 90, 6, 3, 150, 150, 0,.3
+MONTYPE, Giant Worm , worm1.bmp, ,600, 8, 3, 6, 9, 90, 6, 3, 180, 180, 0,.5
+MONTYPE, Purple Worm, worm1.bmp, ,900, 9, 5, 6, 9, 120, 6, 5, 150, 0, 150,.3
+
+MONTYPE, Gurglemeister Girl, girl4.bmp, , 350, 10, 5, 6, 8, 100, 7, 4, 254, 255, 0, .5
+
+MONTYPE, Acid Vines, tendrils1.bmp, Plant,60, 4, 1, 4, 12, 35, 3, 5, 80, 140, 10,.4
+MONTYPE, Girlcrunch Plant, venus1.bmp, Plant,120, 8, 1, 4, 18, 80, 1, 6, 50, 100, 10,.5
+MONTYPE, Violet Toad, frog1.bmp, , 900, 12, 8, 4, 16, 15, 4, 10, 200, 30, 200,.5
+MONTYPE, Purple Ooze, slime1.bmp, 800, , 8, 8, 6, 12, 80, 4, 8, 200, 90, 230,.5
+
+#FAVMONSTER, Silver Naga, 15
+
+#MONTYPE2, Gold Naga, snakewoman3.bmp, 40, 230, 200, 20,.5
+#MONTYPE2, Silver Naga, snakewoman3.bmp, 40, 150, 150, 170, .5
+#MONTYPE2, Violet Toad, frog1.bmp, 40, 200, 30, 200, .5
+#MONTYPE2, Purple Ooze, slime1.bmp, 40, 200, 90, 230, .5
+#MONTYPE2, Demon Sorceress, demonsorceress.bmp, 42, 200, 90, 230, .5
+#MONTYPE2, Demon Sorceress , batsorceress.bmp, 40, 200, 90, 230, .5
+
+/RANDOMMONSTERS, Type (Or ALL), number, x zone start, y zone start, x end, y end
+#RANDOMMONSTERS, ALL, 250, 0,0,0,0
+RANDOMMONSTERS, Giant Worm, 40, 0, 0, 0, 0
+MONTYPE, Gargmaw, worm1.bmp, ,8000, 9, 5, 6, 9, 3000, 6, 5, 50, 50, 50,.2
+RANDOMMONSTERS, Gargmaw, 1, 40, 20, 60
+
+MONTYPE, Purple Witch, succubus1.bmp, , 2000, 15, 12, 8, 12, 500, 5, 15, 150, 10, 250, .4
+
+#MONTYPE2, Purple Witch, succubus1.bmp, 45, 150, 10, 250, .4
+
+#RANDOMMONSTERS, ALL, 100, 0,0,0,0
+
+OBJTYPE, Treasure Bag (Orange)
+EFFECT, GiveGold, 50,,,
+EFFECT, Destruct,,,,
+GRAPH, treasure2.bmp, 1, 200, 140, , .5
+
+CREATEOBJ, Treasure Bag (Orange), 127,75,,,
+CREATEOBJ, Treasure Bag (Orange), 127,76,,,
+CREATEOBJ, Treasure Bag (Orange), 128,75,,,
+CREATEOBJ, Treasure Bag (Orange), 128,76,,,
+
+QUESTMONSTER, Gargmaw
+
+OBJTYPE, Green Key
+EFFECT, SetQuest, Greenkey,,,
+EFFECT, Pickup,,,, 
+GRAPH, key1.bmp, 1, 20,255,20,.6
+
+BUILDING, 8, 8, 46, 46, 15, 10,
+
+CREATEOBJ, Green Key, 50, 50,,,,
+
+OBJTYPE, Life Enhancer
+EFFECT, NPC, , , , ,
+EFFECT, Lifeplus, 1, , , ,
+EFFECT, Destruct, , , , ,
+GRAPH, potionenh1.bmp, 1, 250,15,3,.5
+
+CREATEOBJ, Life Enhancer, 46, 73, Life Potion Enhancement, , You have gained a life potion enhancement!
+/Weapon, graphic, dice, damage, type, weight
+#OBJTYPE, Hexscymr
+#EFFECT, Pickup,,,,
+#EFFECT, WEAPON, uniquespear.bmp, 20, 50, Spear, 2
+#EFFECT, BONHP, 600, , , , ,
+#EFFECT, BONDEX, 8, , , , , ,
+#EFFECT, BONINT, 8, , , , , ,
+#EFFECT, NoEat, , , , ,
+#GRAPH, spear3.bmp, 1, 255, 0, 0, .5
+
+
+#CREATEOBJ, Hexscymr, 45, 73, Hexscymr, , ,
+
+

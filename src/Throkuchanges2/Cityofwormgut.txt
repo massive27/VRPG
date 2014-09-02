@@ -1,0 +1,161 @@
+City of Wormgut
+
+#TERSTR, Now entering the City of Wormgut...
+
+#RANDOMSEED, 925
+#MAPSIZE, 100, 100
+FILLMAP, 13
+/Mapchunk, type, size-ish
+MAPCHUNK, 9, 50
+MAPCHUNK, 9, 30
+MAPCHUNK, 8, 30
+MAPCHUNK, 8, 30
+MAPCHUNK, 12, 30
+MAPCHUNK, 12, 35
+OVRCHUNK, 11, 15
+OVRCHUNK, 8, 10
+OVRCHUNK, 11, 10
+#DUNGEON, 1,1,100,100,12,10,1
+#MULTBUILDING, 5, 0, 0, 0, 0, 13, 10, SELLCLOTHES:Gurglemeister Clothing:girl9.bmp:4:8
+#MULTBUILDING, 2, 0, 0, 0, 0, 13, 10, SELLARMOR:Gurglemeister Armor:girl8.bmp:5:6
+#BUILDING, 0, 0, 0, 0, 12, 9, SELLWEAPONS:Gurglemeister Weapons:girl8.bmp:5:8
+
+
+BUILDING, 5, 5, 0, 0, 3, 10, Treasure8
+BUILDING, 8, 8, 0, 0, 13, 10, Treasure4
+
+BUILDING, 5, 3, 0, 0, 12, 9, Treasure5
+BUILDING, 6, 5, 0, 0, 12, 9, Treasure12
+BUILDING, 5, 5, 0, 0, 15, 10, Clothes8
+BUILDING, 16, 15, 0, 0, 12, 9, Treasure12
+BUILDING, 0,0,0,0,3,11,Treasure30
+
+SPRINKLEOVR, 635, 8
+#SPRINKLEOVR, 825, 5
+SPRINKLE, 525, 13
+#SETMAPS, Fetidswamp.txt, Nagacave.txt, , Wormcave.txt
+
+/MONTYPE, Name, Graphic, Swallowtype, HP, Skill, Dice, Damage, Eatskill, Exp, move, acid, Red/"Clan", Green/Clannumber, Blue, Lightness
+
+MONTYPE, Red Naga, snakewoman2.bmp, ,150, 6, 2, 6, 6, 50, 4, 3, 150, 20, 0,.3
+MONTYPE, Naga, snakewoman2.bmp, ,350, 8, 4, 6, 7, 80, 4, 4, 60, 150, 0,.5
+MONTYPE, Royal Naga, snakewoman1.bmp, ,550, 9, 4, 6, 7, 80, 4, 4, 0, 0, 150,.3
+MONTYPE, Naga Queen, snakewoman1.bmp, ,5550, 10, 4, 6, 7, 1000, 4, 4, 150, 0, 150,.7
+MONTYPE, Naga, snakewoman2.bmp, ,40, 6, 2, 6, 6, 80, 4, 3, 40, 50, 210,.1
+MONTYPE, Giant Snake, snake1.bmp, ,40, 6, 1, 8, 8, 25, 4, 3, 40, 120, 10,.5
+MONTYPE, Marsh Serpent, snake1.bmp, ,125, 8, 2, 8, 9, 55, 5, 3, 20, 80, 0,.4
+MONTYPE, Golden Serpent, snake1.bmp, ,255, 10, 3, 10, 14, 75, 5, 4, 240, 200, 0,.5
+
+MONTYPE, Giant Worm, worm1.bmp, ,600, 8, 3, 6, 9, 90, 6, 3, 150, 150, 0,.3
+MONTYPE, Gurglemeister Girl, girl4.bmp, , 350, 10, 5, 6, 8, 100, 7, 4, 254, 255, 0, .5
+
+#MONTYPE2, Giant Worm, worm1.bmp, 16, 105, 150, 0, .3
+
+MONTYPE, Acid Vines, tendrils1.bmp, Plant,60, 4, 1, 4, 12, 35, 3, 5, 80, 140, 10,.4
+MONTYPE, Girlcrunch Plant, venus1.bmp, Plant,120, 8, 1, 4, 18, 80, 1, 6, 50, 100, 10,.5
+MONTYPE, Giant Frog, frog1.bmp, ,25, 4, 1, 4, 12, 15, 4, 2, 100, 160, 10,.5
+MONTYPE, Slime, slime1.bmp, 40, ,6, 2, 6, 6, 80, 4, 3, 200, 160, 0,.5
+
+FAVMONSTER, Marsh Serpent, 15
+
+/RANDOMMONSTERS, Type (Or ALL), number, x zone start, y zone start, x end, y end
+RANDOMMONSTERS, Gurglemeister Girl, 150, 0,0,0,0
+#RANDOMMONSTERS, Giant Worm, 40, 0, 0, 0, 0
+
+OBJTYPE, Treasure Bag (Orange)
+EFFECT, GiveGold, 50,,,
+EFFECT, Destruct,,,,
+GRAPH, treasure2.bmp, 1, 200, 140, , .5
+
+CREATEOBJ, Treasure Bag (Orange), 127,75,,,
+CREATEOBJ, Treasure Bag (Orange), 127,76,,,
+CREATEOBJ, Treasure Bag (Orange), 128,75,,,
+CREATEOBJ, Treasure Bag (Orange), 128,76,,,
+
+#MULTCREATEOBJ, 12, Fountain of Healing, 0, 0, , ,
+
+#OBJTYPE, NPC
+#EFFECT, Mobile, 4, , , ,
+#EFFECT, NPC, , , , ,
+#GRAPH, girl4.bmp, 2, 254,255,10,.5
+
+CREATEOBJ, NPC, 0, 0, Djorna, NPC2.bmp, $Ooh/ a newcomer! We get so few visitors down here! Tell me/ where did you come from? Was it up north? I hear they have very delic--er/ attractive girls up there. Listen/ I've got a cave of my own down here. If you'll come down there with me/ I'll...um...show you around! Yeah! Show you around! *giggle* Those clothes are digestible/ right? Um/ no reason/ just curious...$
+
+CREATEOBJ, NPC, 0, 0, Gretchin, NPC2.bmp, $Welcome to Wormgut! I'm Gretchin of Clan Gurglemeister. If there's anything you want/ don't hesitate to ask. Say/ could you do me a favor? I've got something stuck in my throat. Could you just maybe reach in there and get it for me? What/ don't you trust me? You think I would just swallow hard/ sending you on a one-way trip to my stomach? Hah! As if! While you're at it/ could you take your clothes off for me? They're so hard to digest...Er/ I mean/ I think you'd be prettier naked. Yeah/ that's it.$
+
+#CREATEOBJ, NPC, 0, 0, Ingrid, NPC2.bmp, $Hello! You've reached the Gurglemeister city of Wormgut/ the last word in subterrainian living. Don't mind the worms. They're just looking for breakfast/ as always.$
+
+#CREATEOBJ, NPC, 0, 0, Betty, NPC2.bmp, $Hah hah! I just saw the GROSSEST thing! I was walking through one of the caves with one of my friends/ and this worm comes up and just TOTALLY swallows her whole! And then it bent over and opened it's mouth/ like it was gonna eat me too/ and I could see down it's throat! It was all covered in glop and I even saw her arm poke out of it's stomach for a second/ oozing with slime! It was so cool! She's probably worm-shit by now/ but it sure was fun to watch.$
+
+#CREATEOBJ, NPC, 0, 0, Abigail, NPC2.bmp, $You say you're looking for Thirsha's keys? Golly. Um...Why/ again? You have some sort of death wish? ...Oh/ you want to fight her. That's...pretty stupid of you. But anyway/ yeah/ one of the keys is actually quite near here. I've heard it's somewhere in the worm cave to the west.$
+
+#OBJTYPE, Healer
+#EFFECT, NPC, , , ,
+#EFFECT, Heal, 10000, , ,
+#EFFECT, SELLPOTIONS, , , , ,
+EFFECT, SELL, Lesser Healing Potion, 40,,
+#GRAPH, girl10.bmp, 2, 255,255,255,.7
+
+#CREATEOBJ, Healer, 0, 0, Abbey, NPC1.bmp, $You want some potions?$
+
+
+#OBJTYPE, Questgirl
+#EFFECT, NPC, , , ,
+#EFFECT, IfQuest, Gargmaw,,,,
+#EFFECT, Manaplus, 1, , ,
+#EFFECT, Message, $You really took on Gargmaw? And you're still here!? Well/ a deal's a deal.$,,,,
+#EFFECT, Destruct,,,,
+#EFFECT, NoEat, , , , ,
+#GRAPH, girl7.bmp, 2, 250,250,70,.5
+
+#CREATEOBJ, Questgirl, 6, 50, Gladys, NPC1.bmp, $Have you heard of Gargmaw/ the great Black Worm? We've managed to keep the other worms around here from eating us/ but Gargmaw has been guzzling down five or six a day! If this keeps up/ there won't be any of us left in a week! Just a bunch of worm poop all over the caves! Kill it for us and there will be a mana potion enhancement in it for ya.$
+
+#OBJTYPE, Gurglemeister Mercenary
+#EFFECT, Pickup,,,,
+#EFFECT, Spell, MercenaryL15,,,
+#EFFECT, Destruct,,,,
+
+#OBJTYPE, Mercenary Girl
+#EFFECT, SELL, Gurglemeister Mercenary, 8000, , ,
+#GRAPH, merc1.bmp, 3, 250, 250, 0, 1
+
+#CREATEOBJ, Mercenary Girl, 50, 50, Gurglemeister Warrior, NPC1.bmp, ,
+
+#OBJTYPE, Gretchin
+#EFFECT, Mobile, 3, , , ,
+#EFFECT, Conversation, Gretchin, portrait-gretchin.jpg, , ,
+#GRAPH, girl11.bmp, 2, 240, 245, 0, 1
+
+#CREATEOBJ, Gretchin, 0, 0, , , ,
+
+#OBJTYPE, Djorna
+#EFFECT, Mobile, 3, , , ,
+#EFFECT, Conversation, Djorna, portrait-djorna.jpg, , ,
+#GRAPH, girl41b.bmp, 2, 240, 245, 0, 1
+
+#CREATEOBJ, Djorna, 0, 0, , , ,
+
+#OBJTYPE, Brigette
+#EFFECT, Mobile, 3, , , ,
+#EFFECT, Conversation, Brigette, portrait-brigette.jpg, , ,
+#GRAPH, girl9.bmp, 2, 240, 245, 0, 1
+
+#CREATEOBJ, Brigette, 0, 0, , , ,
+
+#OBJTYPE, Jeritia
+#EFFECT, Mobile, 3, , , ,
+#EFFECT, Conversation, Jeritia, portrait-gurglemeister1.jpg, , ,
+#GRAPH, girl11.bmp, 2, 100, 245, 0, 1
+
+#CREATEOBJ, Jeritia, 0, 0, , , ,
+
+#CONVGIRL, Michelle, 0, 0, girl14.bmp, 1, , 0, 150, 150, 0
+
+
+#OBJTYPE, Wormgut Portal Gem
+#EFFECT, Pickup,,,,
+#EFFECT, MapTeleport, cityofwormgut.txt, 50, 50, , , ,
+#EFFECT, NoEat, , , , ,
+#GRAPH, Gem5.bmp, 1, 250, 250, 50, .5
+
+#CREATEOBJ, Wormgut Portal Gem, 50, 50, , , ,

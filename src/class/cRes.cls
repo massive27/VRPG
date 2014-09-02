@@ -14,7 +14,7 @@ Attribute VB_Exposed = False
 ' CRES.CLS
 '==========
 '
-'object to handle resource
+'object to handle resourcepack file
 'for vrpg
 'to get rid of mpq
 
@@ -33,26 +33,32 @@ Private Type RESFILEHEAD
     resarraylen As Long
     resdataoffset As Long
 End Type
-    
-Private Type RESMEMORY
-    FullName As String
-    extension As String * 3
-    Loaded As Boolean
-End Type
+
+Private MyPack As String
+Private MyTempFolder As String
+
 
 Private Declare Sub CpMem Lib "KERNEL32" Alias "RtlMoveMemory" (hpvDest As Any, hpvSource As Any, ByVal cbCopy As Long)
 
 Private Sub Class_Initialize()
-
+    MyTempFolder = CleanDirName(App.Path)
 End Sub
-'add a folder as a resource
-Public Sub AddFolder(DirName As String, Optional ByVal priority As Long = 1)
+'sets the packfile to use
+Public Function SetPackFile(PackFileName As String) As Boolean
 
-End Sub
+    If Dir$(PackFileName, vbNormal) <> "" Then
+        MyPack = PackFileName
+        SetPackFile = True
+    Else
+        SetPackFile = False
+    End If
 
-Public Sub AddPack(PackName As String, Optional ByVal priority As Long = 1)
+End Function
+'return a path to a file, or null if the file is not existing in the pack
+Public Function GetFile(thisFile As String) As String
 
-End Sub
+End Function
+
 'extract a file from a pack
 Private Function ExtractMe(TargetPack As String, Destination As String, ByRef ResFilePtr As RESFILE)
 Dim buf() As Byte

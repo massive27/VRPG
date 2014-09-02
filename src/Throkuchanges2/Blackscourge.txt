@@ -1,0 +1,133 @@
+Blackscourge
+
+#TERSTR, Now entering City of Blackscourge...
+
+#RANDOMSEED, 484694
+#MAPSIZE, 55, 55
+#FILLMAP, 14
+/Mapchunk, type, size-ish
+#MAPCHUNK, 3, 10
+#MAPCHUNK, 3, 10
+#MAPCHUNK, 3, 10
+#MAPCHUNK, 3, 10
+#OVRCHUNK, 17, 17
+#OVRCHUNK, 17, 15
+OVRCHUNK, 13, 15
+OVRCHUNK, 13, 15
+OVRCHUNK, 12, 10
+OVRCHUNK, 14, 10
+OVRCHUNK, 14, 10
+OVRCHUNK, 10, 10
+
+SPRINKLEOVR, 535, 14
+#SPRINKLEOVR, 335, 5
+SPRINKLEOVR, 335, 13
+SPRINKLEOVR, 335, 12
+#SPRINKLEOVR, 95, 17
+#SPRINKLEOVR, 75, 15
+#SPRINKLEOVR, 175, 14
+#SPRINKLE, 1225, 15
+
+#BUILDING, 0, 0, 0, 0, 5, 22, Treasure12
+#BUILDING, 0, 0, 0, 0, 5, 22, Objective4
+#BUILDING, 0, 0, 0, 0, 5, 22, 
+#BUILDING, 0, 0, 0, 0, 5, 22, SELLCLOTHES:Darkswallow Clothes:girl9.bmp:42:8
+#BUILDING, 0, 0, 0, 0, 5, 22, SELLWEAPONS:Darkswallow Weapons:girl10.bmp:7:8
+
+MULTBUILDING, 5, 0, 0, 0, 0, 3, 1, Treasure6
+
+MULTBUILDING, 3, 5, 5, 0, 0, 15, 10, Objective3
+BUILDING, 16, 15, 0, 0, 12, 9, Treasure12
+
+
+#SETMAPS, Shadowmountain.txt, Rocky.txt, ,
+
+/MONTYPE, Name, Graphic, Swallowtype, HP, Skill, Dice, Damage, Eatskill, Exp, move, acid, Red/"Clan", Green/Clannumber, Blue, Lightness
+
+MONTYPE, Darkswallow Girl, girl11.bmp, , 500, 8, 6, 8, 14, 800, 8, 6, 30, 30, 30, .5
+
+FAVMONSTER, Darkswallow Girl, 5
+
+/RANDOMMONSTERS, Type (Or ALL), number, x zone start, y zone start, x end, y end
+
+RANDOMMONSTERS, ALL, 20, 0,0,0,0
+RANDOMMONSTERS, Shadow Raven, 100, 0,0,0,0
+RANDOMMONSTERS, Firevines, 50, 0,0,0,0
+
+#MULTCREATEOBJ, 1, Fountain of Healing, 0, 0, , ,
+
+#OBJTYPE, NPC3
+#EFFECT, Mobile, 4, , , ,
+#EFFECT, NPC, , , , ,
+#GRAPH, girl11.bmp, 2, 40,40,40,.5
+
+#OBJTYPE, NPC2
+#EFFECT, Mobile, 4, , , ,
+#EFFECT, NPC, , , , ,
+#GRAPH, girl12.bmp, 2, 140,40,140,.5
+
+#OBJTYPE, NPC
+#EFFECT, Mobile, 4, , , ,
+#EFFECT, NPC, , , , ,
+#GRAPH, girl14.bmp, 1, 40,40,40,.5
+
+#CREATEOBJ, NPC, 0, 0, Luvanara, NPC2.bmp, $To the North is Castle Demongut/ past the Shadow Mountain. I would not recommend visiting--they don't take as kindly to visitors as we do.$
+
+#CREATEOBJ, NPC, 0, 0, Niette, NPC2.bmp, $This is Blackscourge. We belong to the Darkswallow clan.$
+
+#CREATEOBJ, NPC, 0, 0, Rubana, NPC2.bmp, $Thirsha's volcano lies directly to the northeast. If someone doesn't stop her/ she'll come through here and devour all of us sooner or later.$
+
+#CREATEOBJ, NPC, 0, 0, Zette, NPC2.bmp, $Back off.$
+
+#CREATEOBJ, NPC, 0, 0, Eva, NPC1.bmp, $You're looking at me like you were evaluating my potential as a midday snack. I'd watch such thoughts if I were you.$
+
+#CREATEOBJ, NPC, 0, 0, Nira, NPC1.bmp, $So you say you came from the south/ eh? Impressive. Most girls don't make it out of the desert as anything other than worm shit.$
+
+#CREATEOBJ, NPC2, 0, 0, Annette, NPC2.bmp, $This town belongs to clan Darkswallow. Be careful. They may seem more civilized than the Firebellies or the Demonguts/ but don't start thinking they're any less dangerous. Beneath every black dress around here lies a hungry stomach that only knows how to do one thing.$
+
+#CREATEOBJ, NPC, 0, 0, Roxella, NPC1.bmp, $You're looking for Thirsha's keys? Well/ I know the Demonguts have one of them. Try their castle. By the way/ they really don't like visitors.$
+
+#OBJTYPE, Healer
+#EFFECT, NPC, , , ,
+#EFFECT, Heal, 10000, , ,
+#EFFECT, SELLPOTIONS, , , , ,
+EFFECT, SELL, Lesser Healing Potion, 40,,
+#GRAPH, girl10.bmp, 2, 145,155,145,.4
+
+#CREATEOBJ, Healer, 0, 0, Arta, NPC1.bmp, $I offer potions.$
+
+#OBJTYPE, Questgirl
+#EFFECT, Conversation, Illiana, portrait-illiana.jpg, , 
+EFFECT, NPC, , , ,
+EFFECT, IfQuest, White Kari,,,,'if the player has killed a white kari
+EFFECT, Manaplus, 1, , ,
+EFFECT, Message, $That should slow down those carnivorous monsters. Here's my end of the bargain.$,,,,
+EFFECT, Destruct, , , , 
+#EFFECT, NoEat, , , , ,
+#GRAPH, girl3.bmp, 2, 120,120,120,.5
+
+#CREATEOBJ, Questgirl, 25, 25, Illiana, NPC1.bmp, $I heard you kill for potion enhancements. Here's the deal. There's a nest if spiderwomen to the northeast that has been growing constantly. We've learned that the white ones are the ones that are laying their eggs. If you can kill them for us/ I'll give you a mana potion enhancement.$
+
+#CONVGIRL, Licatria, 38, 23, girl33.bmp, 3, portrait-licatria.jpg, , 30, 30, 30
+
+
+#OBJTYPE, Darkswallow Mercenary
+#EFFECT, Pickup,,,,
+#EFFECT, Spell, MercenaryL25,,,
+#EFFECT, Destruct,,,,
+
+#OBJTYPE, Mercenary Girl
+#EFFECT, SELL, Darkswallow Mercenary, 25000, , ,
+#GRAPH, merc1.bmp, 3, 30, 30, 30, 1
+
+#CREATEOBJ, Mercenary Girl, 30, 30, Darkswallow Warrior, NPC1.bmp, ,
+
+
+#OBJTYPE, Blackscourge Portal Gem
+#EFFECT, Pickup,,,,
+#EFFECT, MapTeleport, Blackscourge.txt, 5, 5, , , ,
+#EFFECT, NoEat, , , , ,
+#GRAPH, Gem5.bmp, 1, 15, 15, 15, .5
+
+#CREATEOBJ, Blackscourge Portal Gem, 5, 5, , , ,
+
