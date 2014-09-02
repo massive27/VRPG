@@ -1,0 +1,43 @@
+Duamutef's Glorious Vore RPG v2.14
+Modded Game binary install v01-2014
+
+This special installer include the rebuilt-from-source main game file. That binary doesnt need DMC2.ocx and bass.dll anymore.
+
+It also has many bugfixes and some gameplay improvements.
+
+
+Components Details :
+
+Game files (will be copied into game directory)
+-Data.pak
+-VRPG2.exe
+-MPQExtractor.exe
+
+VB runtime DLL files (will be copied in windows/system32 directory)
+-msvbvm60.dll
+-vb6stkit.dll
+
+Game OCX files win98/XP (will be copied into game directory)
+-MpqCtl.ocx
+
+Game OCX files Vista/7 (will be copied into windows/system32 directory)
+-MpqCtl.ocx
+
+Vista and 7 missing DLLs (will be copied in windows/system32 directory)
+-d3drm.dll
+-dx7vb.dll
+-comdlg32.ocx
+
+
+Modded game file main feature :
+- Reduced dependencies (no DMC2.ocx, no bass.dll, no msvbvm50.dll)
+- Mod support simply by command line : "ExVRPG -mod file.pak -mod thatfolder\ " ...
+- Pets can swallow or be swallowed by enemies (including all "mishap")
+- New belly bulge render
+- An in-game "Mod" menu lets player fiddle around, like puking
+- Better overall performances, crash-free and temporary files handling
+
+
+Support : http://aryion.com/forum/viewforum.php?f=52
+
+Eka's Portal FTW !
