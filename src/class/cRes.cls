@@ -25,7 +25,7 @@ Private Type RESFILE
     offset As Long
     length As Long
     extension As String * 4
-    Name As String
+    name As String
 End Type
 
 Private Type RESFILEHEAD
@@ -34,8 +34,18 @@ Private Type RESFILEHEAD
     resdataoffset As Long
 End Type
 
+
 Private MyPack As String
 Private MyTempFolder As String
+
+'tracker of already-extracted files
+'not doing Type for faster lookup
+Private MyExtracted() As String
+Private MyExtPath() As String
+Private MyExtCnt As Long
+
+Private aResource() As RESFILE
+Private ResLen As Long
 
 
 Private Declare Sub CpMem Lib "KERNEL32" Alias "RtlMoveMemory" (hpvDest As Any, hpvSource As Any, ByVal cbCopy As Long)
@@ -43,19 +53,71 @@ Private Declare Sub CpMem Lib "KERNEL32" Alias "RtlMoveMemory" (hpvDest As Any, 
 Private Sub Class_Initialize()
     MyTempFolder = CleanDirName(App.Path)
 End Sub
-'sets the packfile to use
+
+'sets the packfile to use. Will load it if exists
 Public Function SetPackFile(PackFileName As String) As Boolean
 
     If Dir$(PackFileName, vbNormal) <> "" Then
         MyPack = PackFileName
-        SetPackFile = True
+        SetPackFile = LoadPack(MyPack, aResource)
+        If SetPackFile Then
+            ResLen = UBound(aResource)
+        End If
     Else
         SetPackFile = False
     End If
 
 End Function
+'sets the temp folder for extraction
+Public Function SetTempFolder(DestFolder As String) As Boolean
+Dim sBuf As String
+
+    'test if exists
+    sBuf = CleanDirName(DestFolder)
+    If Dir$(sBuf, vbDirectory) = "" Then
+        SetTempFolder = False
+    Else
+        MyTempFolder = sBuf
+        SetTempFolder = True
+    End If
+
+End Function
 'return a path to a file, or null if the file is not existing in the pack
-Public Function GetFile(thisFile As String) As String
+Public Function GetResToFile(ThisFile As String) As String
+Dim i As Long, p As Long
+Dim bareName As String
+Dim sExt As String
+Dim sDest As String
+
+    Call CleanFileExt(ThisFile, bareName, sExt)
+    
+    'is already extracted ?
+    For i = 1 To MyExtCnt
+        If MyExtracted(i) Like bareName Then
+            GetResToFile = MyExtPath(i)
+            Exit Function
+        End If
+    Next i
+    
+    'not extracted, look in pack
+    For i = 1 To ResLen
+        If aResource(i).name Like bareName Then
+            'found. prepare output
+            sDest = MyTempFolder & aResource(i).name & sExt
+            'extracts
+            If ExtractMe(MyPack, sDest, aResource(i)) Then
+                GetResToFile = sDest
+                'update tracker
+                MyExtCnt = MyExtCnt + 1
+                MyExtracted(MyExtCnt) = bareName
+                MyExtPath(MyExtCnt) = sDest
+            Else
+                GetResToFile = vbNullString
+            End If
+            Exit Function
+        End If
+    Next i
+    GetResToFile = vbNullString
 
 End Function
 
@@ -77,6 +139,7 @@ Dim tp As Integer
     Close #fp
     Close #tp
     
+    'possible error : unable to write to dest, io error
     If Err.Number <> 0 Then
         ExtractMe = False
         Err.clear
@@ -100,7 +163,11 @@ Dim tmpHead As RESFILEHEAD
             Get #fp, 13, tResFile()
             
             If tResFile(1).offset <> tmpHead.resdataoffset Then
-                'corrupted
+                'corrupted. to be handled. later.
+            Else
+                'prepare the extract tracker
+                ReDim MyExtracted(1 To tmpHead.resarraylen) As String
+                ReDim MyExtPath(1 To tmpHead.resarraylen) As String
             End If
             
         Else
@@ -112,14 +179,14 @@ End Function
 
 'create a Pack file from a directory
 Function BuildPack(ByVal DirSource As String, TargetPack As String, Optional ByVal Verbose As Boolean = False) As Boolean
-Dim sfile As String
+Dim sFile As String
 Dim fp As Integer
 Dim rp As Integer, rlen As Long, buf() As Byte
 Dim i As Long
 Dim mb As VbMsgBoxResult
 Dim miniRes() As RESFILE, miniHead As RESFILEHEAD
 Dim ResCnt As Long
-Dim snm As String, sext As String
+Dim snm As String, sExt As String
 Dim p As Long
 Dim nextOffset As Long
 
@@ -135,8 +202,8 @@ Dim nextOffset As Long
     Open TargetPack For Binary As #fp
     
     
-    sfile = Dir$(DirSource & "*", vbNormal)
-    Do Until sfile = ""
+    sFile = Dir$(DirSource & "*", vbNormal)
+    Do Until sFile = vbNullString
         'array of resource
         ResCnt = ResCnt + 1
         If ResCnt Mod 50 = 0 Then
@@ -144,19 +211,12 @@ Dim nextOffset As Long
         End If
         
         'name cleanup
-        p = InStrRev(sfile, ".", , vbBinaryCompare)
-        If p = Len(sfile) - 4 Then
-            sext = Right$(sfile, 4)
-            snm = Left$(sfile, Len(sfile) - 5)
-        Else
-            sext = "    "
-            snm = sfile
-        End If
+        Call CleanFileExt(sFile, snm, sExt)
         
         'storing result
-        miniRes(ResCnt).extension = sext
-        miniRes(ResCnt).Name = snm
-        miniRes(ResCnt).length = FileLen(DirSource & sfile)
+        miniRes(ResCnt).extension = sExt
+        miniRes(ResCnt).name = snm
+        miniRes(ResCnt).length = FileLen(DirSource & sFile)
         
     Loop
     
@@ -164,14 +224,15 @@ Dim nextOffset As Long
     ReDim Preserve miniRes(1 To ResCnt) As RESFILE
     
     'preparing header
-    nextOffset = Len(miniRes) + 16&
+    nextOffset = LenB(miniRes) + 16&
     miniHead.version = 1&
     miniHead.resarraylen = ResCnt
     miniHead.resdataoffset = nextOffset
     
+    'copying resources file into pack
     For i = 1 To ResCnt
         rp = FreeFile
-        Open DirSource & miniRes(i).Name & miniRes(i).extension For Binary Access Read As #rp
+        Open Trim$(DirSource & miniRes(i).name & miniRes(i).extension) For Binary Access Read As #rp
             ReDim buf(1 To miniRes(i).length) As Byte
             Get #rp, 1, buf()
         Close #rp
@@ -213,3 +274,18 @@ Private Function CleanDirName(ThisDir As String) As String
         CleanDirName = ThisDir
     End If
 End Function
+'quick function to strip extension
+Private Sub CleanFileExt(ThisFile As String, ByRef OutName As String, ByRef OutExt As String)
+Dim p As Long
+
+    'name cleanup : separate extension
+    p = InStrRev(ThisFile, ".", , vbBinaryCompare)
+    If p = Len(ThisFile) - 4 Then
+        OutExt = Right$(ThisFile, 4)
+        OutName = Left$(ThisFile, Len(ThisFile) - 5)
+    Else
+        OutExt = "    "
+        OutName = ThisFile
+    End If
+    
+End Sub
