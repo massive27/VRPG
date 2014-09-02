@@ -1,0 +1,68 @@
+Rocky
+
+#TERSTR, Now entering the Rocky Steppes...
+
+#RANDOMSEED, 75345
+#MAPSIZE, 125, 125
+FILLMAP, 2
+/Mapchunk, type, size-ish
+#MAPCHUNK, 12, 30
+#MAPCHUNK, 12, 30
+#MAPCHUNK, 12, 20
+#MAPCHUNK, 12, 20
+#MAPCHUNK, 12, 20
+#MAPCHUNK, 12, 20
+#MAPCHUNK, 15, 15
+#MAPCHUNK, 15, 15
+#MAPCHUNK, 15, 15
+#MAPCHUNK, 15, 15
+#OVRCHUNK, 15, 15
+#OVRCHUNK, 16, 10
+#OVRCHUNK, 16, 10
+#OVRCHUNK, 8, 10
+
+#BUILDING, 5, 5, 0, 0, 12, 10, Treasure8
+#BUILDING, 8, 8, 0, 0, 12, 10, Treasure4
+#MULTBUILDING, 5, 0, 0, 0, 0, 3, 1, Treasure6
+BUILDING, 3, 5, 0, 0, 3, 1, Treasure5
+BUILDING, 5, 3, 0, 0, 3, 1, Treasure5
+#BUILDING, 6, 5, 0, 0, 12, 9, Armor19
+#BUILDING, 5, 5, 0, 0, 15, 10, Objective4
+BUILDING, 16, 15, 0, 0, 12, 9, Treasure12
+BUILDING, 0,0,0,0,3,1,Treasure30
+
+#SPRINKLEOVR, 335, 16
+#SPRINKLEOVR, 335, 15
+#SPRINKLEOVR, 75, 8
+SPRINKLE, 525, 13
+#SETMAPS, Volcanic2.txt, Volcanic3.txt, Desert1.txt, Rocky.txt
+
+/MONTYPE, Name, Graphic, Swallowtype, HP, Skill, Dice, Damage, Eatskill, Exp, move, acid, Red/"Clan", Green/Clannumber, Blue, Lightness
+
+#MONTYPE, Stone Kari, kari1.bmp, ,750, 9, 6, 8, 9, 140, 4, 5, 115, 90, 80, .4
+MONTYPE, Red Naga, snakewoman2.bmp, ,150, 6, 2, 6, 6, 50, 4, 3, 150, 20, 0,.3
+MONTYPE, Naga, snakewoman2.bmp, ,350, 8, 4, 6, 7, 80, 4, 4, 60, 150, 0,.5
+MONTYPE, Giant Snake, snake1.bmp, ,40, 6, 1, 8, 8, 25, 4, 3, 40, 120, 10,.5
+MONTYPE, Marsh Serpent, snake1.bmp, ,125, 8, 2, 8, 9, 55, 5, 3, 20, 80, 0,.4
+MONTYPE, Giant Worm, worm1.bmp, ,600, 8, 3, 6, 9, 90, 6, 3, 150, 150, 0,.3
+MONTYPE, Desert Worm, worm1.bmp, ,800, 8, 4, 6, 9, 110, 5, 3, 100, 90, 80,.3
+MONTYPE, Fire Grub, worm1.bmp, ,900, 12, 7, 12, 11, 250, 5, 8, 230, 50, 0,.4
+MONTYPE, Nightvines, tendrils1.bmp, Plant,380, 10, 8, 12, 5, 155, 3, 12, 40, 40, 40,.4
+MONTYPE, Girlcrunch Plant, venus1.bmp, Plant,120, 8, 1, 4, 18, 80, 1, 6, 50, 100, 10,.5
+MONTYPE, Giant Frog, frog1.bmp, ,25, 4, 1, 4, 12, 15, 4, 2, 100, 160, 10,.5,
+MONTYPE, Slime, slime1.bmp, 40, ,6, 2, 6, 6, 80, 4, 3, 200, 160, 0,.5,
+#MONTYPE, Centauress, centauress1.bmp ,,850, 9, 6, 8, 12, 500, 6, 4, 120, 90, 0, 0.5
+#MONTYPE, Stallioness, centauress1.bmp ,,1250, 10, 6, 8, 10, 600, 6, 5, 80, 80, 80, 0.2
+#MONTYPE, Fireshrike, harpy1.bmp ,,475, 12, 5, 8, 8, 90, 7, 3, 180, 90, 0, 0.5
+MONTYPE, Sprite, sprite1.bmp, , 60, 8, 4, 8, 9, 40, 7, 3, 150, 100, 250,.8
+MONTYPE, Golden Serpent, snake1.bmp, ,255, 10, 3, 10, 14, 75, 5, 4, 240, 200, 0,.5
+
+#FAVMONSTER, Desert Worm, 15
+
+/RANDOMMONSTERS, Type (Or ALL), number, x zone start, y zone start, x end, y end
+
+#RANDOMMONSTERS, ALL, 650, 0,0,0,0
+RANDOMMONSTERS, Desert Worm, 100, 0,0,0,0
+RANDOMMONSTERS, Firevines, 50, 0,0,0,0
+
+#MULTCREATEOBJ, 1, Fountain of Healing, 0, 0, , ,

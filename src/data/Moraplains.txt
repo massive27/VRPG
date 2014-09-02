@@ -1,0 +1,88 @@
+Mora Plains
+
+#TERSTR, Now entering the Mora Plains...
+
+#LEVEL, 10
+
+#RANDOMSEED, 946
+#MAPSIZE, 125, 125
+#FILLMAP, 12
+/Mapchunk, type, size-ish
+#MAPCHUNK, 1, 30
+#MAPCHUNK, 1, 30
+#MAPCHUNK, 1, 30
+#MAPCHUNK, 1, 20
+#MAPCHUNK, 1, 20
+#OVRCHUNK, 17, 15
+#OVRCHUNK, 17, 15
+#OVRCHUNK, 17, 15
+#OVRCHUNK, 17, 15
+#OVRCHUNK, 17, 15
+#OVRCHUNK, 17, 10
+#OVRCHUNK, 8, 10
+
+#BUILDING, 0, 0, 0, 0, 3, 10, Treasure8
+BUILDING, 8, 8, 0, 0, 13, 10, Treasure4
+MULTBUILDING, 5, 0, 0, 0, 0, 13, 10, Treasure6
+BUILDING, 3, 5, 0, 0, 12, 9, Treasure5
+BUILDING, 5, 3, 0, 0, 12, 9, Treasure5
+#BUILDING, 0, 0, 0, 0, 12, 9, Treasure12
+#BUILDING, 0, 0, 0, 0, 15, 10, Armor17
+#BUILDING, 0, 0, 0, 0, 12, 9, Treasure12
+#BUILDING, 0,0,0,0,3,1,Clothes23
+
+#SPRINKLEOVR, 85, 8
+#SPRINKLEOVR, 175, 15
+#SPRINKLEOVR, 425, 5
+#SPRINKLEOVR, 425, 17
+#SPRINKLEOVR, 175, 16
+#SPRINKLE, 325, 3
+#SETMAPS, Templeofyppiz.txt, Cityofangels.txt, ,
+
+/MONTYPE, Name, Graphic, Swallowtype, HP, Skill, Dice, Damage, Eatskill, Exp, move, acid, Red/"Clan", Green/Clannumber, Blue, Lightness
+
+MONTYPE, Kari, kari1.bmp, ,60, 6, 2, 3, 6, 30, 4, 4, 155, 15, 0, .4,
+MONTYPE, Red Naga, snakewoman2.bmp, ,150, 6, 2, 6, 6, 50, 4, 3, 150, 20, 0,.3
+MONTYPE, Naga, snakewoman2.bmp, ,350, 8, 4, 6, 7, 80, 4, 4, 60, 150, 0,.5
+MONTYPE, Mudsnake, snake1.bmp, ,280, 6, 1, 8, 8, 25, 4, 3, 120, 90, 60,.4
+MONTYPE, Marsh Serpent, snake1.bmp, ,125, 8, 2, 8, 9, 55, 5, 3, 20, 80, 0,.4
+MONTYPE, Giant Worm, worm1.bmp, ,40, 6, 2, 6, 6, 80, 4, 3, 100, 0, 150,.5,
+MONTYPE, Slime Vines, tendrils1.bmp, Plant,20, 4, 1, 4, 8, 15, 2, 1, 60, 140, 10,.5, 
+MONTYPE, Bileweed, tendrils1.bmp, Plant,90, 4, 1, 4, 10, 40, 5, 5, 250, 150, 0,.4
+MONTYPE, Bogsnapper Plant, venus1.bmp, Plant,320, 8, 1, 4, 18, 80, 1, 6, 130, 140, 110,.5
+MONTYPE, Girlcrunch Plant, venus1.bmp, Plant,120, 8, 1, 4, 18, 80, 1, 6, 50, 100, 10,.5
+MONTYPE, Greater Bileweed, venus1.bmp, Plant,280, 9, 1, 4, 13, 100, 2, 6, 250, 150, 0,.4
+MONTYPE, Swamp Toad, frog1.bmp, ,225, 4, 1, 4, 12, 15, 4, 2, 140, 120, 110,.4,
+MONTYPE, Slime, slime1.bmp, 40, ,6, 2, 6, 6, 80, 4, 3, 200, 160, 0,.5,
+MONTYPE, Sprite, sprite1.bmp, , 60, 8, 4, 8, 9, 40, 7, 3, 150, 100, 250,.8
+MONTYPE, Groaningbird, harpy1.bmp ,,350, 9, 4, 8, 8, 100, 6, 3, 180, 120, 110, 0.5
+MONTYPE, Centauress, centauress1.bmp ,,350, 9, 4, 8, 8, 100, 6, 3, 120, 90, 0, 0.5
+
+#MONTYPE2, Bileweed, tendrils1.bmp, 10, 250, 150, 0,.4
+#MONTYPE2, Girlcrunch Plant, venus1.bmp, 10, 50, 100, 10,.5
+#MONTYPE2, Greater Bileweed, venus1.bmp, 12, 250, 150, 0,.4
+#MONTYPE2, Groaningbird, harpy1.bmp, 9, 180, 120, 110, 0.5
+#MONTYPE2, Centauress, centauress1.bmp, 9, 120, 90, 0, 0.5
+
+
+#FAVMONSTER, Greater Bileweed, 15
+
+/RANDOMMONSTERS, Type (Or ALL), number, x zone start, y zone start, x end, y end
+
+#RANDOMMONSTERS, ALL, 550, 0,0,0,0
+#RANDOMMONSTERS, Greater Bileweed, 50, 0,0,0,0
+#RANDOMMONSTERS, Bileweed, 50, 0,0,0,0
+
+RANDOMMONSTERS, Mudsnake, 100, 0,0,0,0
+RANDOMMONSTERS, Giant Frog, 200, 0,0,0,0
+
+OBJTYPE, Treasure Bag (Orange)
+EFFECT, GiveGold, 50,,,
+EFFECT, Destruct,,,,
+GRAPH, treasure2.bmp, 1, 200, 140, , .5
+
+CREATEOBJ, Treasure Bag (Orange), 127,75,,,
+CREATEOBJ, Treasure Bag (Orange), 127,76,,,
+CREATEOBJ, Treasure Bag (Orange), 128,75,,,
+CREATEOBJ, Treasure Bag (Orange), 128,76,,,
+

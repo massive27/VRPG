@@ -1,0 +1,81 @@
+Cave of the Naga Queen
+
+#TERSTR, Now entering the Cave of the Naga Queen...
+
+#LEVEL, 14
+
+#RANDOMSEED, 620
+#MAPSIZE, 125, 125
+FILLMAP, 13
+/Mapchunk, type, size-ish
+MAPCHUNK, 9, 50
+MAPCHUNK, 9, 30
+MAPCHUNK, 8, 30
+MAPCHUNK, 8, 30
+MAPCHUNK, 12, 30
+MAPCHUNK, 12, 35
+OVRCHUNK, 11, 15
+OVRCHUNK, 8, 10
+OVRCHUNK, 11, 10
+#DUNGEON, 1,1,125,125,12,10,2
+
+BUILDING, 5, 5, 0, 0, 3, 10, Treasure8
+BUILDING, 8, 8, 0, 0, 13, 10, Treasure4
+MULTBUILDING, 5, 0, 0, 0, 0, 13, 10, Treasure6
+BUILDING, 3, 5, 0, 0, 12, 9, Treasure5
+BUILDING, 5, 3, 0, 0, 12, 9, Treasure5
+BUILDING, 6, 5, 0, 0, 12, 9, Treasure12
+BUILDING, 5, 5, 0, 0, 15, 10, Clothes8
+BUILDING, 16, 15, 0, 0, 12, 9, Treasure12
+BUILDING, 0,0,0,0,3,11,Treasure30
+
+#SPRINKLEOVR, 635, 8
+#SPRINKLEOVR, 825, 5
+SPRINKLE, 525, 13
+#SETMAPS, Reptilebog.txt, , , Cityofwormgut.txt
+
+/MONTYPE, Name, Graphic, Swallowtype, HP, Skill, Dice, Damage, Eatskill, Exp, move, acid, Red/"Clan", Green/Clannumber, Blue, Lightness
+
+/MONTYPE, Name, Graphic, Swallowtype, HP, Skill, Dice, Damage, Eatskill, Exp, move, acid, Red/"Clan", Green/Clannumber, Blue, Lightness
+
+/MONTYPE2, Name, Graphic, Level, R, G, B, L
+
+
+
+#MONTYPE2, Red Naga, snakewoman2.bmp, 13, 150, 20, 0,.3
+#MONTYPE2, Naga, snakewoman2.bmp,  14, 30, 100, 0,.5
+#MONTYPE2, Royal Naga, snakewoman1.bmp, 16, 0, 0, 150,.3
+#MONTYPE3, Naga Queen, snakewoman3.bmp,18, 150, 0, 150,.7
+
+MONTYPE, Naga, snakewoman2.bmp, ,40, 6, 2, 6, 6, 80, 4, 3, 40, 50, 210,.1
+
+#MONTYPE2, Giant Snake, snake1.bmp, 9, 40, 120, 10,.5
+#MONTYPE2, Marsh Serpent, snake1.bmp, 10,20, 80, 0,.4
+#MONTYPE2, Golden Serpent, snake1.bmp, 12, 4, 240, 200, 0,.5
+
+#MONTYPE2, Giant Worm, worm1.bmp, 14, 150, 150, 0,.3
+MONTYPE, Acid Vines, tendrils1.bmp, Plant,60, 4, 1, 4, 12, 35, 3, 5, 80, 140, 10,.4
+MONTYPE, Girlcrunch Plant, venus1.bmp, Plant,120, 8, 1, 4, 18, 80, 1, 6, 50, 100, 10,.5
+MONTYPE, Giant Frog, frog1.bmp, ,25, 4, 1, 4, 12, 15, 4, 2, 100, 160, 10,.5
+MONTYPE, Slime, slime1.bmp, 40, ,6, 2, 6, 6, 80, 4, 3, 200, 160, 0,.5
+
+#FAVMONSTER, Marsh Serpent, 15
+
+/RANDOMMONSTERS, Type (Or ALL), number, x zone start, y zone start, x end, y end
+#RANDOMMONSTERS, Red Naga, 150, 0,0,0,0
+#RANDOMMONSTERS, Naga, 200, 0,0,0,0
+#RANDOMMONSTERS, Royal Naga, 100, 0,0,0,0
+#RANDOMMONSTERS, Naga Queen, 1, 100,100,115,115
+#RANDOMMONSTERS, Giant Worm, 40, 0, 0, 0, 0
+
+OBJTYPE, Treasure Bag (Orange)
+EFFECT, GiveGold, 50,,,
+EFFECT, Destruct,,,,
+GRAPH, treasure2.bmp, 1, 200, 140, , .5
+
+CREATEOBJ, Treasure Bag (Orange), 127,75,,,
+CREATEOBJ, Treasure Bag (Orange), 127,76,,,
+CREATEOBJ, Treasure Bag (Orange), 128,75,,,
+CREATEOBJ, Treasure Bag (Orange), 128,76,,,
+
+#QUESTMONSTER, Naga Queen

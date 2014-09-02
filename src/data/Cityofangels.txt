@@ -1,0 +1,151 @@
+City of Angels
+
+Body:112x219
+#TERSTR, Now Entering City of Angels...
+
+#LEVEL, 8
+
+//MONTYPE, Name, Graphic, HP, Skill, Dice, Damage, Eatskill, Exp, move, acid, Red/"Clan", Green/Clannumber, Blue, Lightness
+//PLAYER, Name, Str, Dex, Int, HPMax, MPMax, Level, Exp, Expneeded
+//TILESET, Filename, Overlay Filename
+//OBJTYPE, Name
+//EFFECT, Eff1, Eff2, Eff3, Eff4, Eff5
+//Max 6 total effects
+//CREATEOBJ, TypeName, X, Y, Name, String, String2 (Uses pre-made object types)
+/Effects:
+/Clothes, graphic, armor, wear1, wear2
+/GRAPH, filename, cells, r,g,b,l
+/SPELL, Name, MP, Effect, amount, targtype (Self/Target/All/Visible), School
+
+/Particular Objects:
+/NPC, x, y, name, graphic, string
+
+/Origional Seed 5173
+#RANDOMSEED, 5173
+
+
+#MAPSIZE, 50, 50
+#MAPCHUNK, 3, 20
+#MAPCHUNK, 3, 20
+/BUILDING, Xsize, Ysize, X, Y, Tile, Overlay, Type
+#BUILDING, 6, 6, 0, 0, 23, 21, SELLARMOR:Armorseller:Girl11.bmp:1:4
+#BUILDING, 3, 6, 0, 0, 22, 21, SELLCLOTHES:Clothesseller1:Girl12.bmp:28:8
+#BUILDING, 6, 3, 0, 0, 22, 21, SELLWEAPONS:Weaponsseller:Girl10.bmp:4:6
+#BUILDING, 6, 6, 0, 0, 22, 21, SELLCLOTHES:Clothesseller2:Girl9.bmp:1:8
+#BUILDING, 6, 6, 0, 0, 23, 21, SELLCLOTHES:Clothesseller3:Girl8.bmp:6:8
+#BUILDING, 6, 6, 0, 0, 20, 21, SELLARMOR:Armorseller2:Girl7.bmp:4:8
+#BUILDING, 0,0,0,0,12,1,Treasure14
+
+#SPRINKLEOVR, 30, 11
+#SPRINKLEOVR, 40, 16
+#SPRINKLEOVR, 30, 20
+#SPRINKLEOVR, 40, 17
+#SPRINKLEOVR, 20, 5
+
+#LOADMAP, cityofangels.map
+#SETMAPS, , Forestofdoubts1.txt, Forestglade.txt, Moraplains.txt
+
+PLAYER, Lianna, 3, 4, 3, 50, 25, 3, 200, 300
+MONTYPE, Random Hungry Girl, testmonster1b.bmp, 30, 5, 1, 6, 40, 100, 8, 3, Clan, 1
+MONTYPE, Random Hungry Girl, girl6.bmp, 30, 5, 1, 6, 40, 100, 8, 3, Clan, 1
+MONTYPE, Random Hungry Girl, girl7.bmp, 30, 5, 1, 6, 40, 100, 8, 3, Clan, 1
+MONTYPE, Random Hungry Girl, girl8.bmp, 30, 5, 1, 6, 40, 100, 8, 3, Clan, 1
+MONTYPE, Random Hungry Girl, girl9.bmp, 30, 5, 1, 6, 40, 100, 8, 3, Clan, 1
+MONTYPE, Random Hungry Girl, girl10.bmp, 30, 5, 1, 6, 40, 100, 8, 3, Clan, 1
+MONTYPE, Random Hungry Girl, girl11.bmp, 30, 5, 1, 6, 40, 100, 8, 3, Clan, 1
+MONTYPE, Random Hungry Girl, girl12.bmp, 30, 5, 1, 6, 40, 100, 8, 3, Clan, 1
+
+MONTYPE, Kari, kari1.bmp, 40, 6, 2, 6, 6, 80, 4, 3, Clan, 1, ,
+MONTYPE, Naga, snakewoman2.bmp, 40, 6, 2, 6, 6, 80, 4, 3, 40, 50, 210,.1
+MONTYPE, Giant Snake, snake1.bmp, 40, 6, 2, 6, 6, 80, 4, 3, 40, 120, 10,.5
+MONTYPE, Giant Worm, worm1.bmp, 40, 6, 2, 6, 6, 80, 4, 3, 100, 0, 150,.5
+MONTYPE, Acid Vines, tendrils1.bmp, 40, 6, 2, 6, 6, 80, 4, 3, 60, 140, 10,.5
+MONTYPE, Girlcrunch Plant, venus1.bmp, 40, 6, 2, 6, 6, 80, 4, 3, 40, 100, 10,.8
+MONTYPE, Giant Frog, frog1.bmp, 40, 6, 2, 6, 6, 80, 4, 3, 140, 160, 10,.5
+MONTYPE, Slime, slime1.bmp, 40, 6, 2, 6, 6, 80, 4, 3, 200, 160, 0,.5
+
+/RANDOMMONSTERS, Type (Or ALL), number, x zone start, y zone start, x end, y end
+
+RANDOMMONSTERS, ALL, 40, 0,0,0,0
+
+#CLANCOLOR, 230, 230, 230, .5
+
+
+#OBJTYPE, NPC2
+#EFFECT, Mobile, 4, , , ,
+#EFFECT, NPC, , , ,
+#EFFECT, Lifeplus, 1, , ,
+#EFFECT, Destruct, , , ,
+#GRAPH, girl3.bmp, 2, 230,230,10,.5
+
+#OBJTYPE, NPC
+#EFFECT, Mobile, 4, , , ,
+#EFFECT, NPC, , , , ,
+#GRAPH, girl3.bmp, 2, 230,230,230,.5
+
+#CREATEOBJ, NPC, 0, 0, Lidara, NPC1.bmp, $Welcome to the City of Angels. We're glad you're here--none of us have been able to fight through the monsters outside!$
+
+#CREATEOBJ, NPC, 0, 0, Rudia, NPC1.bmp, $This is a fairly new city. Only your own town is newer. The one nice thing about the monsters is it's kept the other clans from coming in and attacking us...$
+
+#CREATEOBJ, NPC, 0, 0, Urranna, NPC1.bmp, $I've heard of a city somewhere to the south that's actually supposed to be underground. It wouldn't surprise me if it wasn't just a ploy started by the Nagas to drive people towards the caves/ though.$
+
+#CREATEOBJ, NPC, 0, 0, Yleth, NPC1.bmp, $This is a fairly new city. Only your own town is newer. The one nice thing about the monsters is it's kept the other clans from coming in and attacking us...$
+
+CREATEOBJ, NPC2, 0, 0, Ardayna, NPC1.bmp, $Welcome to the City of Angels. Take this life potion enhancement--you'll need it.$
+
+OBJTYPE, Healer
+EFFECT, NPC, , , ,
+EFFECT, Heal, 10000, , ,
+EFFECT, SELLPOTIONS, , , , ,
+EFFECT, SELL, Lesser Healing Potion, 40,,
+GRAPH, girl10.bmp, 2, 255, 0,255,.7
+
+#OBJTYPE, Weaponsmith
+#EFFECT, SELLWEAPONS, , , , ,
+#GRAPH, girl44.bmp, 3, 200, 200, 100, .5
+
+#CREATEOBJ, Weaponsmith, 15, 21, Trisha, NPC1.bmp,
+
+
+#OBJTYPE, Sellscrolls
+#EFFECT, SELL, Blaze Scroll, 25, , ,
+#EFFECT, SELL, Lightning Storm Scroll, 50, , ,
+#EFFECT, SELL, Teleportation Scroll, 100, , ,
+#EFFECT, SELL, All-Dye Scroll, 100, , ,
+#EFFECT, SELL, Greater Strength Scroll, 150, , ,
+#EFFECT, SELL, Supernova Scroll, 750, , ,
+
+CREATEOBJ, Healer, 0, 0, Trisha, NPC1.bmp, $You want some potions?$
+
+
+OBJTYPE, Questgirl
+EFFECT, NPC, , , ,
+EFFECT, IfQuest, Giantess,,,,
+EFFECT, Lifeplus, 1, , ,
+EFFECT, Message, $Thank you for killing the giantess! Here is your reward.$,,,,
+EFFECT, Destruct, , , , 
+GRAPH, girl3.bmp, 2, 220,200,70,.5
+
+CREATEOBJ, Questgirl, 24, 14, Ardayna, NPC1.bmp, $There is a temple to the northwest of here called the Temple of Yppiz. The cultists there have been feeding themselves willingly to a giant woman there/ and she gets bigger with each meal. She has started to venture out towards our city to find more to eat/ and we cannot defeat her. If you can/ I can give you a life potion enhancement.$
+
+
+#CONVGIRL, Likaysha, 10, 34, girl14.bmp, 1, portrait-likaysha.jpg, 0, 150, 150, 250
+#CONVGIRL, Melanca, 14, 44, girl14.bmp, 1, portrait-melanca.jpg, 0, 0, 150, 0
+#CONVGIRL, Rudiia, 33, 38, girl13.bmp, 1, , 0, 0, 150, 0
+#CONVGIRL, Salyna, 34, 10, girl14.bmp, 1, portrait-melanca.jpg, 0, 150, 0, 150
+
+
+#CREATEOBJ, Fountain of Healing, 25, 25, , , , , , , ,
+
+#OBJTYPE, City of Angels Portal Gem
+#EFFECT, Pickup,,,,
+#EFFECT, MapTeleport, cityofangels.txt, 5, 5, , , ,
+#EFFECT, NoEat, , , , ,
+#GRAPH, Gem5.bmp, 1, 15, 150, 250, .5
+
+#CREATEOBJ, City of Angels Portal Gem, 5, 5, , , ,
+
+
+
+
+10x34

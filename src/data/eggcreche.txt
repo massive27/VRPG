@@ -1,0 +1,8 @@
+#RANDOMSEED, 500
+#MAPSIZE, 20, 20
+#FILLMAP, 19
+DUNGEON, 1,1,10,10,19,10, 0
+MULTBUILDING, 15, 0, 0, 0, 0, 19, 10,
+#LOADMAP, eggcreche.map
+
+#SETMAPS, VRPGData.txt, VRPGData.txt, VRPGData.txt, VRPGData.txt

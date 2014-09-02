@@ -1,0 +1,84 @@
+Forest of Doubts (1)
+
+#TERSTR, Now entering Forest of Doubts...
+
+#LEVEL, 1
+
+#RANDOMSEED, 372
+#MAPSIZE, 125, 125
+/Mapchunk, type, size-ish
+#MAPCHUNK, 12, 50
+#MAPCHUNK, 12, 30
+#MAPCHUNK, 3, 30
+#MAPCHUNK, 3, 30
+#MAPCHUNK, 12, 30
+#MAPCHUNK, 12, 35
+#OVRCHUNK, 52, 15
+#OVRCHUNK, 52, 10
+#OVRCHUNK, 51, 10
+
+#EXTRAOVERS, Tree7.bmp, Tree1.bmp, Tree1.bmp, Thorntree1.bmp
+
+#BUILDING, 5, 5, 0, 0, 3, 1, Treasure8
+#BUILDING, 8, 8, 0, 0, 3, 1, Treasure4
+#MULTBUILDING, 10, 0, 0, 0, 0, 3, 1, Treasure5
+#BUILDING, 3, 5, 0, 0, 3, 1, Treasure5
+#BUILDING, 5, 3, 0, 0, 3, 1, Treasure5
+#BUILDING, 6, 5, 0, 0, 3, 1, Treasure16
+#BUILDING, 5, 5, 0, 0, 3, 1, Clothes8
+#BUILDING, 16, 15, 0, 0, 3, 1, Treasure22
+
+#SPRINKLEOVR, 535, 52
+#SPRINKLEOVR, 335, 51
+#SPRINKLEOVR, 425, 5
+#SPRINKLE, 325, 2
+#SETMAPS, Grasslands.txt, VRPGData.txt, Forestofdoubts2.txt, Cityofangels.txt
+
+/MONTYPE, Name, Graphic, Swallowtype, HP, Skill, Dice, Damage, Eatskill, Exp, move, acid, Red/"Clan", Green/Clannumber, Blue, Lightness
+
+MONTYPE, Kari, kari1.bmp, ,60, 6, 2, 3, 6, 30, 4, 4, 155, 15, 0, .4,
+MONTYPE, Butthole, snakewoman2.bmp, ,40, 6, 2, 6, 6, 80, 4, 3, 40, 50, 210,.1,
+MONTYPE, Giant Snake, snake1.bmp, ,40, 6, 2, 6, 6, 80, 4, 3, 40, 120, 10,.5,
+MONTYPE, Giant Worm, worm1.bmp, ,40, 6, 2, 6, 6, 80, 4, 3, 100, 0, 150,.5,
+MONTYPE, Slime Vines, tendrils1.bmp, Plant,20, 4, 1, 4, 8, 15, 2, 1, 60, 140, 10,.5, 
+MONTYPE, Girlcrunch Plant, venus1.bmp, Plant,30, 6, 2, 6, 6, 80, 4, 3, 40, 100, 10,.8, Plant
+MONTYPE, Giant Frog, frog1.bmp, ,25, 4, 1, 4, 12, 15, 4, 2, 100, 160, 10,.5,
+MONTYPE, Slime, slime1.bmp, 40, ,6, 2, 6, 6, 80, 4, 3, 200, 160, 0,.5,
+
+#MONTYPE2, Kari, kari1.bmp, 2, 155, 15, 0, .4
+MONTYPE2, BLAH, wingedserpent1.bmp, 2, 155, 15, 0, .4
+#MONTYPE2, Slime Vines, tendrils1.bmp, 1, 60, 140, 10, .5
+#MONTYPE2, Giant Frog, frog1.bmp, 1, 100, 160, 10, .5
+
+#RANDOMMONSTERS, ALL, 120, 75,0,125,0
+
+#MONTYPE2, Kari , kari1.bmp, 3, 155, 15, 0, 1
+#MONTYPE2, Kari  , kari1.bmp, 5, 155, 15, 0, 2
+
+#RANDOMMONSTERS, ALL, 120, 1,0,75,0
+
+#FAVMONSTER, Kari, 15
+
+/RANDOMMONSTERS, Type (Or ALL), number, x zone start, y zone start, x end, y end
+RANDOMMONSTERS, Slime Vines, 580, 0,0,0,0
+RANDOMMONSTERS, Giant Frog, 200, 0,0,0,0
+
+OBJTYPE, Treasure Bag (Orange)
+EFFECT, GiveGold, 50,,,
+EFFECT, Destruct,,,,
+GRAPH, treasure2.bmp, 1, 200, 140, , .5
+
+CREATEOBJ, Treasure Bag (Orange), 127,75,,,
+CREATEOBJ, Treasure Bag (Orange), 127,76,,,
+CREATEOBJ, Treasure Bag (Orange), 128,75,,,
+CREATEOBJ, Treasure Bag (Orange), 128,76,,,
+
+#CREATEOBJ, Fountain of Healing, 25, 25, , ,
+#CREATEOBJ, Fountain of Healing, 100, 100, , ,
+#CREATEOBJ, Fountain of Healing, 25, 100, , ,
+#CREATEOBJ, Fountain of Healing, 100, 25, , ,
+#CREATEOBJ, Fountain of Healing, 62, 62, , ,
+
+#CREATEOBJ, Fountain of Healing, 115, 62, , ,
+
+#MUSIC, magty258.it

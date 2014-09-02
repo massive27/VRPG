@@ -1,0 +1,57 @@
+/CLASS, Name, Str, Dex, End, Int, HP, MP, Prim attribute, sec attribute, ter attribute, skill1, skill2, skill3, skill4, skill5, skill6
+
+Base class: 12 att points, 30HP, 30MP
+
+
+createskill "Deathblow", "sword", "Adds 10% damage, +5% per skill level"
+createskill "Critical Strike", "skull", "10% chance to inflict double damage. Chance increases by 3% per level."
+createskill "Resilience", "circleplus", "-3 points of damage from incoming attacks, plus -2 per level"
+createskill "Defence", "circleplusblue", "+15% to armor, +5% per level"
+createskill "Dodge", "splatterblue", "5% chance to dodge incoming attacks, +2% per level"
+createskill "Endurance", "heartorange", "+2 HP for every character level, +1 per skill level"
+createskill "Drain Life", "heartdrip", "Gain 1% of damage when hitting enemies, +0.5% per level"
+createskill "Drain Magic", "heartdripblue", "Convert 1% of the damage you inflict on enemies into mana, +0.5% per level"
+createskill "Regeneration", "plus", "Regenerate HP over time. Rate increases with skill level."
+createskill "Firepower", "firepower", "Increases damage done with direct attack spells. +10% base, +5% per level."
+createskill "Accuracy", "swordblue", "Increases chances to hit with melee weapons. +2 base, +1 per level."
+createskill "Greed", "cash", "+10% to gold collected, +4% per level"
+createskill "Spell Mastery", "trianglefire", "Spells cost 10% less mana to cast, +3% per level."
+createskill "Mana Mastery", "manafire", "+2 mana per character level, +1 per skill level."
+createskill "Mana Regeneration", "heartblue", "Increases mana regeneration rate."
+createskill "Streetfighting", "fists", "Increases unarmed damage by 30%, plus 15% per level."
+createskill "Weapons Mastery", "swordgrey", "Increases all weapon damage by 20%, plus 6% per level."
+createskill "Giant Stomach", "stomach", "Allows you to eat monsters!  Higher levels allow you to hold more monsters in your stomach at a time.  1 monster base, +1 monster per skill level." & vbCrLf & "(Press 'E' before attacking something to attempt to eat it)"
+createskill "Super Acid", "stomachacid", "Increases the speed at which you digest monsters and the damage they take while in your stomach."
+createskill "Gluttony", "mouth", "Increases your chance of successfully swallowing monsters."
+createskill "Sword Mastery", "swordmastery", "Increases damage inflicted by sword and knife type weapons.  +2 per die per level."
+createskill "Spear Mastery", "spearmastery", "Increases damage inflicted by spear type weapons.  +3 per die per level."
+createskill "Axe Mastery", "axemastery", "Increases damage inflicted by axe and mace type weapons.  +2 per die per level."
+createskill "Bow Mastery", "bowmastery", "Increases damage inflicted by bow type weapons.  +20% per level."
+createskill "White Magic", "whitemagic", "Increases power of white spells and gives access to new white spells."
+createskill "Grey Magic", "greymagic", "Increases power of grey spells and gives access to new grey spells."
+createskill "Fire Magic", "firemagic", "Increases power of fire spells and gives access to new fire spells."
+createskill "Lightning Magic", "lightningmagic", "Increases power of lightning spells and gives access to new lightning spells."
+createskill "Demon Summoning", "demonsummoning", "Increases the power of summoned demons and gives you the ability to summon more."
+createskill "Sorcery", "sorcery", "'Basic' magic.  Gives a broad range of spells and abilities that increase your magical powers."
+createskill "Magic Summoning", "magicsummoning", "Gives you the ability to summon a magical creature to aid you."
+
+    If Command8(a).caption = "Strength" Then plr.classdata.strmult = 3 - Index
+    If Command8(a).caption = "Dexterity" Then plr.classdata.dexmult = 3 - Index
+    If Command8(a).caption = "Strength" Then plr.classdata.strmult = 3 - Index
+    If Command8(a).caption = "Hit Points" Then plr.classdata.hpmult = 3 - Index
+    If Command8(a).caption = "Mana" Then plr.classdata.mpmult = 3 - Index
+    If Command8(a).caption = "Endurance" Then plr.classdata.endmult = 3 - Index
+
+/CLASS, Name, Str, Dex, End, Int, HP, MP, Prim attribute, sec attribute, ter attribute, skill1, skill2, skill3, skill4, skill5, skill6
+
+Base class: 12 att points, 30HP, 30MP
+
+#CLASS, Amazon, 5, 3, 3, 1, 60, 0, Strength, Endurance, Dexterity, Deathblow, Critical Strike, Resilience, Endurance, Weapons Mastery, Dodge
+
+#CLASS, Valkyrie, 3, 3, 3, 3, 40, 20, Endurance, Strength, Dexterity, Defense, Dodge, Resilience, Endurance, Weapons Mastery, White Magic
+#CLASS, Huntress, 3, 3, 3, 3, 40, 20, Endurance, Strength, Dexterity, Defense, Dodge, Resilience, Endurance, Weapons Mastery, White Magic
+
+
+#CLASS, Sorceress, 1, 2, 3, 6, 20, 40, Mana, Intelligence, Dexterity, Sorcery, Fire Magic, Grey Magic, Mana Regeneration, Spell Mastery, Firepower
+
+

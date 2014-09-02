@@ -1,0 +1,84 @@
+Lakelands
+
+#TERSTR, Now entering the Lakelands...
+
+#LEVEL, 30
+
+#RANDOMSEED, 693346
+#MAPSIZE, 150, 150
+#FILLMAP, 14
+/Mapchunk, type, size-ish
+#MAPCHUNK, 12, 20
+#MAPCHUNK, 12, 30
+#MAPCHUNK, 8, 20
+#MAPCHUNK, 8, 30
+#MAPCHUNK, 3, 40
+#MAPCHUNK, 8, 35
+#MAPCHUNK, 8, 15
+#MAPCHUNK, 8, 15
+OVRCHUNK, 14, 15
+#OVRCHUNK, 18, 15
+#OVRCHUNK, 18, 15
+OVRCHUNK, 13, 10
+OVRCHUNK, 13, 10
+OVRCHUNK, 8, 10
+FILLOVR, 13
+
+BUILDING, 5, 5, 0, 0, 12, 10, Treasure8
+BUILDING, 8, 8, 0, 0, 12, 10, Treasure4
+#MULTBUILDING, 5, 0, 0, 0, 0, 19, 6, Objective2
+BUILDING, 3, 5, 0, 0, 3, 1, Treasure5
+BUILDING, 5, 3, 0, 0, 3, 1, Treasure5
+BUILDING, 6, 5, 0, 0, 12, 9, Armor19
+BUILDING, 5, 5, 0, 0, 15, 10, Armor8
+BUILDING, 16, 15, 0, 0, 12, 9, Treasure12
+BUILDING, 0,0,0,0,3,1,Treasure30
+
+DUNGEON, 0,5,0,35,14,12,3
+
+#SPRINKLEOVR, 235, 14
+#SPRINKLEOVR, 235, 20
+#SPRINKLEOVR, 235, 17
+#SPRINKLEOVR, 235, 18
+#SPRINKLEOVR, 335, 19
+SPRINKLEOVR, 75, 8
+#SPRINKLE, 825, 12
+#SETMAPS, , Glorymarsh.txt, Lakelands2.txt, Volcanicpass.txt
+
+/MONTYPE, Name, Graphic, Swallowtype, HP, Skill, Dice, Damage, Eatskill, Exp, move, acid, Red/"Clan", Green/Clannumber, Blue, Lightness
+
+MONTYPE, Dark Kari, kari1.bmp, ,1250, 12, 7, 8, 12, 4000, 4, 8, 80, 80, 80, .3
+MONTYPE, Red Naga, snakewoman2.bmp, ,150, 6, 2, 6, 6, 50, 4, 3, 150, 20, 0,.3
+MONTYPE, Fire Naga, snakewoman2.bmp, ,950, 9, 6, 6, 7, 800, 4, 6, 255, 120, 0,.3
+MONTYPE, Giant Snake, snake1.bmp, ,40, 6, 1, 8, 8, 25, 4, 3, 40, 120, 10,.5
+MONTYPE, Marsh Serpent, snake1.bmp, ,125, 8, 2, 8, 9, 55, 5, 3, 20, 80, 0,.4
+MONTYPE, Giant Worm, worm1.bmp, ,600, 8, 3, 6, 9, 90, 6, 3, 150, 150, 0,.3
+MONTYPE, Albino Worm, worm1.bmp, ,1600, 12, 12, 6, 10, 110, 5, 12, 200, 240, 255,.6
+MONTYPE, Fire Grub, worm1.bmp, ,900, 12, 7, 12, 11, 250, 5, 8, 230, 50, 0,.4
+MONTYPE, Nightvines, tendrils1.bmp, Plant,380, 10, 8, 12, 5, 250, 3, 12, 40, 40, 40,.4
+MONTYPE, Girlcrunch Plant, venus1.bmp, Plant,120, 8, 1, 4, 18, 80, 1, 6, 50, 100, 10,.5
+MONTYPE, Giant Frog, frog1.bmp, ,25, 4, 1, 4, 12, 15, 4, 2, 100, 160, 10,.5,
+MONTYPE, Green Pudding, slime1.bmp, Slime, 1100, 8, 5, 6, 14, 80, 4, 12, 30, 160, 10,.4
+MONTYPE, Sea Slime, slime1.bmp, Slime, 1100 ,11, 5, 6, 14, 80, 4, 10, 30, 100, 210,.3
+MONTYPE, Centauress, centauress1.bmp ,,350, 9, 4, 8, 8, 100, 6, 3, 120, 90, 0, 0.5
+MONTYPE, Fireshrike, harpy1.bmp ,,475, 12, 5, 8, 8, 90, 7, 3, 180, 90, 0, 0.5
+MONTYPE, Water Sprite, sprite1.bmp, , 800, 10, 5, 8, 9, 40, 7, 3, 0, 75, 250,.5
+MONTYPE, Golden Serpent, snake1.bmp, ,255, 10, 3, 10, 14, 75, 5, 4, 240, 200, 0,.5
+MONTYPE, Succubus, succubus1.bmp, , 1500, 15, 8, 8, 10, 5000, 5, 8, 255, 0, 0, .3
+MONTYPE, Succubus , succubus1.bmp, , 1500, 15, 8, 8, 10, 5000, 5, 8, 80, 80,80, .3
+
+#MONTYPE2, Albino Worm, worm1.bmp, 30, 200, 240, 255,.6
+#MONTYPE2, Green Pudding, slime1.bmp, 28, 30, 160, 10,.4
+#MONTYPE2, Sea Slime, slime1.bmp, Slime, 30, 30, 100, 210,.3
+#MONTYPE2, Water Sprite, sprite1.bmp, 30, 0, 75, 250,.5
+#MONTYPE2, Xebbebba, xebebba1.bmp, 30, 0, 75, 75,.5
+
+#FAVMONSTER, Water Sprite, 15
+
+/RANDOMMONSTERS, Type (Or ALL), number, x zone start, y zone start, x end, y end
+
+#RANDOMMONSTERS, ALL, 400, 0,0,0,0
+RANDOMMONSTERS, Fire Grub, 100, 0,0,0,0
+RANDOMMONSTERS, Succubus, 50, 0,0,0,0
+
+MULTCREATEOBJ, 1, Fountain of Healing, 0, 0, , ,

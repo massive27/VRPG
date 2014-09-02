@@ -1,0 +1,634 @@
+Beta 1.3 of the RPG is now available.  I have also put a feature lock in place, so now only play balance and bugs will be dealt with.  (Meaning no more characters lost to the incompatibility demons.  Unless there's another bug in the character file stuff...)
+You can take a gander at the tremendous list of changes, and download the update (It's frickin' huge) here.
+
+www.darklands.cx/~duam9/VRPG.html
+
+Stuff to do:
+
+*New Help Files
+Finish Conversations
+Piercing spells?
+Class-specific combat skills?  (Do extra damage to monsters that are a higher level than you,
+REDO THE ENDING, JERK
+
+Time Point Skills
+Seamstress (Create Custom Clothes)
+Enchantress (Make items magical)
+
+
+*Remove or Disable Cheat Junk
+*Add Secret Character Junk
+
+Skills: 
+Cripple (Inflicts 25% damage on the first hit, +4% per level)
+Frenzy (Attacks 1 extra nearby enemy per level)
+Split Spell (Adds 80% to the mana cost of a spell and doubles the number of bolts it fires)
+Stun
+Charged Strike (Adds 50% damage, +25% per level)
+Power Strike (Adds Str times dice damage per level)
+Vital Strike (Adds Dex times dice damage per level)
+Cunning Strike (Adds Int times dice damage per level)
+Mana Shield (Half damage is absorbed by mana, with a 5% reduction in damage taken to mana per level)
+Block (Damage reduced by 25%, +2% per level)
+Damage Energy (You get an amount of mana equal to 10% of the damage you take, +5% per level)
+Poisonous (Monsters take damage when they try to digest you--costs mana every turn that it's on)
+Alchemy (Gain a point of mana per level every turn at the cost of 2 goldpieces per turn)
+Split Arrow (Fire one extra arrow per level)
+Piercing Arrow (Arrows pierce up to 3 enemies, +1 per dice to damage per level)
+Perfect Strike (Inflict maximum damage automatically)
+Reflection (Sends attacks back at their sender, with damage multiplied by your level in Reflection)
+Confusion?
+
+Maps:
+*Temple of Yppiz
+*Giant Groundmaw
+*Dungeon of Wallows
+Firegut Mountain?
+*Castle Demongut
+*Kari's Nest
+*Thirsha's Volcano
+*Thirsha's Lair
+
+*Make three key quests (Key locations--Castle Demongut, Worm Cave, Giant Groundmaw)
+*Make potion quests
+Make EZ Map Editor
+
+Forest of Doubts
+Hometown
+Swamp
+Volcanic region
+Reptile Bog
+Worm Cave
+Kari's Nest
+City of Angels
+City of Blackscourge (Darkswallow City)
+City of Skinbane (Firebelly City)
+City of Wormgut (Gurglemeister City)
+City of Allia (Velvet Intestine City)
+Whitescathe Desert
+Tevenas Mountain
+Forest Glade
+Grasslands
+The Plain of Beasts
+The Jungle of Pain
+
+
+Furgirls
+Octopi
+Thirsha
+Mini-dragons (Wyverns)
+Anemones
+More plants
+Bunnies? (Restore HP with a pic of girl eating bunny?)
+
+Body:112x219
+
+#TERSTR, Now entering Home City...
+#TOWNMAP, Home City
+
+//MONTYPE, Name, Graphic, Swallowtype, HP, Skill, Dice, Damage, Eatskill, Exp, move, acid, Red/"Clan", Green/Clannumber, Blue, Lightness
+//PLAYER, Name, Str, Dex, Int, HPMax, MPMax, Level, Exp, Expneeded
+//TILESET, Filename, Overlay Filename
+//LOADMAP, filename
+//SETMAPS, North, East, South, West
+//FAVMONSTER, Type, Number
+//QUESTMONSTER, Type
+//TERSTR, message
+//TOWNMAP, Name  (Adds to warp possibilities)
+//DUNGEON, x,y,x2,y2,tiletype,ovrtype, Treasure (0 means none)
+//CLANCOLOR, r, g, b, l
+//MUSIC, filename
+//EXTRAOVERS, Tree2.bmp, Tree5.bmp, Tree1.bmp, Thornytree1.bmp
+//BUILDING, Xsize, Ysize, X, Y, Tile, Overlay, Type (Treasure#/Clothes#/Armor#/ SELL____:Name:Graphic:Worth:Num)
+//OBJTYPE, Name
+//EFFECT, Eff1, Eff2, Eff3, Eff4, Eff5
+//Max 6 total effects
+//CREATEOBJ, TypeName, X, Y, Name, String, String2 (Uses pre-made object types)
+//CONVGIRL, Name, X, Y, graphic, frames, portrait, Mobile, r, g, b
+//LEVEL, level  'For shops in places that don't have adjacent maps
+//PLANETJUNK, temperature, moisture, rockyness, vegetation
+//LOADSEG, segfilen, X, Y, floortype, walltype, salesobj, signobj, bij1, bij2, doorobj, stealobj
+
+
+/Effects:
+/Clothes, graphic, armor, wear1, wear2
+/Weapon, graphic, dice, damage, type, weight
+/GRAPH, filename, cells, r,g,b,l
+/SELLWEAPONS/SELLARMOR/SELLCLOTHES, Quality, Number of selections
+/Destruct
+/Become, Type, name, string1, string2
+/Give, Type
+/Heal, Effect (uses transval)
+/MapTeleport, Map, X, Y
+/Teleport, X, Y
+/GiveExp, Amount
+/GiveGold, Amount
+/Lifeplus, Amount (Adds to life potion level)
+/Manaplus, Amount (Adds to mana potion level)
+/SELL, Objecttype, Gold, , ,
+/Conversation, Conv Name, Image, [Start Position--defaults to "MAIN"],
+/Pickup, [Sound]
+/Equipjunk, Weight, Sockets, , ,  ( <-- Put other random requirements and stats for clothing and weapons here )
+/Cargo, Type, Amt
+
+/SPELL, Name, MP, Effect, amount, targtype (Self/Target/All/Visible), School, level
+
+ITEM BONUSES  (Second parameter on all of them is how much
+/BONSTR
+/BONDEX
+/BONINT
+/BONHP
+/BONMP
+/BONDICE
+/BONDAMAGE
+/BONUSDAMAGE
+/BONUNDIG  (percent chance of avoiding digestion)
+/BONSKILL, num, skillname
+TO ADD
+/BONEXP
+/BONTOHIT
+
+Tiny (x1), Small (x2), Medium (x3), Large (x4), Priceless (x5), Emmaculate (Extra Ability)
+Ruby: +2 Str, Em +15 HPMAX
+Emerald: +2 Dex, Em +1 Regeneration
+Amythist: +10 MPMAX, Em +1 Dex
+Sapphire: +2 Int, Em +1 Mana Mastery
+Heartstone: +1 Dex +1 Str, Em +1 Life Steal
+Diamond: +1 Dex +1 Int +1 Str, Em +3 Dex +3 Int +3 Str
+
+
+/Particular Objects:
+/NPC, x, y, name, graphic, string
+
+
+#RANDOMSEED, 500
+#MAPSIZE, 50, 50
+/Mapchunk, type, size-ish
+MAPCHUNK, 12, 40
+MAPCHUNK, 12, 40
+/SPRINKLEOVR, Amount, Type (Overlays)
+/SPRINKLE, Amount, Type (Tiles)
+#SPRINKLEOVR, 35, 27
+#SPRINKLEOVR, 25, 5
+#SPRINKLE, 125, 3
+
+/FILLMAP, type
+/FILLOVR, type
+
+/BUILDING, Xsize, Ysize, X, Y, Tile, Overlay, Type (Treasure)
+/MULTBUILDING, Number, Xsize, Ysize, X, Y, Tile, Overlay, Type
+#BUILDING, 6, 6, 0, 0, 20, 1, None
+#BUILDING, 3, 6, 0, 0, 23, 1, None
+#BUILDING, 6, 3, 0, 0, 23, 1, None
+#BUILDING, 6, 6, 0, 0, 22, 1, None
+#BUILDING, 6, 6, 0, 0, 23, 1, None
+#BUILDING, 6, 6, 0, 0, 22, 1, None
+
+#LOADMAP, city1.map
+
+CREATEGEMS, 20
+
+#SETMAPS, Plainofbeasts.txt, Forestofdoubts3.txt, Marshland.txt, Forestofdoubts1.txt
+SETMAPS, Thirshasvolcano.txt, Allia.txt, Dungeonofwallows.txt, Blackscourge.txt
+
+#MUSIC, magty259.it
+
+#PLAYER, Lianna, 3, 4, 3, 40, 25, 1, 0, 100
+
+
+/MONTYPE, Name, Graphic, Swallowtype, HP, Skill, Dice, Damage, Eatskill, Exp, move, acid, Red/"Clan", Green/Clannumber, Blue, Lightness
+
+/MONTYPE2, Name, Graphic, Level[:shootytype:frequency], R, G, B, L
+
+MONTYPE, Giantess, giantess.bmp, , 1200, 15, 8, 8, 10, 500, 5, 8, 235, 40, 20, .5
+MONTYPE, Thirsha, thirsha1.bmp, , 25000, 22, 20, 20, 18, 80000, 8, 30, 30, 30, 80, 1
+MONTYPE, Kari, kari1.bmp,, 40, 6, 2, 6, 6, 80, 4, 3, Clan, 1
+MONTYPE, Naga, snakewoman2.bmp,, 40, 6, 2, 6, 6, 80, 4, 3, 40, 50, 210,.1
+MONTYPE, Giant Snake, snake1.bmp,, 40, 6, 2, 6, 6, 80, 4, 3, 40, 120, 10,.5
+MONTYPE, Giant Worm, worm1.bmp,, 40, 6, 2, 6, 6, 80, 4, 3, 100, 0, 150,.5
+MONTYPE, Acid Vines, tendrils1.bmp,Plant, 40, 6, 2, 6, 6, 80, 4, 3, 60, 140, 10,.5,
+MONTYPE, Girlcrunch Plant, venus1.bmp,Plant, 40, 6, 2, 6, 6, 80, 4, 3, 40, 100, 10,.8
+MONTYPE, Giant Frog, frog1.bmp,, 40, 6, 2, 6, 6, 80, 4, 3, 140, 160, 10,.5
+MONTYPE, Slime, slime1.bmp, 40,, 6, 2, 6, 6, 80, 4, 3, 200, 160, 0,.5
+MONTYPE, Centauress, centauress1.bmp ,,350, 9, 4, 8, 8, 100, 6, 3, 120, 90, 0, 0.5
+MONTYPE, Harpy, harpy1.bmp ,,350, 9, 4, 8, 8, 100, 6, 3, 180, 90, 0, 0.5
+MONTYPE, Sprite, sprite1.bmp, , 60, 8, 4, 8, 9, 40, 7, 3, 150, 100, 250,.8
+MONTYPE, Succubus, succubus1.bmp, , 1200, 15, 8, 8, 10, 500, 5, 8, 255, 0, 0, .3
+
+MONTYPE, Random Hungry Girl, testmonster1b.bmp, ,30, 5, 1, 6, 40, 100, 8, 3, Clan, 1
+MONTYPE, Random Hungry Girl, girl6.bmp, ,30, 5, 1, 6, 40, 100, 8, 3, Clan, 1,
+MONTYPE, Random Hungry Girl, girl7.bmp, ,30, 5, 1, 6, 40, 100, 8, 3, Clan, 1
+MONTYPE, Random Hungry Girl, girl8.bmp, ,30, 5, 1, 6, 40, 100, 8, 3, Clan, 1
+MONTYPE, Random Hungry Girl, girl9.bmp, ,30, 5, 1, 6, 40, 100, 8, 3, Clan, 1
+MONTYPE, Random Hungry Girl, girl10.bmp, ,30, 5, 1, 6, 40, 100, 8, 3, Clan, 1
+MONTYPE, Random Hungry Girl, girl11.bmp, ,30, 5, 1, 6, 40, 100, 8, 3, Clan, 1
+MONTYPE, Random Hungry Girl, girl12.bmp, ,30, 5, 1, 6, 40, 100, 8, 3, Clan, 1
+
+/RANDOMMONSTERS, Type (Or ALL), number, x zone start, y zone start, x end, y end
+
+/MONTYPE2, dragon, thirsha1.bmp, 1, 35, 35, 50, 0.5
+/MONTYPE2, Groundmaw, groundmaw2.bmp, 3, 155, 3, 20, 0.7
+/MONTYPE2, Groundworm, worm2.bmp, 3, 155, 100, 20, 0.7
+MONTYPE2, Lizardwoman, lizardwoman1.bmp, 1, 30, 100, 10, 0.4
+MONTYPE2, Lizardwoman, lizardwoman1.bmp, 1, 150, 100, 30, 0.4
+MONTYPE2, Carnivorous Flower, flower1.bmp, 1:6:2, 20, 80, 10, 0.4
+MONTYPE2, Dark Sorceress, mage2.bmp, 1:2:5, 0, 0, 80, 0.4
+RANDOMMONSTERS, Lizardwoman, 8, 30,30,40,40
+RANDOMMONSTERS, Demonette, 8, 30,30,40,40
+MONTYPE2, Demoness, demoness4.bmp, 1, 230, 170, 30, 0.5
+RANDOMMONSTERS, Demoness, 3, 30,30,40,40
+/RANDOMMONSTERS, ALL, 12, 30, 30, 50, 50
+
+FAVMONSTER, Naga, 4
+
+OBJTYPE, DEATH SWORD OF ULTIMATE DOOM
+EFFECT, Weapon, sword1.bmp, 6, 6, Sword,
+GRAPH, sword1.bmp, 1, 55,55,55,.5
+
+CREATEOBJ, DEATH SWORD OF ULTIMATE DOOM, 1, 5,,,
+
+#OBJTYPE, Cyberbody
+#EFFECT, Clothes, Cyberbody2.bmp, 5, CyberBody,,
+EFFECT, Translucent, 1, , , , ,
+#GRAPH, armorobj1.bmp, 1, 155,0,155,.5
+
+#OBJTYPE, Cyberarms
+#EFFECT, Clothes, Cyberarms2.bmp, 5, CyberArms,,
+EFFECT, Translucent, 1, , , , ,
+#GRAPH, armorobj1.bmp, 1, 155,0,155,.5
+
+#OBJTYPE, Cyberlegs
+#EFFECT, Clothes, Cyberlegs2.bmp, 5, CyberLegs,,
+EFFECT, Translucent, 1, , , , ,
+#GRAPH, armorobj1.bmp, 1, 155,0,155,.5
+
+CREATEOBJ, Cyberbody, 13, 15, , ,
+CREATEOBJ, Cyberarms, 14, 15, , ,
+CREATEOBJ, Cyberlegs, 13, 14, , ,
+
+#OBJTYPE, Black Cotton Panties
+#EFFECT, Clothes, panties1.bmp, 1, Panties,,
+#GRAPH, armorobj1.bmp, 1, 55,55,55,.2
+
+#OBJTYPE, Black Cotton Bra
+#EFFECT, Clothes, bra2.bmp, 1, Bra,,
+#GRAPH, armorobj1.bmp, 1, 55,55,55,.2
+
+CREATEOBJ, Breastplate, 4, 4,,,
+
+#OBJTYPE, NPC
+#EFFECT, Mobile, 4, , , ,
+#EFFECT, NPC, , , , ,
+#GRAPH, girl3.bmp, 2, 155,0,155,.5
+
+#OBJTYPE, NPC2
+#EFFECT, Mobile, 4, , , ,
+#EFFECT, NPC, , , , ,
+#GRAPH, girl3.bmp, 2, 185,70,185,1
+
+OBJTYPE, Panty Salesman
+EFFECT, NotQuest, Gotpanties,,,
+EFFECT, NPC, , , , ,
+EFFECT, Give, Black Cotton Panties, 30, , ,
+EFFECT, Give, Black Cotton Bra, 30, , ,
+EFFECT, Become, Salesgirl3, Panty Salesman, NPC1.bmp,
+EFFECT, SetQuest, Gotpanties,,,
+EFFECT, Destruct,,,,
+EFFECT, SELLCLOTHES, 3, 4, , ,
+GRAPH, girl7.bmp, 2, 255,0,0,.5
+
+#OBJTYPE, Zettia
+#EFFECT, Conversation, Zettia, portrait-zettia.jpg, , ,
+#EFFECT, NoEat, , , , ,
+EFFECT, NPC, , , ,
+EFFECT, IfQuest, Naga Queen,,,,'if the player has killed a naga queen
+EFFECT, GiveGold, 2000, , ,
+EFFECT, Manaplus, 1, , ,
+EFFECT, Message, $Congratulations on killing the Naga Queen! Here is your reward.$, , , ,
+EFFECT, Destruct,,,,
+#GRAPH, girl14.bmp, 1, 35,30,30,.5
+
+#CREATEOBJ, Zettia, 42, 34, Zettia, NPC1.bmp, $The Naga Queen lives in the caves far to the south/ past the marshes and the reptile bog. Her serpentine followers have been eating our girls for months! If this keeps up/ we'll have no chance against Thirsha the Dragon. There is a reward of 2000 gold for anyone who can kill the Naga Queen/ plus a mana potion enhancement. If you do kill her/ come see me for the reward. Remember/ though/ that you'd have to fight through not only the reptile bog but also the cave itself. Don't try it unless you're already a powerful warrior.$
+
+CREATEOBJ, Panty Salesman, 8, 8, Panties R Us, NPC1.bmp, $Hello. Take this black bra and panties. They will help you in your quest.$
+
+#OBJTYPE, Healer
+EFFECT, Conversation, Melanca, portrait-melanca.jpg, , ,
+EFFECT, NPC, , , ,
+EFFECT, Heal, 10000, , ,
+#EFFECT, SELLPOTIONS, , , , ,
+EFFECT, SELL, Lesser Healing Potion, 40,,
+#GRAPH, girl10.bmp, 2, 255,255,255,.7
+
+#OBJTYPE, Salesgirl
+/EFFECT, SELL, Breastplate, Gold, , ,
+#EFFECT, SELLWEAPONS, 0.5, 8, , ,
+#GRAPH, girl4.bmp, 2, 0, 150, 255, .7
+
+#OBJTYPE, Salesgirl2
+#EFFECT, Conversation, Ettra, portrait-ettra.jpg, , ,
+/EFFECT, SELLARMOR, 3, 8, , ,
+#GRAPH, girl5.bmp, 2, 150, 150, 150, .7
+
+#OBJTYPE, Salesgirl3
+#EFFECT, Conversation, Ralyrra, portrait-ralyrra.jpg, , ,
+/EFFECT, SELLCLOTHES, 3, 8, , ,
+#GRAPH, girl8.bmp, 2, 130, 70, 0, .5
+
+OBJTYPE, Potiongirl
+/EFFECT, SELL, Breastplate, Gold, , ,
+EFFECT, SELLPOTIONS, , , , ,
+GRAPH, girl4.bmp, 2, 0, 150, 255, .7
+
+#OBJTYPE, Healing Potion
+#EFFECT, Pickup,,,,
+#EFFECT, Heal, R3Die6, , , 
+#EFFECT, Destruct,,,,
+#GRAPH, potion1.bmp, 1, 255, 0, 255, .5
+
+#OBJTYPE, Blaze Scroll
+#EFFECT, Pickup,,,,
+#EFFECT, Spell, Blaze,,,
+#EFFECT, Destruct,,,,
+#GRAPH, scroll.bmp, 1, 255, 150, , .5
+
+#OBJTYPE, Guard Warrior
+EFFECT, Pickup,,,,
+#EFFECT, Spell, MercenaryL1,,,
+#EFFECT, Destruct,,,,
+
+#OBJTYPE, Veteran Guard Warrior
+EFFECT, Pickup,,,,
+#EFFECT, Spell, MercenaryL3,,,
+#EFFECT, Destruct,,,,
+
+#OBJTYPE, Elite Guard Warrior
+EFFECT, Pickup,,,,
+#EFFECT, Spell, MercenaryL10,,,
+#EFFECT, Destruct,,,,
+
+#OBJTYPE, Mercenary Girl
+#EFFECT, Conversation, Allanna, portrait2.jpg, ,
+#GRAPH, merc1.bmp, 3, 250, 10, 250, 1
+
+#OBJTYPE, Mercenary Girl2
+#EFFECT, SELL, Guard Warrior, 250, , , ,
+#EFFECT, SELL, Veteran Guard Warrior, 1000, , , ,
+#EFFECT, SELL, Elite Guard Warrior, 5000, , , ,
+#GRAPH, merc1.bmp, 3, 250, 10, 250, 1
+
+#OBJTYPE, Tanna
+#EFFECT, Mobile, 2, , , ,
+#EFFECT, Conversation, Tanna, portrait1.jpg, , ,
+EFFECT, Conversation, Vulkuca, portrait-vulkuca.jpg, , ,
+#GRAPH, merc1.bmp, 3, 250, 250, 250, 1
+
+#OBJTYPE, Tannapotions
+#EFFECT, Lifepotion, 5, , , ,
+#OBJTYPE, Treasure Chest
+#EFFECT, GiveGold, 200,,,
+#EFFECT, Destruct,,,,
+#GRAPH, treasure1.bmp, 1, 255, 190, , .5
+
+#CREATEOBJ, Healing Potion, 32, 15, , ,
+#CREATEOBJ, Healing Potion, 33, 15, , ,
+#CREATEOBJ, Healing Potion, 34, 15, , ,
+#CREATEOBJ, Teleportation Scroll, 36,19,,,
+#CREATEOBJ, Treasure Chest, 44,34,,,
+
+/With random weapons girls, string2 is the random seed
+
+#CREATEOBJ, Salesgirl, 30, 18, Weapons Salesgirl, NPC1.bmp,
+#CREATEOBJ, Salesgirl2, 17, 6, Juliette's Armor, NPC1.bmp,
+#CREATEOBJ, Salesgirl3, 35, 32, Ralyrra, NPC1.bmp,
+CREATEOBJ, Salesgirl3, 8, 5, Ralyrra, NPC1.bmp,
+
+#CREATEOBJ, Mercenary Girl, 15, 5, Guard Captain, NPC2.bmp,
+
+#CREATEOBJ, NPC, 3,3, Janet, NPC2.bmp, $Be careful when fighting monsters! If you are wounded/ it becomes easier for them to eat you!$
+
+#CREATEOBJ, NPC, 8,9, Allanda, NPC2.bmp, $It is sometimes good to carry extra clothes with you on your journey. If you are swallowed by a monster/ your clothes can be dissolved by their digestive juices/ leaving you defenseless!$
+
+#CREATEOBJ, NPC, 12,18, Mystri, NPC2.bmp, $Not all girls you meet on your journey will be friendly. Some may even try to eat you! Girls near the middle of towns or inside buildings are usually safe/ but not always.$
+
+#CREATEOBJ, NPC, 15,15, Lyda, NPC2.bmp, $Be sure you have a weapon before you leave town. Most beasts find it downright tantalizing when their prey just waves her fists at them.$
+
+#CREATEOBJ, NPC, 45,45, Ija, NPC2.bmp, $There's an abandoned temple directly southeast of here! I was there the other day/ and it's filled with treasures! I couldn't bring much back with me/ since I nearly got eaten by a snake/ but anyone strong enough to fight them off could strike it rich!$
+
+#CREATEOBJ, NPC, 0, 0, Lidia, NPC2.bmp, $As you know/ all cities are built by the different clans that inhabit this region. There are no clan wars going on right now/ but when they do/ the monsters are the least of your worries...$
+
+#CREATEOBJ, Healer, 11, 32, Town Healer, NPC1.bmp, $Welcome. I shall heal your wounds.$
+
+#OBJTYPE, Home City Portal Gem
+#EFFECT, Pickup,,,,
+#EFFECT, MapTeleport, VRPGData.txt, 5, 5, , , ,
+#EFFECT, NoEat, , , , ,
+#GRAPH, Gem5.bmp, 1, 15, 150, 250, .5
+
+#CREATEOBJ, Home City Portal Gem, 5, 5, , , ,
+
+OBJTYPE, New Object
+GRAPH, girl11.bmp, 150, 0, 0, 1.5
+EFFECT, SELLARMOR, 8, 8, , , 
+EFFECT, Mobile, 3, , , , 
+
+CREATEOBJ, New Object, 16, 4, Darph Bobo, NPC1.bmp,  
+
+#CREATEOBJ, NPC2, 23, 23, Adona, NPC1.bmp, $Good evening/ my lady. You're new to town/ aren't you? Let me give you a warning. If you're going adventuring/ your first stop should be the City of Angels to the west. Anywhere to the north requires going through the plain of beasts and the deserts/ and the southern marshes are filled with hungry reptiles. Strengthen your fighting skills first and fulfill quests to make your potions stronger--every quest you finish for someone will strengthen either your life or mana potions.$
+
+#CREATEOBJ, Tanna, 24, 24, , , ,
+
+#CREATEOBJ, Fountain of Healing, 20, 20, , ,
+MULTCREATEOBJ, 100, Fountain of Healing, 0, 0, , ,
+
+OBJTYPE, Groundmaw
+EFFECT, MapTeleport, giantgroundmaw.txt, 95, 5, , ,
+GRAPH, groundmaw1.bmp, 1, 150,150,0,.5
+
+CREATEOBJ, Groundmaw, 0, 0, , ,
+
+CREATEOBJ, Groundmaw, 0, 0, , ,
+
+MULTCREATEOBJ, 50, Groundmaw, 0, 0, , ,
+
+TREASURE TYPES (For reference)
+
+f = createobjtype("Treasure Bag (Orange)", "treasure2.bmp", 200, 140, 0, 0.5)
+addeffect f, "GiveGold", "25"
+addeffect f, "Destruct"
+
+f = createobjtype("Treasure Bag (Green)", "treasure2.bmp", 0, 180, 0, 0.5)
+addeffect f, "GiveGold", "50"
+addeffect f, "Destruct"
+
+f = createobjtype("Treasure Bag (Red)", "treasure2.bmp", 230, 0, 0, 0.5)
+addeffect f, "GiveGold", "200"
+addeffect f, "Destruct"
+
+f = createobjtype("Treasure Bag (Blue)", "treasure2.bmp", 0, 0, 255, 0.5)
+addeffect f, "GiveGold", "500"
+addeffect f, "Destruct"
+
+f = createobjtype("Treasure Bag (Black)", "treasure2.bmp", 55, 55, 55, 0.3)
+addeffect f, "GiveGold", "1000"
+addeffect f, "Destruct"
+
+f = createobjtype("Treasure Chest (Orange)", "treasure1.bmp", 200, 140, 0, 0.5)
+addeffect f, "GiveGold", "250"
+addeffect f, "Destruct"
+
+f = createobjtype("Treasure Chest (Green)", "treasure1.bmp", 0, 180, 0, 0.5)
+addeffect f, "GiveGold", "500"
+addeffect f, "Destruct"
+
+f = createobjtype("Treasure Chest (Red)", "treasure1.bmp", 230, 0, 0, 0.5)
+addeffect f, "GiveGold", "2000"
+addeffect f, "Destruct"
+
+f = createobjtype("Treasure Chest (Blue)", "treasure1.bmp", 0, 0, 255, 0.5)
+addeffect f, "GiveGold", "5000"
+addeffect f, "Destruct"
+
+f = createobjtype("Treasure Chest (Black)", "treasure1.bmp", 55, 55, 55, 0.3)
+addeffect f, "GiveGold", "10000"
+addeffect f, "Destruct"
+
+f = createobjtype("Lesser Healing Potion", "potion1.bmp", 255, 0, 255, 0.4)
+addeffect f, "Pickup"
+addeffect f, "Heal", "R3Die6"
+addeffect f, "Destruct"
+
+f = createobjtype("Healing Potion", "potion1.bmp", 255, 30, 255, 0.5)
+addeffect f, "Pickup"
+addeffect f, "Heal", "R8Die12"
+addeffect f, "Destruct"
+
+f = createobjtype("Greater Healing Potion", "potion1.bmp", 255, 30, 255, 0.7)
+addeffect f, "Pickup"
+addeffect f, "Heal", "R12Die30"
+addeffect f, "Destruct"
+
+f = createobjtype("Full Healing Potion", "potion1.bmp", 255, 160, 255, 1)
+addeffect f, "Pickup"
+addeffect f, "Heal", "10000"
+addeffect f, "Destruct"
+
+f = createobjtype("Fountain of Healing", "Fountain1.bmp", 255, 160, 255, 1)
+addeffect f, "Heal", "10000"
+addeffect f, "Givemp", "10000"
+addeffect f, "Backup"
+
+f = createobjtype("Potion of Strength", "potion1.bmp", 255, 255, 0, 1)
+addeffect f, "Pickup"
+addeffect f, "Givestr", "1"
+addeffect f, "Destruct"
+
+f = createobjtype("Potion of Dexterity", "potion1.bmp", 155, , 155, 0.3)
+addeffect f, "Pickup"
+addeffect f, "Givedex", "1"
+addeffect f, "Destruct"
+
+f = createobjtype("Potion of Intelligence", "potion1.bmp", 0, 0, 255, 0.5)
+addeffect f, "Pickup"
+addeffect f, "Giveint", "1"
+addeffect f, "Destruct"
+
+f = createobjtype("Potion of Experience", "potion1.bmp", 255, 155, 0, 0.3)
+addeffect f, "Pickup"
+addeffect f, "Giveexp", "1000"
+addeffect f, "Destruct"
+
+f = createobjtype("Greater Potion of Experience", "potion1.bmp", 255, 155, 0, 0.6)
+addeffect f, "Pickup"
+addeffect f, "Giveexp", "10000"
+addeffect f, "Destruct"
+
+f = createobjtype("Mega Potion of Experience", "potion1.bmp", 255, 155, 0, 1)
+addeffect f, "Pickup"
+addeffect f, "Giveexp", "100000"
+addeffect f, "Destruct"
+
+f = createobjtype("Lesser Mana Potion", "potion1.bmp", 0, 0, 255, 0.3)
+addeffect f, "Pickup"
+addeffect f, "Givemp", "R4Die6"
+addeffect f, "Destruct"
+
+f = createobjtype("Mana Potion", "potion1.bmp", 0, 0, 255, 0.5)
+addeffect f, "Pickup"
+addeffect f, "Givemp", "R5Die12"
+addeffect f, "Destruct"
+
+f = createobjtype("Greater Mana Potion", "potion1.bmp", 0, 0, 255, 0.7)
+addeffect f, "Pickup"
+addeffect f, "Givemp", "R12Die12"
+addeffect f, "Destruct"
+
+Each increases by 10% per level
+
+Valkyrie: Deflection (+10% armor against normal attacks (Not digestion))
+Amazon: Critical +10% damage
+Enchantress: Regeneration 2 point auto regen
+Priestess: Speed (-2 to enemy attack rolls)
+Huntress: Accurate (+2 to attack rolls)
+Sorceress: Greed +20% to gold collected
+Succubus: Steal 2% of life
+Angel: Increased mana regeneration
+
+Undigestable (+6 armor vs. digestion)
+
+Valkyrie--Ruby
+Sorceress--Zoe
+Succubus--Lain (Eve)
+Enchantress--Cyrell
+
+/MONDATA, Name, graphic, heat, moisture, rockyness, vegetation, tolerance
+
+List of Monster Types
+
+Giantess, giantess.bmp
+Dragon, dragon1.bmp
+Kari, kari1.bmp
+Kari, kari2.bmp
+Naga, snakewoman2.bmp
+Giant Snake, snake1.bmp
+Giant Worm, worm1.bmp
+Groundworm, worm2.bmp
+Acid Vines, tendrils1.bmp
+Girlcrunch Plant, venus1.bmp
+Giant Frog, frog1.bmp
+Slime, slime1.bmp
+Centauress, centauress1.bmp
+Harpy, harpy1.bmp
+Sprite, sprite1.bmp
+Succubus, succubus1.bmp
+Demoness (nude), demoness1.bmp
+Demoness, demoness4.bmp
+Demoness (flesh), demoness4c.bmp
+Demoness (red), demoness4f.bmp
+Demonette, demoness2.bmp
+Lizardwoman, lizardwoman1.bmp
+Carnivorous Flower, flower1.bmp
+Dark Sorceress, mage2.bmp
+Groundmaw, groundmaw2.bmp
+xebbebba.bmp
+croc2.bmp
+wingedserpent1.bmp
+slime1.bmp
+elemental1.bmp
+giantess.bmp
+Random Hungry Girl
+
+
+Given/Converted
+reddragon.bmp
+greendragon.bmp
+dragdiara.bmp
+purple_snake.bmp
+fifimon.bmp
+demonsorceress.bmp
+batsorceress.bmp
+wyvern1.bmp
+snake2.bmp
+furdragon1.bmp
+
+/MONDATA, Name, graphic, heat, moisture, rockyness, vegetation, tolerance

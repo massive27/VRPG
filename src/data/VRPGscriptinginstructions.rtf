@@ -1,0 +1,205 @@
+{\rtf1\ansi\ansicpg1252\deff0\deflang1033{\fonttbl{\f0\fswiss\fcharset0 Arial;}{\f1\fnil\fcharset0 Courier New;}}
+\viewkind4\uc1\pard\f0\fs20 This file will explain the basics of scripting conversations.  There is an example at the bottom, so you don't need to understand everything right away.  (Actually, you might want to look at the example first, so when I describe the commands they will make more sense...)  There is also some basic game world information at the bottom.\par
+\par
+All conversations are stored in the same file, regardless of what city or character they're assigned to.  You do not actually need to worry about assigning conversations to anybody or creating the actual characters--that will be my problem.\par
+Conversations are based on a simple scripting engine that the program interprets as needed.  Construction of conversation is basically based on giving commands to the interpreter.\par
+The very first command for any given conversation is the "#CONVERSATION" command, which goes like this:\par
+\par
+#CONVERSATION, (Conversation name)\par
+\par
+Obviously, you would replace "(Conversation name)" with whatever the conversation is supposed to be called.  You can call it whatever you want--I usually just name the conversations after the characters they're assigned to.\par
+The #CONVERSATION command tells the interpreter that you are starting a new conversation, so make sure all the commands for any given conversation are under the #CONVERSATION command and before the next one, and make sure you start each new conversation with the #CONVERSATION command.\par
+\par
+The next most important command is the #BRANCH command.  These set up the 'nodes' of the conversation--the sets of speech and responses that make up the conversation.  The syntax is:\par
+\par
+#BRANCH, (Branch name)\par
+\par
+Again, the branch name can be anything you want.  Each branch can contain one message, up to eight replies, and up to fifteen total commands.  (I'll explain all of those as we go along).  The only exception to this is "#BRANCH, MAIN".  You must _always_ have at least one branch in each conversation called "MAIN"--this is the branch that the conversation will start at by default (meaning it should usually be the first branch).\par
+For each branch, you will want to decide whether to use either a #SAY command or a #TEXT command.  Each #BRANCH should have a #SAY or a #TEXT under it--otherwise nothing will be displayed for the conversation branch.  #SAY displays the text in white, and adds quotation marks to the beginning and the end, whereas #TEXT does not, and displays the text in a different color.  It is sometimes useful for displaying other information that is not being said by someone--such as when the player is examining an object.  You can only have one #SAY command OR one #TEXT command.  If you put in more than one, all but one of them will be ignored.\par
+The syntax for both are very similar:\par
+\par
+#SAY, (Text)\par
+#TEXT, (Text)\par
+\par
+There is one VERY IMPORTANT thing to remember about both message commands and reply commands--The parsing program uses commas as delimiters, so if you have a comma in something someone says, make sure it is surrounded in quotes (" ").\par
+Likewise, you must include the commas between the different commands as indicated in the syntax.  (Just write them as I show you and you'll be fine--just don't forget the commas)\par
+Another useful little tidbit is that it will also replace the word "$NAME" with whatever the player's name is.  Also, it will replace forward slashes ( / ) with commas when it displays it.\par
+\par
+Next up are the commands that allow you to give choices to the player--possible replies that they can choose from.  The only commands of this type you really need to worry about are #CHOICE and #EXIT:\par
+\par
+#CHOICE, (Text), (Name of branch to go to)\par
+#EXIT, (Text)\par
+\par
+In both cases, whatever you put in place of "(Text)" will be what the player sees as their choices.  You can have up to eight #CHOICE commands for each #BRANCH.\par
+The #CHOICE command will simply tell the interpreter to go to another branch--the name you choose in the #BRANCH command is the name you use to refer to it.  So if you have a branch called "#BRANCH, JERKWAD" then you can get there from any point in the conversation by having a choice like "#CHOICE, (Text), JERKWAD"\par
+The #EXIT command, on the other hand, will simply end the conversation.  That is why it does not require the name of a #BRANCH to go to.\par
+\par
+Those are all the basic commands you need to craft a conversation.  There are also numerous advanced commands which you probably won't need--if you do, I'll write them for you (Or show you how to use them if what you want to do would be really time-consuming, or you want to experiment...)\par
+\par
+There are a few advanced commands you will want to use at some point, however, so I will still explain how to use them.\par
+Advanced commands usually tack onto the basic commands at either the beginning or the end.  \par
+\par
+Commands that go at the end:\par
+To use them, you simply type the command in place of the branch name.  (For example, instead of "#CHOICE, This will take you to the ARSEBRAIN branch, ARSEBRAIN" you would type "#CHOICE, This will invoke the #SELLCLOTHES command., #SELLCLOTHES")\par
+Each command starts with the '#' symbol.  This is mostly just to make sure you (Or I) don't accidentally use a command name as a branch name.\par
+Most commands also have parameters, some of which are optional (Meaning you don't have to put them in).  Those that are optional have brackets around them.  You separate commands and parameters with colons (':'s).  Any command with a "Goto" parameter still moves on to another branch--the branch name goes in the "Goto" spot.\par
+\par
+The end commands (That you'd be able to use, anyway) are:\par
+\f1\tab #SELLCLOTHES[:Color:Wear1:Wear2]\par
+This will tell the character to sell clothing.  Color must be one of the predefined colors, such as "Red", "Black", "Green", "Blue" etc.  (Any color you see in the game can be assigned here, by name)  The quality of the clothing they sell will be based on the town they're in.  "Wear1" and "Wear2" are advanced parameters for when you want to choose what kinds of clothing they sell--the four kinds are "Bra", "Panties", "Lower" and "Upper".  If you include these parameters, the character will not sell anything that doesn't qualify as at least one of the specified types.  (Note that swimsuits qualify as Bras OR panties, dresses count as Uppers OR Lowers, etc.)\par
+\tab #SELLARMOR[:Worth (By number)]\par
+This tells the character to sell armor.  Worth determines the quality of the material--1 is leather, 11 is Angelic Steel.\par
+\tab #CHANGESTART:Newstart:Goto\par
+This command tells the game to start at the branch "Newstart" (Replace "Newstart" with whatever branch name you're aiming for, obviously) from then on.  After this command is invoked, the conversation will no longer start at branch MAIN, but will instead start at whatever branch you specify in place of "Newstart".  Note that the presence of a Goto parameter means the parameter you tell it to start at does not have to be the same one the choice leads to.\par
+\tab #EATME\par
+Causes the player to eat the object.  The object can't be recovered, and if it's within visual range of an NPC it will summon the city guards, so use with care.\par
+\tab #DAMAGE:Goto:Amt\par
+Damage the player in the amount you put in "Amt".\par
+\tab #DIGESTTO:Goto:Amt\par
+Sets the character's digestion status to "Amt".  If you don't know what digestion status is, don't bother, but basically, it's how digested you are.  4 or more is instantly lethal, so you've usually got between 1 and 3 to work with.\f0\par
+\par
+\par
+Commands that go at the beginning:\par
+These go alongside the "#CHOICE" command, and are also called Requirements, because they determine when and if the choice appears.  To use them, put a colon after "#CHOICE", and then put in the command.\par
+\par
+\f1 #CHOICE:SAYONCE\par
+This means the player can only select the choice once, and then it disappears permanently.  It will not disappear until they choose it.\par
+#CHOICE:DEX:Dexneeded (Also INT and STR)\par
+This means the choice will only appear if the players dexterity (Or strength, if you use STR in place of DEX, or intelligence, if you use INT) is equal to or higher than the number you specify in place of "Dexneeded".\par
+#CHOICE:NOTDEX:Dexneeded (NOTINT, NOTSTR)\f0\par
+This is the opposite of the DEX command above.  The choice will only appear if the player's dex/int/str is below the number you specify.\par
+\par
+\par
+I have included one conversation from the game as an example.  So long as yours looks like this, you should be fine.  (As you can see from it, it's got a few commands I haven't discussed--I left them out because they reference other, often more complicated parts of the game engine that I don't want to take the time to explain.  If you want a conversation to have an effect there is no command for, just tell me and I'll set it up for you.  Note also that this conversation may actually change before the game is released, so don't be surprised if you play it and it's different)\par
+\par
+\par
+\f1 #CONVERSATION, Zettia\par
+#BRANCH, MAIN\par
+#SAY, "Greetings.  I know your name--it is $NAME.  I am called Zettia."\par
+#CHOICE:IFQUEST:Naga Queen, I have destroyed the Naga Queen.,#CHANGESTART:MAIN2:KILLEDQUEEN\par
+#CHOICE, How do you know my name?,NAME\par
+#CHOICE, Zettia? Are you a sorceress?, SORC\par
+#CHOICE, What can you tell me about magic?, MAGIC\par
+#CHOICE, Do you sell potions?, POTIONS\par
+#EXIT, Farewell.\par
+\par
+#BRANCH, KILLEDQUEEN\par
+#SAY, "Excellent work, $NAME.  You are apparently more formidable than you appear.  I shall enhance your mana potions at once."\par
+#CHOICE, "Thank you, Zettia.  Happy to be of service.",#EFFECT:MAIN2:Manaplus:1\par
+\par
+#BRANCH, MAIN2\par
+#SAY, *Zettia nods* What can I do for you?\par
+#CHOICE, How do you know my name?,NAME\par
+#CHOICE, Zettia? Are you a sorceress?, SORC\par
+#CHOICE, What can you tell me about magic?, MAGIC\par
+#CHOICE, Do you sell potions?, POTIONS\par
+#EXIT, Farewell.\par
+\par
+#BRANCH, NAME\par
+#SAY, It shouldn't be too surprising.  Word of your quest has spread all over town.  I might have a little job for you, if you're eager to prove yourself.\par
+#CHOICE, "Okay, I'm game.  What's this job?",QUEST\par
+#CHOICE, "No thanks.  I had some questions, though.", MAIN2\par
+#EXIT, Sorry.  Not interested.\par
+\par
+#BRANCH, QUEST\par
+#SAY, "I have learned of a Naga Queen who lives in the caves far to the south, past the marshes and the reptile bog. Her serpentine followers have been eating our girls for months.  I have tired of my apprentices ending up as Naga-excrement. I can provide you with an enhancement for your mana potions for your trouble if you can destroy her for me.  Remember, though, that you'd have to fight through not only the reptile bog but also the cave itself.  I wouldn't recommend you try it unless you're already a powerful warrior."\par
+#CHOICE, I'll keep a look out for her.  I had some other questions...,MAIN2\par
+#EXIT, Not interested.  Goodbye.\par
+\par
+#BRANCH, QUESTIONS\par
+#SAY, Yes?\par
+#CHOICE, Are you a sorceress?, SORC\par
+#CHOICE, What can you tell me about magic?, MAGIC\par
+#CHOICE, Do you sell potions?, POTIONS\par
+#EXIT, Farewell.\par
+\par
+#BRANCH, POTIONS\par
+#SAY, "Not personally.  If it's potions you want, you should speak to Arrianna."\par
+#CHOICE, Are you a sorceress?, SORC\par
+#CHOICE, What can you tell me about magic?, MAGIC\par
+#EXIT, I think I'll do that. Farewell.\par
+\par
+#BRANCH, SORC\par
+#SAY, I am indeed.  All of the powers of the arcane arts are at my disposal--I would like to see the monster that could stuff the mighty Zettia down it's greedy maw!\par
+#CHOICE, I bet Thirsha could.,THIRSHA\par
+#CHOICE, Could you teach me about magic then?,MAGIC\par
+#EXIT, Fascinating.  I'll see you later.\par
+\par
+#BRANCH, THIRSHA\par
+#SAY, Thirsha indeed!  That whelp of a lizard could never challenge me.\par
+#CHOICE, Why don't you come with me then?,JOIN\par
+#CHOICE, I don't think so.  I think you'd be sliding through her intestines before you even knew what happened.,MAD\par
+#EXIT. Whatever. Goodbye.\par
+\par
+#BRANCH, JOIN\par
+#SAY, "I would/ but I am forbidden.  A rival sorceress of mine, a Darkswallow by the name of Rutara/ would instantly set upon me if I were to leave here.  And while I could handle her,  I have my doubts that I could defeat both her and Thirsha simultaneously."\par
+#CHOICE, Whatever. Pansy.,MAD\par
+#CHOICE, That's a pretty lame excuse. Honestly.,MAD\par
+#CHOICE, Makes sense.  Can I ask you about something else?,QUESTIONS\par
+\par
+#BRANCH, MAD\par
+#SAY, How dare you speak to me in such a fashion.  I have half a mind to shrink you down and swallow you myself!  See if a few hours wallowing in my vomit would teach you some manners.  If only you weren't Tanna's little pet hero...\par
+#EXIT, Whatever/ bitch.  I'm leaving.\par
+#CHOICE, Look/ I'm sorry.  Can I ask you something?,QUESTIONS\par
+\par
+#BRANCH, MAGIC\par
+#SAY, "Magic is like any other combat skill. It has it's advantages and it's drawbacks. The advantage of magic is that you can attack beasts from a distance--the disadvantage is that if you don't kill it in the first few shots, it's almost guaranteed to come after you with it's mouth wide open, waiting to stuff you down it's throat where your spells won't mean a lot.  There are a few spells you can still cast when inside a monster's belly, however--particularly area effect spells and summoning spells."\par
+#CHOICE, And what happens if one of those spells kills a monster while I'm inside it?,INSIDE\par
+#CHOICE, What do you know about Black Magic in particular?,BLACK\par
+#CHOICE, What can you tell me about White Magic?, WHITE\par
+#CHOICE, Do you know anything about Grey Magic?, GREY\par
+#EXIT, Thank you.  That's all I need to know.\par
+\par
+#BRANCH, INSIDE\par
+#SAY, "You escape, no worse for the wear except for perhaps having stomach goop soaked into your clothing."\par
+#CHOICE, What do you know about Black Magic in particular?,BLACK\par
+#CHOICE, What can you tell me about White Magic?, WHITE\par
+#CHOICE, Do you know anything about Grey Magic?, GREY\par
+#EXIT, Thank you.  That's all I need to know.\par
+\par
+#BRANCH, WHITE\par
+#SAY, "White magic is the magic of healing and strength.  I don't know much about it, because as a sorcereress I rarely use it.  Most white magic involves regaining hit points, but many white spells can make your attacks hit harder, and there are even a few offensive white spells."\par
+#CHOICE, What do you know about Black Magic?,BLACK\par
+#CHOICE, Do you know anything about Grey Magic?, GREY\par
+#EXIT, Thank you.  That's all I need to know.\par
+\par
+#BRANCH, GREY\par
+#SAY, Of course I know about Grey magic.  Grey magic is the magic of enchantment--changing things to suit your will.  Most enchantresses and other practitioners of the Grey arts focus on changing themselves/ making themselves faster/ stronger and smarter than they would be.  Many grey spells can also offer protection or defenses against monsters.  The downfall of Grey magic is that it possesses almost no direct offensive capabilities/ so you had best have another way to destroy your foes or all of your enchantments will be for naught.\par
+#CHOICE, What do you know about Black Magic then?,BLACK\par
+#CHOICE, What can you tell me about White Magic?, WHITE\par
+#EXIT, Thank you.  That's all I need to know.\par
+\par
+#BRANCH, BLACK\par
+#SAY, Black magic is the magic of offense.  It is for those who tire of enigmatic means and decide simply to reduce their enemies to ashes.  Black magic is primarily attack spells/ but the Black school also contains many rituals which boost the caster's intelligence--increasing the potency of any spells cast henceforth.\par
+#CHOICE, What can you tell me about White Magic?, WHITE\par
+#CHOICE, Do you know anything about Grey Magic?, GREY\par
+#EXIT, Thank you.  That's all I need to know.\par
+\par
+\f0\par
+\par
+Game World\par
+\par
+The basic plot of the game is that the player has to kill the black dragon Thirsha.  To get to her, she must get three keys that lead to her lair.   One key is next to Wormgut, one is owned by Clan Demongut, and one is inside a giant Groundmaw (A Sarlac kinda thing).  The player is 'born' at the beginning of the game, so won't really know anyone beforehanda.\par
+There are six cities and five clans in the game.  Here are the cities and their owners, in rough order of when you are likely to visit them:\par
+\par
+Home City--Neutral\par
+City of Angels--Neutral\par
+Wormgut--Clan Gurglemeister, underground city, filled with giant worms\par
+Skinbane--Clan Firebelly, in the volcanic region\par
+Blackscourge--Clan Darkswallow, in a mountainous region\par
+Allia--Clan Velvet Intestine, in a dark lakeland region bordering a jungle\par
+\par
+The fifth clan, clan Demongut, does not have a city--or, rather, they have a castle that you fight through, but you never talk to any of them, so they don't matter.\par
+\par
+Here are the basic Clan personalities:\par
+Gurglemeisters: Complete perverts.\par
+Firebellies: Irritable but not completely unnapproachable.  Known to hate the Demonguts more than most.\par
+Darkswallows:  Rather evil and conniving, but not as openly rude as the Firebellies.\par
+Velvet Intestine: Enigmatic and polite, but with a conniving streak of their own when it suits them.\par
+\par
+Most of the cities are partially isolated by the sheer volume of monsters that have been building up, because Thirsha has a fetish for eating guardswomen and monster hunters in particular.  The clans aren't going after her mostly because they're busy dealing with each other.\par
+Conversations can be basically anything you can think of--I can incorporate 'Errand' quests if you want to write them.\par
+\par
+\par
+}
+ 

@@ -1,0 +1,73 @@
+Forest of Doubts (3)
+
+#TERSTR, Now entering Forest of Doubts...
+
+#LEVEL, 3
+
+#EXTRAOVERS, Tree7.bmp, Tree1.bmp, Tree1.bmp, Thorntree1.bmp
+
+#RANDOMSEED, 7374
+#MAPSIZE, 150, 150
+/Mapchunk, type, size-ish
+#MAPCHUNK, 12, 50
+#MAPCHUNK, 12, 30
+#MAPCHUNK, 3, 30
+#MAPCHUNK, 3, 30
+#MAPCHUNK, 12, 30
+#MAPCHUNK, 12, 35
+#OVRCHUNK, 2, 15
+#OVRCHUNK, 2, 10
+#OVRCHUNK, 2, 10
+#OVRCHUNK, 2, 10
+#OVRCHUNK, 2, 10
+
+#BUILDING, 5, 5, 125, 74, 3, 1, Treasure8
+#BUILDING, 8, 8, 175, 100, 3, 1, Armor7
+#MULTBUILDING, 15, 0, 0, 0, 0, 3, 1, Treasure5
+#BUILDING, 3, 5, 0, 0, 3, 1, Treasure5
+#BUILDING, 5, 3, 0, 0, 3, 1, Treasure5
+#BUILDING, 6, 5, 0, 0, 3, 1, Treasure16
+#BUILDING, 5, 5, 0, 0, 3, 1, Clothes8
+#BUILDING, 16, 15, 0, 0, 3, 1, Treasure22
+
+#SPRINKLEOVR, 935, 52
+#SPRINKLEOVR, 735, 51
+#SPRINKLEOVR, 825, 5
+#SPRINKLE, 525, 2
+#SETMAPS, , , Temple.txt, VRPGData.txt
+
+/MONTYPE, Name, Graphic, Swallowtype, HP, Skill, Dice, Damage, Eatskill, Exp, move, acid, Red/"Clan", Green/Clannumber, Blue, Lightness
+
+MONTYPE, Kari, kari1.bmp, ,60, 6, 2, 3, 6, 30, 4, 4, 155, 15, 0, .4,
+MONTYPE, Butthole, snakewoman2.bmp, ,40, 6, 2, 6, 6, 80, 4, 3, 40, 50, 210,.1,
+MONTYPE, Giant Snake, snake1.bmp, ,40, 6, 2, 6, 6, 80, 4, 3, 40, 120, 10,.5,
+MONTYPE, Giant Worm, worm1.bmp, ,40, 6, 2, 6, 6, 80, 4, 3, 100, 0, 150,.5,
+MONTYPE, Slime Vines, tendrils1.bmp, Plant,20, 4, 1, 4, 8, 15, 2, 1, 60, 140, 10,.5, 
+MONTYPE, Girlcrunch Plant, venus1.bmp, Plant,30, 6, 2, 6, 6, 80, 4, 3, 40, 100, 10,.8, Plant
+MONTYPE, Giant Frog, frog1.bmp, ,25, 4, 1, 4, 12, 15, 4, 2, 100, 160, 10,.5,
+MONTYPE, Slime, slime1.bmp, 40, ,6, 2, 6, 6, 80, 4, 3, 200, 160, 0,.5,
+MONTYPE, Centauress, centauress1.bmp ,,350, 9, 4, 8, 8, 100, 6, 3, 120, 90, 0, 0.5
+
+#MONTYPE2, Kari, kari1.bmp, 3, 155, 15, 0, .4
+#MONTYPE2, Slime Vines, tendrils1.bmp, 2, 60, 140, 10, .5
+#MONTYPE2, Giant Frog, frog1.bmp, 2, 100, 160, 10, .5
+#MONTYPE2, Kari , kari1.bmp, 4, 155, 15, 0, 1
+#MONTYPE2, Kari  , kari1.bmp, 5, 155, 15, 0, 2
+#MONTYPE2, Centauress, centauress1.bmp, 4, 120, 90, 0, 0.5
+
+/RANDOMMONSTERS, Type (Or ALL), number, x zone start, y zone start, x end, y end
+#RANDOMMONSTERS, ALL, 580, 0,0,0,0
+#RANDOMMONSTERS, Centauress, 80, 0,0,0,0
+
+#FAVMONSTER, Centauress, 8
+
+OBJTYPE, Treasure Bag (Orange)
+EFFECT, GiveGold, 50,,,
+EFFECT, Destruct,,,,
+GRAPH, treasure2.bmp, 1, 200, 140, , .5
+
+CREATEOBJ, Treasure Bag (Orange), 127,75,,,
+CREATEOBJ, Treasure Bag (Orange), 127,76,,,
+CREATEOBJ, Treasure Bag (Orange), 128,75,,,
+CREATEOBJ, Treasure Bag (Orange), 128,76,,,
+

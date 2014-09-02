@@ -1,0 +1,632 @@
+/SPELL, Name, MP, Effect, amount, targtype (Player/Target/All/Visible), School, level
+
+1=ARROW, 2=FIRE, 3=FIRE2, 4=LIT, 5=LIT2, 6=OOZE, 7=BOLT
+
+Auras:
+/SPELL, Name, MP, ObjectEffects(BonusName:Amt:AmtB:Bonusname2:Amt2:AmtB2:Bonusname3:Amt3:AmtB3 etc), amount, Aura:Graphic:R:G:B:Frames:Duration, School, level
+Aura Graphics: 
+"swordaura.bmp", 15  (Sword Aura)
+"aura1.bmp", 3  (Flower Aura)
+"aura2.bmp", 4  (Triangle, Point Down)
+"aura3.bmp", 4  (Triangle, Point Up)
+"aura4.bmp", 6  (Orange Vortex)
+"aura5.bmp", 6  (Recolor Vortex)
+"aura6.bmp", 7  (Static Aura)
+"aura7.bmp", 18 (Defense Star Aura)
+"aura8.bmp", 6  (Billowing Vortex)
+
+Bijdangs:
+1: Sword
+5: Big Fire
+6: Purple Zap
+7: Lightning
+8: Small Fire
+
+Attacks:
+Target:Graphtype:[Num]:[Angle+]:[Radius]:[Bijdang]:[Pierce / -Bounce]
+
+Summons:
+#SPELL, Spell Name, MP, Summon, Monster Level[:Shootytype:Frequency], Monster name:filename:red:green:blue:light(0.5):boss(1):owner(2):Maxnum:MissileAttack, School, Level
+
+Enchantments
+#SPELL, Enchantment Test:Gives an item of clothing a +2 intelligence bonus, Mana cost, Effects (Bonuses.  Same as auras.), , Enchant:Type(Clothes, Weapon, GEM etc), School, Level
+
+
+With duplicate spells, the character will keep the highest level version of the spell
+BONINT, BONSTR, BONHP, BONMP, BONARMOR, BONEND, BONDICE, BONDAMAGE (Max per die), BONUSDAMAGE (Straight), BONSKILL:SKILLNAME:AMT
+Add an extra : at the end of attribute bonuses (To make up for the fact that it looks for three values in a row due to skills)
+Special with enchantment:  If the effect is Random:Level, it will make a completely random item with a worth of Level
+
+HUNTRESS ABILITIES
+
+SPELL, Split Arrow (2), 3, Splitarrow, , Target::2:5, Huntress, 3
+SPELL, Split Arrow (3), 5, Splitarrow, , Target::3:5, Huntress, 8
+SPELL, Split Arrow (4), 8, Splitarrow, , Target::4:4, Huntress, 12
+SPELL, Split Arrow (5), 12, Splitarrow, , Target::5:4, Huntress, 18
+
+TAUNT AURA
+
+#SPELL, Taunt Aura: Taunts the enemy with descriptions of your digestive tract.  Adds +1 to Super Acid., 20, BONSKILL:Super Acid:2, , Aura:Aura5.bmp:200:160:0:6:800, Taunt Aura, 1
+#SPELL, Taunt Aura: Taunts the enemy with descriptions of your digestive tract.  Adds +2 to Super Acid., 20, BONSKILL:Super Acid:2, , Aura:Aura5.bmp:200:160:0:6:800, Taunt Aura, 2
+#SPELL, Taunt Aura: Taunts the enemy with descriptions of your digestive tract.  Adds +3 to Super Acid and +1 to Gluttony., 20, BONSKILL:Super Acid:3:BONSKILL:Gluttony:1, , Aura:Aura5.bmp:200:160:0:6:800, Taunt Aura, 3
+#SPELL, Taunt Aura: Taunts the enemy with descriptions of your digestive tract.  Adds +4 to Super Acid and +1 to Gluttony., 20, BONSKILL:Super Acid:4:BONSKILL:Gluttony:1, , Aura:Aura5.bmp:200:160:0:6:800, Taunt Aura, 4
+#SPELL, Taunt Aura: Taunts the enemy with descriptions of your digestive tract.  Adds +5 to Super Acid and +2 to Gluttony., 20, BONSKILL:Super Acid:5:BONSKILL:Gluttony:2, , Aura:Aura5.bmp:200:160:0:6:800, Taunt Aura, 5
+#SPELL, Taunt Aura: Taunts the enemy with descriptions of your digestive tract.  Adds +6 to Super Acid and +2 to Gluttony., 20, BONSKILL:Super Acid:6:BONSKILL:Gluttony:2, , Aura:Aura5.bmp:200:160:0:6:800, Taunt Aura, 6
+#SPELL, Taunt Aura: Taunts the enemy with descriptions of your digestive tract.  Adds +7 to Super Acid and +3 to Gluttony., 20, BONSKILL:Super Acid:7:BONSKILL:Gluttony:3, , Aura:Aura5.bmp:200:160:0:6:800, Taunt Aura, 7
+#SPELL, Taunt Aura: Taunts the enemy with descriptions of your digestive tract.  Adds +8 to Super Acid and +3 to Gluttony., 20, BONSKILL:Super Acid:8:BONSKILL:Gluttony:3, , Aura:Aura5.bmp:200:160:0:6:800, Taunt Aura, 8
+#SPELL, Taunt Aura: Taunts the enemy with descriptions of your digestive tract.  Adds +9 to Super Acid and +4 to Gluttony., 20, BONSKILL:Super Acid:9:BONSKILL:Gluttony:4, , Aura:Aura5.bmp:200:160:0:6:800, Taunt Aura, 9
+#SPELL, Taunt Aura: Taunts the enemy with descriptions of your digestive tract.  Adds +10 to Super Acid and +5 to Gluttony., 20, BONSKILL:Super Acid:10:BONSKILL:Gluttony:5, , Aura:Aura5.bmp:200:160:0:6:800, Taunt Aura, 10
+
+
+WHITE MAGIC ABILITIES
+
+#SPELL, Heal, 6, Heal, R3Die6, Player, White Magic, 1
+#SPELL, Heal, 7, Heal, R4Die6, Player, White Magic, 2
+#SPELL, Heal, 8, Heal, R5Die6, Player, White Magic, 3
+#SPELL, Heal, 9, Heal, R6Die6, Player, White Magic, 4
+#SPELL, Heal, 10, Heal, R7Die6, Player, White Magic, 5
+#SPELL, Heal, 11, Heal, R8Die6, Player, White Magic, 6
+#SPELL, Heal, 12, Heal, R9Die6, Player, White Magic, 7
+#SPELL, Heal, 14, Heal, R10Die6, Player, White Magic, 8
+#SPELL, Heal, 16, Heal, R11Die6, Player, White Magic, 9
+#SPELL, Heal, 16, Heal, R12Die6, Player, White Magic, 10
+
+#SPELL, Divine Might, 15, Givestr, 4, Player, White Magic, 4
+#SPELL, Divine Might, 20, Givestr, 6, Player, White Magic, 6
+#SPELL, Divine Might, 25, Givestr, 8, Player, White Magic, 8
+#SPELL, Divine Might, 35, Givestr, 10, Player, White Magic, 9
+#SPELL, Divine Might, 45, Givestr, 15, Player, White Magic, 10
+
+#SPELL, Divine Bolt, 5, Damage, R3Die12, Target:BOLT, White Magic, 2
+#SPELL, Divine Bolt, 6, Damage, R4Die12, Target:BOLT, White Magic, 4
+#SPELL, Divine Bolt, 8, Damage, R5Die12, Target:BOLT, White Magic, 5
+#SPELL, Divine Bolt, 12, Damage, R6Die12, Target:BOLT, White Magic, 7
+#SPELL, Divine Bolt, 12, Damage, R7Die12, Target:BOLT, White Magic, 9
+#SPELL, Divine Bolt, 15, Damage, R7Die12, Target:BOLT:3, White Magic, 10
+
+#SPELL, Aura of Protection, 40, BONSKILL:Resilience:2, , Aura:Aura7.bmp:30:80:250:16:80, White Magic, 3
+#SPELL, Aura of Protection, 50, BONSKILL:Resilience:3, , Aura:Aura7.bmp:30:80:250:16:80, White Magic, 5
+#SPELL, Aura of Protection, 60, BONSKILL:Resilience:4, , Aura:Aura7.bmp:30:80:250:16:80, White Magic, 7
+#SPELL, Aura of Protection, 70, BONSKILL:Resilience:5, , Aura:Aura7.bmp:30:80:250:16:80, White Magic, 9
+
+#SPELL, Aura of Divinity, 300, BONSKILL:Regeneration:8:BONSKILL:Accuracy:6:BONHP:300::BONSKILL:Accuracy:6, , Aura:Aura8.bmp:50:250:50:6:80, White Magic, 10
+
+
+FIRE MAGIC ABILITIES
+
+Enchant:Objreq(Clothes,Weapon,GEM etc.)
+
+SPELL, Enchantment Test:Gives an item of clothing a +2 intelligence bonus, 3, BONINT:2, , Enchant:Clothes, Fire Magic, 1
+
+
+#SPELL, Firebolt, 3, Damage, R8Die6, Target:FIRE:1:::8, Fire Magic, 1
+#SPELL, Firebolt, 4, Damage, R9Die6, Target:FIRE:1:::8, Fire Magic, 2
+#SPELL, Firebolt, 4, Damage, R10Die6, Target:FIRE:1:::8, Fire Magic, 3
+#SPELL, Firebolt, 5, Damage, R11Die6, Target:FIRE:1:::8, Fire Magic, 4
+#SPELL, Firebolt, 5, Damage, R12Die6, Target:FIRE:1:::8, Fire Magic, 5
+#SPELL, Firebolt, 6, Damage, R14Die6, Target:FIRE:1:::8, Fire Magic, 6
+#SPELL, Firebolt, 5, Damage, R16Die6, Target:FIRE:1:::8, Fire Magic, 7
+#SPELL, Firebolt, 4, Damage, R18Die6, Target:FIRE:1:::8, Fire Magic, 8
+#SPELL, Firebolt, 3, Damage, R20Die6, Target:FIRE:1:::8, Fire Magic, 9
+#SPELL, Firebolt, 2, Damage, R24Die6, Target:FIRE:1:::8, Fire Magic, 10
+
+#SPELL, Triple Firebolt, 10, Damage, R7Die6, Target:FIRE:3:::8, Fire Magic, 5
+#SPELL, Triple Firebolt, 12, Damage, R8Die6, Target:FIRE:3:::8, Fire Magic, 6
+#SPELL, Triple Firebolt, 14, Damage, R9Die6, Target:FIRE:3:::8, Fire Magic, 7
+#SPELL, Triple Firebolt, 16, Damage, R10Die6, Target:FIRE:3:::8, Fire Magic, 8
+#SPELL, Triple Firebolt, 18, Damage, R10Die6, Target:FIRE:5:::8, Fire Magic, 9
+#SPELL, Triple Firebolt, 20, Damage, R12Die6, Target:FIRE:5:::8, Fire Magic, 10
+
+#SPELL, Supernova, 120, Damage, R10Die20, Target:FIRE2:18:20:3:5:3, Fire Magic, 10
+
+#SPELL, Blaze, 20, Damage, R6Die6, Target:FIRE:18:20::8, Fire Magic, 3
+#SPELL, Blaze, 22, Damage, R7Die6, Target:FIRE:18:20::8, Fire Magic, 5
+#SPELL, Blaze, 24, Damage, R8Die6, Target:FIRE:18:20::8, Fire Magic, 6
+#SPELL, Blaze, 26, Damage, R9Die6, Target:FIRE:18:20::8, Fire Magic, 7
+#SPELL, Blaze, 28, Damage, R10Die6, Target:FIRE:18:20::8, Fire Magic, 8
+#SPELL, Blaze, 30, Damage, R12Die6, Target:FIRE:18:20, Fire Magic, 10
+
+#SPELL, Fireball:Shoots an explosive fireball that damages all monsters in a 2-square radius, 12, Damage, R8Die20, Target:FIRE2:1::2:5, Fire Magic, 4
+#SPELL, Fireball:Shoots an explosive fireball that damages all monsters in a 3-square radius, 14, Damage, R10Die20, Target:FIRE2:1::3:5, Fire Magic, 6
+#SPELL, Fireball:Shoots an explosive fireball that damages all monsters in a 4-square radius, 16, Damage, R12Die20, Target:FIRE2:1::4:5, Fire Magic, 9
+
+#SPELL, Flaming Aura, 20, BONSKILL:Fire Aura:1, , Aura:Aura4.bmp:0:0:0:6:30, Fire Magic, 2
+#SPELL, Flaming Aura, 40, BONSKILL:Fire Aura:3:BONSKILL:Deathblow:1, , Aura:Aura4.bmp:0:0:0:6:40, Fire Magic, 5
+#SPELL, Flaming Aura, 60, BONSKILL:Fire Aura:5:BONSKILL:Deathblow:2, , Aura:Aura4.bmp:0:0:0:6:50, Fire Magic, 7
+#SPELL, Flaming Aura, 80, BONSKILL:Fire Aura:8:BONSKILL:Deathblow:3, , Aura:Aura4.bmp:0:0:0:6:60, Fire Magic, 10
+
+#SPELL, Blade of Fire:Gives a weapon +3 Deathblow., PERM10, BONSKILL:Deathblow:3, , Enchant:Weapon, Fire Magic, 6
+
+#SPELL, Summon Fire Elemental:Summons a fire elemental., 120, Summon, 12:3:4, Summoned Fire Elemental:fireelemental1.bmp:250:20:0:.4:2:1:1, Fire Magic, 6
+#SPELL, Summon Fire Elemental:Summons a fire elemental., 140, Summon, 14:3:4, Summoned Fire Elemental:fireelemental1.bmp:250:20:0:.4:2:1:1, Fire Magic, 7
+#SPELL, Summon Fire Elemental:Summons a fire elemental., 160, Summon, 16:3:3, Summoned Fire Elemental:fireelemental1.bmp:250:20:0:.4:2:1:1, Fire Magic, 8
+#SPELL, Summon Fire Elemental:Summons a fire elemental., 180, Summon, 18:3:3, Summoned Fire Elemental:fireelemental1.bmp:250:20:0:.4:2:1:1, Fire Magic, 9
+#SPELL, Summon Fire Elemental:Summons a fire elemental., 200, Summon, 20:3:2, Summoned Fire Elemental:fireelemental1.bmp:250:20:0:.4:2:1:1, Fire Magic, 10
+
+AIR MAGIC ABILITIES
+
+#SPELL, Lightning Bolt, 4, Damage, R2Die30, Target:LIT:1:::7, Air Magic, 1
+#SPELL, Lightning Bolt, 6, Damage, R3Die30, Target:LIT:1:::7, Air Magic, 2
+#SPELL, Lightning Bolt, 8, Damage, R4Die30, Target:LIT:1:::7, Air Magic, 3
+#SPELL, Lightning Bolt, 10, Damage, R5Die30, Target:LIT:1:::7, Air Magic, 4
+#SPELL, Lightning Bolt, 12, Damage, R6Die30, Target:LIT:1:::7, Air Magic, 5
+#SPELL, Lightning Bolt, 14, Damage, R7Die30, Target:LIT:1:::7, Air Magic, 6
+#SPELL, Lightning Bolt, 16, Damage, R8Die30, Target:LIT:1:::7, Air Magic, 7
+#SPELL, Lightning Bolt, 18, Damage, R9Die30, Target:LIT:1:::7, Air Magic, 8
+#SPELL, Lightning Bolt, 20, Damage, R10Die30, Target:LIT:1:::7, Air Magic, 9
+#SPELL, Lightning Bolt, 22, Damage, R12Die30, Target:LIT:1:::7, Air Magic, 10
+
+#SPELL, Healing Light, 20, Heal, R26Die4, Player, Air Magic, 3
+#SPELL, Healing Light, 20, Heal, R18Die4, Player, Air Magic, 4
+#SPELL, Healing Light, 20, Heal, R20Die4, Player, Air Magic, 5
+#SPELL, Healing Light, 20, Heal, R21Die4, Player, Air Magic, 6
+#SPELL, Healing Light, 20, Heal, R22Die4, Player, Air Magic, 7
+#SPELL, Healing Light, 20, Heal, R23Die4, Player, Air Magic, 8
+#SPELL, Healing Light, 20, Heal, R24Die4, Player, Air Magic, 9
+#SPELL, Healing Light, 20, Heal, R25Die4, Player, Air Magic, 10
+
+SPELL, Chain Lightning, 6, Damage, R6Die8, Target:LIT2:1:::7:-2, Air Magic, 3
+#SPELL, Chain Lightning, 8, Damage, R8Die8, Target:LIT2:1:::7:-2, Air Magic, 4
+#SPELL, Chain Lightning, 10, Damage, R10Die8, Target:LIT2:1:::7:-2, Air Magic, 5
+#SPELL, Chain Lightning, 13, Damage, R12Die8, Target:LIT2:1:::7:-3, Air Magic, 6
+#SPELL, Chain Lightning, 17, Damage, R14Die8, Target:LIT2:1:::7:-3, Air Magic, 7
+#SPELL, Chain Lightning, 20, Damage, R16Die8, Target:LIT2:1:::7:-3, Air Magic, 8
+#SPELL, Chain Lightning, 25, Damage, R18Die8, Target:LIT2:1:::7:-4, Air Magic, 9
+#SPELL, Chain Lightning, 30, Damage, R20Die8, Target:LIT2:1:::7:-4, Air Magic, 10
+
+SPELL, Lightning Wave, 20, Damage, R6Die10, Target:LIT2:18:20::7, Air Magic, 4
+SPELL, Lightning Wave, 25, Damage, R6Die10, Target:LIT2:18:20::7:-1, Air Magic, 5
+#SPELL, Lightning Wave, 30, Damage, R7Die10, Target:LIT2:18:20::7:-1, Air Magic, 6
+#SPELL, Lightning Wave, 35, Damage, R7Die10, Target:LIT2:18:20::7:-2, Air Magic, 7
+#SPELL, Lightning Wave, 40, Damage, R8Die10, Target:LIT2:18:20::7:-2, Air Magic, 8
+#SPELL, Lightning Wave, 45, Damage, R8Die10, Target:LIT2:18:20::7:-3, Air Magic, 9
+#SPELL, Lightning Wave, 50, Damage, R9Die10, Target:LIT2:18:20::7:-3, Air Magic, 10
+
+#SPELL, Aura of Air, 20, BONSKILL:Dodge:3, , Aura:Aura6.bmp:0:150:250:7:100, Air Magic, 2
+#SPELL, Aura of Air, 30, BONSKILL:Dodge:4, , Aura:Aura6.bmp:0:150:250:7:100, Air Magic, 4
+#SPELL, Aura of Air, 40, BONSKILL:Dodge:5:BONINT:1, , Aura:Aura6.bmp:0:150:250:7:100, Air Magic, 6
+#SPELL, Aura of Air, 50, BONSKILL:Dodge:6:BONINT:2, , Aura:Aura6.bmp:0:150:250:7:100, Air Magic, 8
+#SPELL, Aura of Air, 60, BONSKILL:Dodge:8:BONINT:3, , Aura:Aura6.bmp:0:150:250:7:100, Air Magic, 10
+
+#SPELL, Bow of Air:Gives a weapon +2 Split Arrow., PERM10, BONSKILL:Split Arrow:2, , Enchant:Weapon, Air Magic, 5
+
+#SPELL, Summon Lightning Dragon:Summons a powerful lightning dragon., 500, Summon, 55:5:2, Summoned Dragon:dragon1.bmp:10:200:250:.4:2.5:1:3, Air Magic, 10
+
+#SPELL, Air Step:Teleports you to a target square., 30, Teleport, , Target, Air, 5
+
+
+
+WATER MAGIC ABILITIES
+Advantages so far: Early enchantment, only random enchantment so far, cheap healing spell, create healing/mana potions
+Mega spell: Power of Water
+
+#SPELL, Acid Burp, 2, Damage, R4Die6, Target:OOZE:1, Water Magic, 1
+#SPELL, Acid Burp, 2, Damage, R5Die6, Target:OOZE:1, Water Magic, 2
+#SPELL, Acid Burp, 2, Damage, R6Die6, Target:OOZE:1, Water Magic, 3
+#SPELL, Acid Burp, 3, Damage, R7Die6, Target:OOZE:2:5, Water Magic, 4
+#SPELL, Acid Burp, 3, Damage, R8Die6, Target:OOZE:2:5, Water Magic, 5
+#SPELL, Acid Burp, 3, Damage, R9Die6, Target:OOZE:2:5, Water Magic, 6
+#SPELL, Acid Burp, 4, Damage, R10Die6, Target:OOZE:3:5, Water Magic, 7
+#SPELL, Acid Burp, 4, Damage, R11Die6, Target:OOZE:3:5, Water Magic, 8
+#SPELL, Acid Burp, 5, Damage, R12Die6, Target:OOZE:4:5, Water Magic, 9
+#SPELL, Acid Burp, 5, Damage, R14Die6, Target:OOZE:5:5, Water Magic, 10
+
+#SPELL, Aura of Water, 30, BONSKILL:Evasion:1:BONSKILL:Super Acid:1:BONSKILL:Critical Strike:1, , Aura:Aura5.bmp:0:100:200:6:100, Water Magic, 3
+#SPELL, Aura of Water, 40, BONSKILL:Evasion:2:BONSKILL:Super Acid:2:BONSKILL:Critical Strike:2, , Aura:Aura5.bmp:0:100:200:6:100, Water Magic, 5
+#SPELL, Aura of Water, 50, BONSKILL:Evasion:2:BONSKILL:Super Acid:3:BONSKILL:Critical Strike:3, , Aura:Aura5.bmp:0:100:200:6:100, Water Magic, 7
+#SPELL, Aura of Water, 60, BONSKILL:Evasion:3:BONSKILL:Super Acid:4:BONSKILL:Critical Strike:4, , Aura:Aura5.bmp:0:100:200:6:100, Water Magic, 9
+#SPELL, Aura of Water, 70, BONSKILL:Evasion:3:BONSKILL:Super Acid:5:BONSKILL:Critical Strike:5, , Aura:Aura5.bmp:0:100:200:6:100, Water Magic, 10
+
+#SPELL, Cure, 5, Heal, R3Die6, Player, Water Magic, 2
+#SPELL, Cure, 6, Heal, R4Die6, Player, Water Magic, 3
+#SPELL, Cure, 7, Heal, R5Die6, Player, Water Magic, 4
+#SPELL, Cure, 8, Heal, R6Die6, Player, Water Magic, 5
+#SPELL, Cure, 9, Heal, R7Die6, Player, Water Magic, 6
+#SPELL, Cure, 10, Heal, R8Die6, Player, Water Magic, 7
+#SPELL, Cure, 11, Heal, R9Die6, Player, Water Magic, 8
+#SPELL, Cure, 12, Heal, R10Die6, Player, Water Magic, 9
+#SPELL, Cure, 13, Heal, R12Die6, Player, Water Magic, 10
+
+SPELL, Enchant Item:Gives an item of clothing +1 Strength, Dexterity, and Intelligence., PERM3, BONSTR:1:1:BONINT:1:1:BONDEX:1:1, , Enchant:Clothes, Water Magic, 4
+
+#SPELL, Infuse Item:Gives an item of clothing a random enchantment, PERM6, Random:1, , Enchant:Clothes, Water Magic, 4
+#SPELL, Infuse Item:Gives an item of clothing a random enchantment, PERM7, Random:2, , Enchant:Clothes, Water Magic, 5
+#SPELL, Infuse Item:Gives an item of clothing a random enchantment, PERM8, Random:3, , Enchant:Clothes, Water Magic, 6
+#SPELL, Infuse Item:Gives an item of clothing a random enchantment, PERM9, Random:4, , Enchant:Clothes, Water Magic, 7
+#SPELL, Infuse Item:Gives an item of clothing a random enchantment, PERM10, Random:5, , Enchant:Clothes, Water Magic, 8
+#SPELL, Infuse Item:Gives an item of clothing a random enchantment, PERM11, Random:6, , Enchant:Clothes, Water Magic, 9
+#SPELL, Infuse Item:Gives an item of clothing a random enchantment, PERM12, Random:7, , Enchant:Clothes, Water Magic, 10
+
+#SPELL, Summon Water Elemental:Summons a water elemental.  You can control one water elemental., 60, Summon, 14, Summoned Water Elemental:elemental1.bmp:0:80:120:.4:1.25:1:1, Demon Summoning, 6
+#SPELL, Summon Water Elemental:Summons a water elemental.  You can control one water elementals., 60, Summon, 16, Summoned Water Elemental:elemental1.bmp:0:80:120:.4:1.25:1:1, Demon Summoning, 7
+#SPELL, Summon Water Elemental:Summons a water elemental.  You can control two water elementals., 60, Summon, 18, Summoned Water Elemental:elemental1.bmp:0:80:120:.4:1.25:1:2, Demon Summoning, 8
+#SPELL, Summon Water Elemental:Summons a water elemental.  You can control two water elementals., 60, Summon, 20, Summoned Water Elemental:elemental1.bmp:0:80:120:.4:1.25:1:2, Demon Summoning, 9
+#SPELL, Summon Water Elemental:Summons a water elemental.  You can control three water elementals., 60, Summon, 22, Summoned Water Elemental:elemental1.bmp:0:80:120:.4:1.25:1:3, Demon Summoning, 10
+
+#SPELL, Blade of Water:Gives a weapon +3 Critical Strike., PERM6, BONSKILL:Critical Strike:3, , Enchant:Weapon, Water Magic, 5
+
+
+SPELL, Aura of Regeneration, 10, BONSKILL:Regeneration:1:BONEND:2, , Aura:Aura5.bmp:0:100:250:6:100, Earth Magic, 1
+
+#SPELL, Power of Water:Gives an item of clothing a permanent +2 regeneration bonus, PERM20, BONSKILL:REGENERATION:2, , Enchant:Clothes, Water Magic, 10
+
+
+#SPELL, Aura of Life, 300, BONSKILL:Regeneration:10:BONHP:300:300, , Aura:Aura8.bmp:50:250:50:6:80, ???, 10
+
+
+EARTH MAGIC ABILITIES
+Advantages so far: Excellent defensive abilities, early summoning, regeneration at level 2 (!!)
+
+#SPELL, Enchantment of Earth:Gives an item of clothing a permanent +6 armor bonus, PERM6, BONARMOR:6, , Enchant:Clothes, Earth Magic, 5
+#SPELL, Enchantment of Earth:Gives an item of clothing a permanent +8 armor bonus, PERM7, BONARMOR:8, , Enchant:Clothes, Earth Magic, 6
+#SPELL, Enchantment of Earth:Gives an item of clothing a permanent +10 armor bonus, PERM8, BONARMOR:10, , Enchant:Clothes, Earth Magic, 7
+#SPELL, Enchantment of Earth:Gives an item of clothing a permanent +12 armor bonus, PERM9, BONARMOR:12, , Enchant:Clothes, Earth Magic, 8
+#SPELL, Enchantment of Earth:Gives an item of clothing a permanent +16 armor bonus, PERM10, BONARMOR:14, , Enchant:Clothes, Earth Magic, 9
+#SPELL, Enchantment of Earth:Gives an item of clothing a permanent +20 armor bonus, PERM12, BONARMOR:16, , Enchant:Clothes, Earth Magic, 10
+
+#SPELL, Endurance of Earth:Gives an item of clothing a permanent +2 endurance bonus, PERM6, BONEND:2, , Enchant:Clothes, Earth Magic, 7
+#SPELL, Endurance of Earth:Gives an item of clothing a permanent +3 endurance bonus, PERM8, BONEND:3, , Enchant:Clothes, Earth Magic, 9
+
+#SPELL, Power of Earth:Gives an item of clothing a permanent +6 strength bonus and +3 Resilience Bonus, PERM16, BONSKILL:Resilience:3:BONSTR:6, , Enchant:Clothes, Earth Magic, 10
+
+
+#SPELL, Aura of Earth, 10, BONSKILL:Resilience:1:BONEND:2, , Aura:Aura5.bmp:0:100:250:6:100, Earth Magic, 1
+#SPELL, Aura of Earth, 15, BONSKILL:Resilience:1:BONEND:3, , Aura:Aura5.bmp:0:100:250:6:100, Earth Magic, 2
+#SPELL, Aura of Earth, 20, BONSKILL:Resilience:2:BONEND:4::BONSTR:1, , Aura:Aura5.bmp:0:100:250:6:100, Earth Magic, 3
+#SPELL, Aura of Earth, 25, BONSKILL:Resilience:2:BONEND:5::BONSTR:1, , Aura:Aura5.bmp:0:100:250:6:100, Earth Magic, 5
+#SPELL, Aura of Earth, 30, BONSKILL:Resilience:3:BONEND:6::BONSTR:2, , Aura:Aura5.bmp:0:100:250:6:100, Earth Magic, 7
+#SPELL, Aura of Earth, 35, BONSKILL:Resilience:4:BONEND:7::BONSTR:3, , Aura:Aura5.bmp:0:100:250:6:100, Earth Magic, 9
+#SPELL, Aura of Earth, 40, BONSKILL:Resilience:5:BONEND:8::BONSTR:4, , Aura:Aura5.bmp:0:100:250:6:100, Earth Magic, 10
+
+#SPELL, Deflection, 30, Armboost, 12, Player, Earth Magic, 4
+#SPELL, Deflection, 35, Armboost, 18, Player, Earth Magic, 5
+#SPELL, Deflection, 40, Armboost, 24, Player, Earth Magic, 6
+#SPELL, Deflection, 45, Armboost, 30, Player, Earth Magic, 7
+#SPELL, Deflection, 50, Armboost, 36, Player, Earth Magic, 8
+#SPELL, Deflection, 55, Armboost, 42, Player, Earth Magic, 9
+#SPELL, Deflection, 60, Armboost, 50, Player, Earth Magic, 10
+
+#SPELL, Regeneration:Gain regenerative abilities for a limited time., 30, Regen, 1, Player, Earth Magic, 2
+#SPELL, Regeneration:Gain regenerative abilities for a limited time., 50, Regen, 2, Player, Earth Magic, 3
+#SPELL, Regeneration:Gain regenerative abilities for a limited time., 70, Regen, 3, Player, Earth Magic, 4
+#SPELL, Regeneration:Gain regenerative abilities for a limited time., 90, Regen, 4, Player, Earth Magic, 5
+#SPELL, Regeneration:Gain regenerative abilities for a limited time., 110, Regen, 5, Player, Earth Magic, 6
+#SPELL, Regeneration:Gain regenerative abilities for a limited time., 130, Regen, 6, Player, Earth Magic, 7
+#SPELL, Regeneration:Gain regenerative abilities for a limited time., 150, Regen, 7, Player, Earth Magic, 8
+#SPELL, Regeneration:Gain regenerative abilities for a limited time., 150, Regen, 8, Player, Earth Magic, 9
+#SPELL, Regeneration:Gain regenerative abilities for a limited time., 150, Regen, 9, Player, Earth Magic, 10
+
+(Summoning spells use the 'Target' parameter to determine data, syntax name:filename:red:green:blue:light:boss:owner:maxnum (0 means infinite))
+#SPELL, Summon Earth Elemental:Summons an earth elemental.  You may control up to one., 20, Summon, 4, Summoned Earth Elemental:elemental1.bmp:150:170:60:.4:2:1:1, Earth Magic, 3
+#SPELL, Summon Earth Elemental:Summons an earth elemental.  You may control up to one., 30, Summon, 6, Summoned Earth Elemental:elemental1.bmp:150:170:60:.4:2:1:1, Earth Magic, 4
+#SPELL, Summon Earth Elemental:Summons an earth elemental.  You may control up to one., 40, Summon, 8, Summoned Earth Elemental:elemental1.bmp:150:170:60:.4:2:1:1, Earth Magic, 5
+#SPELL, Summon Earth Elemental:Summons an earth elemental.  You may control up to two., 50, Summon, 10, Summoned Earth Elemental:elemental1.bmp:150:170:60:.4:2:1:1, Earth Magic, 6
+#SPELL, Summon Earth Elemental:Summons an earth elemental.  You may control up to two., 60, Summon, 12, Summoned Earth Elemental:elemental1.bmp:150:170:60:.4:2:1:1, Earth Magic, 7
+#SPELL, Summon Earth Elemental:Summons an earth elemental.  You may control up to two., 70, Summon, 14, Summoned Earth Elemental:elemental1.bmp:150:170:60:.4:2:1:1, Earth Magic, 8
+#SPELL, Summon Earth Elemental:Summons an earth elemental.  You may control up to three., 90, Summon, 18, Summoned Earth Elemental:elemental1.bmp:150:170:60:.4:2:1:1, Earth Magic, 9
+#SPELL, Summon Earth Elemental:Summons an earth elemental.  You may control up to three., 120, Summon, 25, Summoned Earth Elemental:elemental1.bmp:150:170:60:.4:2:1:1, Earth Magic, 10
+
+#SPELL, Hammer of Earth:Gives a weapon +3 Defence., PERM6, BONSKILL:Defence:3, , Enchant:Weapon, Earth Magic, 6
+
+
+SORCERY ABILITIES
+
+#SPELL, Blur Aura, 40, BONSKILL:Evasion:2:BONSKILL:Dodge:2, , Aura:Aura6.bmp:0:0:150:7:50, Sorcery, 2
+#SPELL, Blur Aura, 45, BONSKILL:Evasion:2:BONSKILL:Dodge:3, , Aura:Aura6.bmp:0:0:150:7:70, Sorcery, 6
+#SPELL, Blur Aura, 50, BONSKILL:Evasion:2:BONSKILL:Dodge:4, , Aura:Aura6.bmp:0:0:150:7:90, Sorcery, 10
+
+#SPELL, Aura of Energy, 30, BONSKILL:Mana Regeneration:4, , Aura:Aura7.bmp:150:0:150:18:50, Sorcery, 3
+#SPELL, Aura of Energy, 30, BONSKILL:Mana Regeneration:4, , Aura:Aura7.bmp:150:0:150:18:60, Sorcery, 4
+#SPELL, Aura of Energy, 40, BONSKILL:Mana Regeneration:5, , Aura:Aura7.bmp:150:0:150:18:70, Sorcery, 5
+#SPELL, Aura of Energy, 40, BONSKILL:Mana Regeneration:5, , Aura:Aura7.bmp:150:0:150:18:80, Sorcery, 6
+#SPELL, Aura of Energy, 50, BONSKILL:Mana Regeneration:6, , Aura:Aura7.bmp:150:0:150:18:90, Sorcery, 7
+#SPELL, Aura of Energy, 50, BONSKILL:Mana Regeneration:6, , Aura:Aura7.bmp:150:0:150:18:100, Sorcery, 8
+#SPELL, Aura of Energy, 60, BONSKILL:Mana Regeneration:7, , Aura:Aura7.bmp:150:0:150:18:140, Sorcery, 9
+#SPELL, Aura of Energy, 65, BONSKILL:Mana Regeneration:8, , Aura:Aura7.bmp:150:0:150:18:200, Sorcery, 10
+
+#SPELL, Aura of Power, 240, BONSKILL:Mana Regeneration:6:BONSKILL:Firepower:10, , Aura:Aura6.bmp:250:50:0:6:90, Sorcery, 10
+
+#SPELL, Power Channel, 150, Giveint, 8, Player, Sorcery, 4
+#SPELL, Power Channel, 150, Giveint, 9, Player, Sorcery, 6
+#SPELL, Power Channel, 150, Giveint, 10, Player, Sorcery, 8
+#SPELL, Power Channel, 150, Giveint, 12, Player, Sorcery, 10
+
+#SPELL, Magic Bolts, 2, Damage, R3Die6, Target:BOLT:1:::6, Sorcery, 1
+#SPELL, Magic Bolts, 3, Damage, R3Die6, Target:BOLT:2:::6, Sorcery, 2
+#SPELL, Magic Bolts, 3, Damage, R3Die6, Target:BOLT:3:::6-2, Sorcery, 3
+#SPELL, Magic Bolts, 3, Damage, R3Die7, Target:BOLT:4:::6-2, Sorcery, 4
+#SPELL, Magic Bolts, 4, Damage, R3Die7, Target:BOLT:5:::6-2, Sorcery, 5
+#SPELL, Magic Bolts, 4, Damage, R3Die8, Target:BOLT:6:::6:-3, Sorcery, 6
+#SPELL, Magic Bolts, 5, Damage, R3Die8, Target:BOLT:7:::6:-3, Sorcery, 7
+#SPELL, Magic Bolts, 6, Damage, R3Die9, Target:BOLT:8:::6:-3, Sorcery, 8
+#SPELL, Magic Bolts, 7, Damage, R3Die10, Target:BOLT:9:::6:-4, Sorcery, 9
+#SPELL, Magic Bolts, 8, Damage, R4Die10, Target:BOLT:10:::6:-5, Sorcery, 10
+
+#SPELL, Charm, 40, POSSESS, R2Die200, Target, Sorcery, 5
+#SPELL, Charm, 45, POSSESS, R3Die200, Target, Sorcery, 6
+#SPELL, Charm, 50, POSSESS, R4Die200, Target, Sorcery, 7
+#SPELL, Charm, 55, POSSESS, R5Die200, Target, Sorcery, 8
+#SPELL, Charm, 60, POSSESS, R6Die200, Target, Sorcery, 9
+#SPELL, Charm, 65, POSSESS, R7Die200, Target, Sorcery, 10
+
+#SPELL, Teleport:Teleports you to a target square., 25, Teleport, , Target, Sorcery, 3
+#SPELL, Teleport:Teleports you to a target square., 24, Teleport, , Target, Sorcery, 6
+#SPELL, Teleport:Teleports you to a target square., 22, Teleport, , Target, Sorcery, 7
+#SPELL, Teleport:Teleports you to a target square., 20, Teleport, , Target, Sorcery, 8
+#SPELL, Teleport:Teleports you to a target square., 18, Teleport, , Target, Sorcery, 9
+#SPELL, Teleport:Teleports you to a target square., 15, Teleport, , Target, Sorcery, 10
+
+#SPELL, Magic Summon:Level 1.  Summons a magical sprite to fight for you., 30, Summon, 3, Summoned Sprite:sprite1.bmp:0:200:250:.4:1:1:1, Sorcery, 1
+#SPELL, Magic Summon:Level 2.  Summons a magical sprite to fight for you., 60, Summon, 6, Summoned Sprite:sprite1.bmp:100:200:250:.4:1:1:1, Sorcery, 2
+#SPELL, Magic Summon:Level 3.  Summons a magical acolyte to fight for you., 100, Summon, 10:7:3, Summoned Acolyte:mage2.bmp:0:200:250:.4:1:1:1, Sorcery, 3
+#SPELL, Magic Summon:Level 4.  Summons a magical acolyte to fight for you., 130, Summon, 13:7:3, Summoned Acolyte:mage2.bmp:20:200:250:.4:1:1:1, Sorcery, 4
+#SPELL, Magic Summon:Level 5.  Summons a magical acolyte to fight for you., 160, Summon, 16:7:2, Summoned Acolyte:mage2.bmp:40:200:250:.4:1:1:1, Sorcery, 5
+#SPELL, Magic Summon:Level 6.  Summons a magical elemental to fight for you., 200, Summon, 20:4:5, Summoned Elemental:elemental1.bmp:0:200:250:.4:1:1:1, Sorcery, 6
+#SPELL, Magic Summon:Level 7.  Summons a magical elemental to fight for you., 230, Summon, 23:4:4, Summoned Elemental:elemental1.bmp:10:200:250:.4:1:1:1, Sorcery, 7
+#SPELL, Magic Summon:Level 8.  Summons a magical elemental to fight for you., 260, Summon, 26:5:4, Summoned Elemental:elemental1.bmp:20:200:250:.4:1:1:1, Sorcery, 8
+#SPELL, Magic Summon:Level 9.  Summons a magical elemental to fight for you., 290, Summon, 29:5:3, Summoned Elemental:elemental1.bmp:30:200:250:.4:1:1:1, Sorcery, 9
+#SPELL, Magic Summon:Level 10.  Summons a magical dragon to fight for you., 300, Summon, 40, Summoned Elemental:Dragadiara_a.bmp:0:200:250:.4:1:1:1, Sorcery, 10
+
+GREY MAGIC ABILITIES
+Ultimate Spell: Brilliance Aura
+
+#SPELL, Strength Aura, 10, BONSTR:2, , Aura:Aura1.bmp:250:80:0:3:80, Grey Magic, 1
+#SPELL, Dexterity Aura, 10, BONDEX:2, , Aura:Aura1.bmp:250:0:250:3:80, Grey Magic, 1
+#SPELL, Intelligence Aura, 10, BONINT:2, , Aura:Aura1.bmp:80:80:80:3:80, Grey Magic, 1
+#SPELL, Strength Aura, 10, BONSTR:3, , Aura:Aura1.bmp:250:80:0:3:80, Grey Magic, 3
+#SPELL, Dexterity Aura, 10, BONDEX:3, , Aura:Aura1.bmp:250:0:250:3:80, Grey Magic, 3
+#SPELL, Intelligence Aura, 10, BONINT:3, , Aura:Aura1.bmp:80:80:80:3:80, Grey Magic, 3
+#SPELL, Strength Aura, 10, BONSTR:4, , Aura:Aura1.bmp:250:80:0:3:80, Grey Magic, 5
+#SPELL, Dexterity Aura, 10, BONDEX:4, , Aura:Aura1.bmp:250:0:250:3:80, Grey Magic, 5
+#SPELL, Intelligence Aura, 10, BONINT:4, , Aura:Aura1.bmp:80:80:80:3:80, Grey Magic, 5
+#SPELL, Strength Aura, 10, BONSTR:5, , Aura:Aura1.bmp:250:80:0:3:80, Grey Magic, 7
+#SPELL, Dexterity Aura, 10, BONDEX:5, , Aura:Aura1.bmp:250:0:250:3:80, Grey Magic, 7
+#SPELL, Intelligence Aura, 10, BONINT:5, , Aura:Aura1.bmp:80:80:80:3:80, Grey Magic, 7
+#SPELL, Strength Aura, 10, BONSTR:6, , Aura:Aura1.bmp:250:80:0:3:80, Grey Magic, 9
+#SPELL, Dexterity Aura, 10, BONDEX:6, , Aura:Aura1.bmp:250:0:250:3:80, Grey Magic, 9
+#SPELL, Intelligence Aura, 10, BONINT:6, , Aura:Aura1.bmp:80:80:80:3:80, Grey Magic, 9
+#SPELL, Strength Aura, 10, BONSTR:7, , Aura:Aura1.bmp:250:80:0:3:80, Grey Magic, 10
+#SPELL, Dexterity Aura, 10, BONDEX:7, , Aura:Aura1.bmp:250:0:250:3:80, Grey Magic, 10
+#SPELL, Intelligence Aura, 10, BONINT:7, , Aura:Aura1.bmp:80:80:80:3:80, Grey Magic, 10
+
+#SPELL, Brilliance Aura:Raises all of your stats., 30, BONDEX:6:BONSTR:6:BONINT:6, , Aura:Aura5.bmp:250:250:180:6:80, Grey Magic, 10
+
+#SPELL, Aura of Deflection, 40, BONSKILL:Resilience:2, , Aura:Aura7.bmp:80:80:100:16:80, Grey Magic, 2
+#SPELL, Aura of Deflection, 40, BONSKILL:Resilience:3, , Aura:Aura7.bmp:80:80:100:16:80, Grey Magic, 4
+#SPELL, Aura of Deflection, 40, BONSKILL:Resilience:4, , Aura:Aura7.bmp:80:80:100:16:80, Grey Magic, 6
+#SPELL, Aura of Deflection, 40, BONSKILL:Resilience:5, , Aura:Aura7.bmp:80:80:100:16:80, Grey Magic, 8
+#SPELL, Aura of Deflection, 40, BONSKILL:Resilience:6, , Aura:Aura7.bmp:80:80:100:16:80, Grey Magic, 10
+
+SPELL, Teleport:Teleports you to a target square., 30, Teleport, , Target, Grey Magic, 3
+SPELL, Teleport:Teleports you to a target square., 28, Teleport, , Target, Grey Magic, 4
+SPELL, Teleport:Teleports you to a target square., 26, Teleport, , Target, Grey Magic, 5
+SPELL, Teleport:Teleports you to a target square., 24, Teleport, , Target, Grey Magic, 6
+SPELL, Teleport:Teleports you to a target square., 22, Teleport, , Target, Grey Magic, 7
+SPELL, Teleport:Teleports you to a target square., 20, Teleport, , Target, Grey Magic, 8
+SPELL, Teleport:Teleports you to a target square., 18, Teleport, , Target, Grey Magic, 9
+SPELL, Teleport:Teleports you to a target square., 15, Teleport, , Target, Grey Magic, 10
+
+SPELL, Enchant Clothing:Gives an item of clothing +1 Strength, Dexterity, and Intelligence., PERM6, BONSTR:1:1:BONINT:1:1:BONDEX:1:1, , Enchant:Clothes, Water Magic, 2
+#SPELL, Enchant Clothing:Gives an item of clothing +2 Strength, Dexterity, and Intelligence., PERM12, BONSTR:2:2:BONINT:2:2:BONDEX:2:2, , Enchant:Clothes, Grey Magic, 4
+#SPELL, Enchant Clothing:Gives an item of clothing +3 Strength, Dexterity, and Intelligence., PERM18, BONSTR:3:3:BONINT:3:3:BONDEX:3:3, , Enchant:Clothes, Grey Magic, 6
+#SPELL, Enchant Clothing:Gives an item of clothing +4 Strength, Dexterity, and Intelligence., PERM24, BONSTR:4:4:BONINT:4:4:BONDEX:4:4, , Enchant:Clothes, Grey Magic, 8
+#SPELL, Enchant Clothing:Gives an item of clothing +5 Strength, Dexterity, and Intelligence., PERM30, BONSTR:5:5:BONINT:5:5:BONDEX:5:5, , Enchant:Clothes, Grey Magic, 10
+
+
+#SPELL, Bless Weapon:Gives a weapon a +5 damage bonus permanently., PERM2, BONUSDAMAGE:5:5, , Enchant:Weapon, Grey Magic, 1
+#SPELL, Bless Weapon:Gives a weapon a +8 damage bonus permanently., PERM3, BONUSDAMAGE:8:8, , Enchant:Weapon, Grey Magic, 2
+#SPELL, Bless Weapon:Gives a weapon a +10 damage bonus permanently., PERM4, BONUSDAMAGE:10:10, , Enchant:Weapon, Grey Magic, 3
+#SPELL, Bless Weapon:Gives a weapon a +12 damage bonus permanently., PERM5, BONUSDAMAGE:12:12, , Enchant:Weapon, Grey Magic, 4
+#SPELL, Bless Weapon:Gives a weapon a +15 damage bonus permanently., PERM6, BONUSDAMAGE:15:15, , Enchant:Weapon, Grey Magic, 5
+#SPELL, Bless Weapon:Gives a weapon a +20 damage bonus permanently., PERM7, BONUSDAMAGE:20:20, , Enchant:Weapon, Grey Magic, 6
+#SPELL, Bless Weapon:Gives a weapon a +25 damage bonus permanently., PERM8, BONUSDAMAGE:25:25, , Enchant:Weapon, Grey Magic, 7
+#SPELL, Bless Weapon:Gives a weapon a +30 damage bonus permanently., PERM9, BONUSDAMAGE:30:30, , Enchant:Weapon, Grey Magic, 8
+#SPELL, Bless Weapon:Gives a weapon a +35 damage bonus permanently., PERM10, BONUSDAMAGE:35:35, , Enchant:Weapon, Grey Magic, 9
+#SPELL, Bless Weapon:Gives a weapon a +40 damage bonus permanently., PERM10, BONUSDAMAGE:40:40, , Enchant:Weapon, Grey Magic, 10
+
+
+#SPELL, Refine Weapon:Gives a weapon +2 damage dice permanently., PERM6, BONDICE:2:2, , Enchant:Weapon, Grey Magic, 3
+#SPELL, Refine Weapon:Gives a weapon +3 damage dice permanently., PERM8, BONDICE:3:3, , Enchant:Weapon, Grey Magic, 5
+#SPELL, Refine Weapon:Gives a weapon +4 damage dice permanently., PERM10, BONDICE:4:4, , Enchant:Weapon, Grey Magic, 7
+#SPELL, Refine Weapon:Gives a weapon +5 damage dice permanently., PERM12, BONDICE:5:5, , Enchant:Weapon, Grey Magic, 9
+
+#SPELL, Enchant Weapon:Gives a weapon +2 damage per die permanently., PERM8, BONDAMAGE:2:2, , Enchant:Weapon, Grey Magic, 5
+#SPELL, Enchant Weapon:Gives a weapon +3 damage per die permanently., PERM15, BONDAMAGE:3:3, , Enchant:Weapon, Grey Magic, 8
+#SPELL, Enchant Weapon:Gives a weapon +4 damage per die permanently., PERM20, BONDAMAGE:4:4, , Enchant:Weapon, Grey Magic, 10
+
+
+
+
+
+SPELL, Enchant Weapon:Adds +2 Damage per die to a weapon until you unequip it., PERM30, EWeapon, 2, Player, Grey Magic, 7
+SPELL, Enchant Weapon:Adds +3 Damage per die to a weapon until you unequip it., PERM30, EWeapon, 3, Player, Grey Magic, 9
+SPELL, Enchant Weapon:Adds +4 Damage per die to a weapon until you unequip it., PERM30, EWeapon, 4, Player, Grey Magic, 10
+SPELL, Enchant Armor:Adds +2 Armor to your top article of clothing., PERM3, EArmor, 2, Player, Grey Magic, 6
+SPELL, Enchant Armor:Adds +3 Armor to your top article of clothing., PERM3, EArmor, 3, Player, Grey Magic, 7
+SPELL, Enchant Armor:Adds +4 Armor to your top article of clothing., PERM3, EArmor, 4, Player, Grey Magic, 8
+SPELL, Enchant Armor:Adds +5 Armor to your top article of clothing., PERM3, EArmor, 5, Player, Grey Magic, 9
+SPELL, Enchant Armor:Adds +6 Armor to your top article of clothing., PERM3, EArmor, 6, Player, Grey Magic, 10
+
+#SPELL, Regeneration:Gain lesser regenerative abilities for a smaller mana cost., 40, Regen, 2, Player, Grey Magic, 7
+
+#SPELL, Create Mana Potion:Create 1 mana potion., PERM1, Create, Mana Potion, , Grey Magic, 5
+#SPELL, Magic Dye:Change the color of one item in your inventory., PERM1, Recolor, , Player, Grey Magic, 3
+#SPELL, All-Dye:Recolors everything you are wearing to a color you choose., PERM2, Recolorall, , Player, Grey Magic, 4
+#SPELL, Repair Armor:Repairs armor that has been partially digested., PERM10, Undigest, , , Grey Magic, 5
+#SPELL, Deflect, 60, Armboost, 12, Player, Grey Magic, 18
+#SPELL, Ultimate Dexterity, 250, Givedex, 12, Player, Grey, 25
+
+
+DEMON SUMMONING ABILITIES
+(Summoning spells use the 'Target' parameter to determine data, syntax name:filename:red:green:blue:light:boss:owner:maxnum (0 means infinite))
+
+#SPELL, Vampiric Aura, 20, BONSKILL:Drain Life:3, , Aura:Aura7.bmp:0:150:0:0:30, Demon Summoning, 2
+#SPELL, Vampiric Aura, 25, BONSKILL:Drain Life:4, , Aura:Aura7.bmp:0:150:0:0:30, Demon Summoning, 4
+#SPELL, Vampiric Aura, 30, BONSKILL:Drain Life:5, , Aura:Aura7.bmp:0:150:0:0:35, Demon Summoning, 6
+#SPELL, Vampiric Aura, 35, BONSKILL:Drain Life:6, , Aura:Aura7.bmp:0:150:0:0:40, Demon Summoning, 8
+#SPELL, Vampiric Aura, 40, BONSKILL:Drain Life:7, , Aura:Aura7.bmp:0:150:0:0:50, Demon Summoning, 10
+
+
+#SPELL, Summon Succubus:Summons a succubus.  You can control one succubus for every two levels of demon summoning you possess., 50, Summon, 2, Summoned Succubus:succubus1.bmp:250:20:0:.4:1:1:1, Demon Summoning, 1
+#SPELL, Summon Succubus:Summons a succubus.  You can control one succubus for every two levels of demon summoning you possess., 55, Summon, 5, Summoned Succubus:succubus1.bmp:250:20:0:.4:1.1:1:1, Demon Summoning, 2
+#SPELL, Summon Succubus:Summons a succubus.  You can control one succubus for every two levels of demon summoning you possess., 60, Summon, 8, Summoned Succubus:succubus1.bmp:250:20:0:.4:1.15:1:2, Demon Summoning, 3
+#SPELL, Summon Succubus:Summons a succubus.  You can control one succubus for every two levels sof demon summoning you possess., 65, Summon, 11, Summoned Succubus:succubus1.bmp:250:20:0:.4:1.2:1:2, Demon Summoning, 4
+#SPELL, Summon Succubus:Summons a succubus.  You can control one succubus for every two levels of demon summoning you possess., 70, Summon, 14, Summoned Succubus:succubus1.bmp:250:20:0:.4:1.25:1:3, Demon Summoning, 5
+#SPELL, Summon Succubus:Summons a succubus.  You can control one succubus for every two levels of demon summoning you possess., 75, Summon, 17, Summoned Succubus:succubus1.bmp:250:20:0:.4:1.3:1:3, Demon Summoning, 6
+#SPELL, Summon Succubus:Summons a succubus.  You can control one succubus for every two levels of demon summoning you possess., 75, Summon, 20, Summoned Succubus:succubus1.bmp:250:20:0:.4:1.35:1:4, Demon Summoning, 7
+#SPELL, Summon Succubus:Summons a succubus.  You can control one succubus for every two levels of demon summoning you possess., 75, Summon, 23, Summoned Succubus:succubus1.bmp:250:20:0:.4:1.4:1:4, Demon Summoning, 8
+#SPELL, Summon Succubus:Summons a succubus.  You can control one succubus for every two levels of demon summoning you possess., 75, Summon, 26, Summoned Succubus:succubus1.bmp:250:20:0:.4:1.45:1:5, Demon Summoning, 9
+#SPELL, Summon Succubus:Summons a succubus.  You can control one succubus for every two levels of demon summoning you possess., 75, Summon, 30, Summoned Succubus:succubus1.bmp:250:20:0:.4:1.5:1:5, Demon Summoning, 10
+
+#SPELL, Summon Acolyte:Summons a cultist with a missile attack.  You can control up to one., 40, Summon, 8:2:2, Summoned Acolyte:mage1.bmp:250:20:0:.4:1.1:2:1, Demon Summoning, 3
+#SPELL, Summon Acolyte:Summons a cultist with a missile attack.  You can control up to one., 40, Summon, 10:2:2, Summoned Acolyte:mage1.bmp:250:20:0:.4:1.1:2:1, Demon Summoning, 4
+#SPELL, Summon Acolyte:Summons a cultist with a missile attack.  You can control up to two., 50, Summon, 12:2:2, Summoned Acolyte:mage1.bmp:250:20:0:.4:1.1:2:2, Demon Summoning, 5
+#SPELL, Summon Acolyte:Summons a cultist with a missile attack.  You can control up to two., 50, Summon, 15:2:2, Summoned Acolyte:mage1.bmp:250:20:0:.4:1.1:2:2, Demon Summoning, 6
+#SPELL, Summon Acolyte:Summons a cultist with a missile attack.  You can control up to three., 60, Summon, 18:2:2, Summoned Acolyte:mage1.bmp:250:20:0:.4:1.1:2:3, Demon Summoning, 7
+#SPELL, Summon Acolyte:Summons a cultist with a missile attack.  You can control up to three., 60, Summon, 20:2:2, Summoned Acolyte:mage1.bmp:250:20:0:.4:1.1:2:3, Demon Summoning, 8
+#SPELL, Summon Acolyte:Summons a cultist with a missile attack.  You can control up to three., 70, Summon, 22:2:2, Summoned Acolyte:mage1.bmp:250:20:0:.4:1.1:2:3, Demon Summoning, 9
+#SPELL, Summon Acolyte:Summons a cultist with a missile attack.  You can control up to three., 70, Summon, 24:2:2, Summoned Acolyte:mage1.bmp:250:20:0:.4:1.1:2:3, Demon Summoning, 10
+
+#SPELL, Summon Demoness:Summons a demoness.  You can control up to one., 150, Summon, 17:3:5, Summoned Demoness:demoness1.bmp:250:20:0:.4:2.1:2:1, Demon Summoning, 5
+#SPELL, Summon Demoness:Summons a demoness.  You can control up to two., 170, Summon, 22:3:5, Summoned Demoness:demoness1.bmp:250:20:0:.4:2.1:2:1, Demon Summoning, 7
+#SPELL, Summon Demoness:Summons a demoness.  You can control up to three., 200, Summon, 25:3:5, Summoned Demoness:demoness1.bmp:250:20:0:.4:2.5:2:1, Demon Summoning, 9
+#SPELL, Summon Demoness:Summons a demoness.  You can control up to three., 150, Summon, 30:3:4, Summoned Demoness:demoness1.bmp:250:20:0:.4:2.1:1:3, Demon Summoning, 10
+
+#SPELL, Summon Baroness:Summons an exceptionally powerful demoness., 400, Summon, 50, Summoned Baroness:demoness4f.bmp:250:20:0:.4:2.5:1:3, Demon Summoning, 10
+
+
+
+REPTILE SUMMONING ABILITIES
+
+ANGEL SUMMONING ABILITIES
+
+BEAST SUMMONING ABILITIES
+
+MAGIC SUMMONING ABILITIES
+
+#SPELL, Magic Summon:Level 1.  Summons a magical sprite to fight for you., 30, Summon, 3, Summoned Sprite:sprite1.bmp:0:200:250:.4:1:1:1, Magic Summoning, 1
+#SPELL, Magic Summon:Level 2.  Summons a magical sprite to fight for you., 60, Summon, 6, Summoned Sprite:sprite1.bmp:100:200:250:.4:1:1:1, Magic Summoning, 2
+#SPELL, Magic Summon:Level 3.  Summons a magical acolyte to fight for you., 100, Summon, 10:7:3, Summoned Acolyte:mage2.bmp:0:200:250:.4:1:1:1, Magic Summoning, 3
+#SPELL, Magic Summon:Level 4.  Summons a magical acolyte to fight for you., 130, Summon, 13:7:3, Summoned Acolyte:mage2.bmp:20:200:250:.4:1:1:1, Magic Summoning, 4
+#SPELL, Magic Summon:Level 5.  Summons a magical acolyte to fight for you., 160, Summon, 16:7:2, Summoned Acolyte:mage2.bmp:40:200:250:.4:1:1:1, Magic Summoning, 5
+#SPELL, Magic Summon:Level 6.  Summons a magical elemental to fight for you., 200, Summon, 20:4:5, Summoned Elemental:elemental1.bmp:0:200:250:.4:1:1:1, Magic Summoning, 6
+#SPELL, Magic Summon:Level 7.  Summons a magical elemental to fight for you., 230, Summon, 23:4:4, Summoned Elemental:elemental1.bmp:10:200:250:.4:1:1:1, Magic Summoning, 7
+#SPELL, Magic Summon:Level 8.  Summons a magical elemental to fight for you., 260, Summon, 26:5:4, Summoned Elemental:elemental1.bmp:20:200:250:.4:1:1:1, Magic Summoning, 8
+#SPELL, Magic Summon:Level 9.  Summons a magical elemental to fight for you., 290, Summon, 29:5:3, Summoned Elemental:elemental1.bmp:30:200:250:.4:1:1:1, Magic Summoning, 9
+#SPELL, Magic Summon:Level 10.  Summons a magical dragon to fight for you., 300, Summon, 40, Summoned Elemental:Dragadiara_a.bmp:0:200:250:.4:1:1:1, Magic Summoning, 10
+
+WARRIOR SUMMONING ABILITIES
+
+
+
+WHITE MAGIC
+#SPELL, Minor Heal, 8, Heal, R8Die6, Player, White, 1
+#SPELL, Strength, 15, Givestr, 2, Player, White, 3
+#SPELL, Armor of Light, 25, Armboost, 4, Player, White, 4
+#SPELL, Heal, 20, Heal, R5Die40, Player, White, 5
+#SPELL, Strike, 15, Damage, R5Die12, Target:LIT2, White, 5
+#SPELL, Blessing, 25, Regen, 3, Player, White, 6
+#SPELL, Lighting Strike, 25, Damage, R6Die20, Target:LIT2:12:30, White, 8
+#SPELL, Blessed Strength, 75, Givestr, 5, Player, White, 12
+#SPELL, Create Healing Potion, PERM3, Create, Healing Potion, , White, 7
+#SPELL, Heavenly Power (Intelligence), 150, Giveint, 6, Player, White, 14
+#SPELL, Greater Heal, 60, Heal, R30Die50, Player, White, 12
+#SPELL, Divine Might, 250, Givestr, 8, Player, White, 16
+#SPELL, Fire Strike, 80, Damage, R20Die12, Target:FIRE2:12:30, White, 18
+#SPELL, Blessed Speed, 150, Givedex, 5, Player, White, 20
+#SPELL, Armor of Power, 75, Armboost, 35, Player, White, 25
+#SPELL, Full Heal, PERM5, Heal, 10000, Player, White, 30
+#SPELL, Titan Strength, PERM5, Givestr, 18, Player, White, 35
+
+BLACK MAGIC
+#SPELL, Firebolt, 3, Damage, R5Die6, Target:FIRE:1, Black, 1
+#SPELL, Triple Firebolt, 7, Damage, R6Die6, Target:FIRE:3, Black, 12
+#SPELL, Blaze, 15, Damage, R5Die6, Target:FIRE:18:20, Black, 3
+SPELL, Blaze, 10, Damage, R6Die6, All, Black, 3
+#SPELL, Lightning Bolt, 12, Damage, R4Die20, Target:LIT, Black, 5
+#SPELL, Ritual of Power, 45, Giveint, 2, Player, Black, 8
+#SPELL, Fireball, 25, Damage, R6Die20, Target:FIRE2, Black, 9
+SPELL, Lightning Storm, 60, Damage, R2Die100, All, Black, 10
+#SPELL, Greater Lightning Bolt, 50, Damage, R15Die20, Target:LIT2, Black, 14
+#SPELL, Lightning Storm, 80, Damage, R15Die20, Target:LIT2:8:45, Black, 12
+#SPELL, Mind Control, 100, POSSESS, R15Die50, Target, Black, 15
+#SPELL, Power Gamble, 250, Giveint, R1Die14, Player, Black, 16
+#SPELL, Power Channel, 250, Giveint, 8, Player, Black, 18
+#SPELL, Greater Fireball, 80, Damage, R10Die20, Target:FIRE2:3:5, Black, 20
+#SPELL, Power Vortex, PERM20, Giveint, R8Die4, , Black, 25
+#SPELL, Lightning Wave, 120, Damage, R20Die20, Target:LIT2:5:8, Black, 25
+#SPELL, Doombolt, 200, Damage, R10Die40, Target:LIT:3:1, Black, 30
+#SPELL, Invulnerability, 250, Armboost, 50, Player, Black, 35
+#SPELL, Supernova, 350, Damage, R10Die200, Target:FIRE2:36, Black, 40
+
+GREY MAGIC
+
+#SPELL, Charm, 40, POSSESS, R15Die10, Target, Black, 5
+#SPELL, Power of Arm, 15, Givestr, 1, Player, Grey, 2
+#SPELL, Speed, 15, Givedex, 1, Player, Grey, 1
+#SPELL, Precision, 20, Giveint, 1, Player, Grey, 3
+#SPELL, Minor Regeneration, 25, Regen, 2, Player, Grey, 5
+#SPELL, Dexterity, 50, Givedex, 3, Player, Grey, 4
+#SPELL, Strength, 50, Givestr, 3, Player, Grey, 8
+#SPELL, Regeneration, 60, Regen, 4, Player, Grey, 16
+#SPELL, Create Mana Potion, PERM3, Create, Mana Potion, , Grey, 12
+#SPELL, Teleport, 30, Teleport, , Target, Grey, 14
+#SPELL, Magic Dye, PERM1, Recolor, , Player, Grey, 18
+#SPELL, All-Dye, PERM2, Recolorall, , Player, Grey, 18
+#SPELL, Intellect, 60, Giveint, 3, Player, Grey, 16
+#SPELL, Greater Dexterity, 120, Givedex, 6, Player, Grey, 20
+#SPELL, Greater Strength, 120, Givestr, 6, Player, Grey, 24
+#SPELL, Repair Armor, PERM5, Undigest, , , Grey, 16
+#SPELL, Deflect, 60, Armboost, 12, Player, Grey, 18
+#SPELL, Ultimate Dexterity, 250, Givedex, 12, Player, Grey, 25
+#SPELL, Enchant Weapon, PERM20, EWeapon, 2, Player, Grey, 20
+#SPELL, Enchant Armor, PERM15, EArmor, 2, Player, Grey, 18
+#SPELL, Super Regeneration, PERM2, Regen, 12, Player, Grey, 28
+#SPELL, Blur, PERM10, Givedex, 20, Player, Grey, 35
+
+SUMMONING SPELLS (Summoning spells use the 'Target' parameter to determine data, syntax name:filename:red:green:blue:light:boss:owner:maxnum (0 means infinite))
+
+
+
+#SPELL, Magic Tendrils, 40, Summon, 4, Magic Tendrils:tendrils1.bmp:30:250:155:1:0:1:, Grey, 6
+#SPELL, Summon Faerie, 10, Summon, 1, Summoned Faerie:sprite1.bmp:230:50:250:1:0:2:, Summon, 1
+#SPELL, Summon Slime, 25, Summon, 2, Summoned Slime:slime1.bmp:130:80:0:0.5:0:2:, Summon, 2
+#SPELL, Summon Kari, 60, Summon, 3, Summoned Kari:kari1.bmp:230:50:5:.7:1:2:, Summon, 5
+#SPELL, Summon Red Mare, 120, Summon, 6, Summoned Red Mare:centauress1.bmp:230:80:5:.3:1:2:, Summon, 8
+#SPELL, Summon Giantess, 300, Summon, 15, Summoned Giantess:giantess.bmp:130:50:5:.4:1:2:, Summon, 18
+#SPELL, Summon Wyvernsnake, 80, Summon, 8, Summoned Wyvernsnake:wingedserpent1.bmp:130:50:250:1:0:2:, Summon, 10
+#SPELL, Summon White Wyvern, 150, Summon, 25, Summoned White Wyvern:wingedserpent1.bmp:230:230:230:1:0:2:, Summon, 28
+#SPELL, Summon Spectral Warrior, 500, Summon, 30, Summoned Spectral Warrior:merc1.bmp:20:20:45:.5:1:2:, Summon, 35
+
+#SPELL, Summon Demoness, 500, Summon, 45, Summoned Demoness:demoness1.bmp:250:20:0:.4:1:1:, Black, 50
+
+
+MERC SCROLLS
+
+/SPELL, Spell Name, MP, Summon, Monster Level[:Shootytype:Frequency], Monster name:filename:red:green:blue:light(0.5):boss(1):owner(2):Maxnum:MissileAttack, School, Level
+
+#SPELL, MercenaryL1, 0, Summon, 1, Guard Warrior:merc1.bmp:220:20:245:2:2:1:, Merc, 35
+
+#SPELL, MercenaryL3, 0, Summon, 3, Veteran Guard Warrior:merc1.bmp:220:20:245:0.5:2:2:, Merc, 35
+
+#SPELL, MercenaryL10, 0, Summon, 10, Elite Guard Warrior:merc1.bmp:120:20:245:0.6:2:2:, Merc, 35
+#SPELL, MercenaryL15, 0, Summon, 15, Gurglemeister Mercenary:merc1.bmp:220:220:10:0.5:2:2:, Merc, 35
+#SPELL, MercenaryL20, 0, Summon, 20, Firebelly Mercenary:merc1.bmp:180:5:0:0.4:2:2:, Merc, 35
+#SPELL, MercenaryL25, 0, Summon, 25, Darkswallow Mercenary:merc1.bmp:40:40:40:0.4:2:2:, Merc, 35
+#SPELL, MercenaryL30, 0, Summon, 30, Velvet Intestine Mercenary:merc1.bmp:200:20:250:0.4:2:2:, Merc, 35
+
+
+'Auras
+
+Each increases by 10% per level
+
+Valkyrie: Deflection (+10% armor against normal attacks (Not digestion))
+Amazon: Critical +10% damage
+Enchantress: Regeneration 2 point auto regen
+Priestess: Speed (-2 to enemy attack rolls)
+Huntress: Accurate (+2 to attack rolls)
+Sorceress: Greed +30% to gold collected
+Succubus: Steal 2% of life
+Angel: Increased mana regeneration, +2 to enemy swallow rolls
+
+Undigestable (+6 armor vs. digestion)

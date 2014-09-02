@@ -1,0 +1,71 @@
+Grasslands
+
+#TERSTR, Now entering the Grasslands...
+
+#LEVEL, 6
+
+#RANDOMSEED, 1120
+#MAPSIZE, 100, 100
+FILLMAP, 2
+/Mapchunk, type, size-ish
+#MAPCHUNK, 2, 30
+#MAPCHUNK, 2, 30
+#MAPCHUNK, 3, 30
+#MAPCHUNK, 3, 30
+#MAPCHUNK, 15, 20
+#MAPCHUNK, 15, 25
+#OVRCHUNK, 5, 15
+#OVRCHUNK, 2, 10
+OVRCHUNK, 8, 10
+
+#BUILDING, 5, 5, 0, 0, 12, 10, Treasure8
+#BUILDING, 8, 8, 0, 0, 12, 10, Treasure4
+#MULTBUILDING, 5, 0, 0, 0, 0, 3, 1, Treasure6
+#BUILDING, 3, 5, 0, 0, 3, 1, Treasure5
+#BUILDING, 5, 3, 0, 0, 3, 1, Treasure5
+#BUILDING, 6, 5, 0, 0, 12, 9, Potion12
+#BUILDING, 5, 5, 0, 0, 15, 10, Clothes8
+#BUILDING, 16, 15, 0, 0, 12, 9, Treasure12
+#BUILDING, 0,0,0,0,3,1,Treasure30
+
+#SPRINKLEOVR, 835, 8
+#SPRINKLEOVR, 325, 2
+SPRINKLE, 525, 13
+#SETMAPS, Desert2.txt, Plainofbeasts.txt, Forestofdoubts1.txt,
+
+/MONTYPE, Name, Graphic, Swallowtype, HP, Skill, Dice, Damage, Eatskill, Exp, move, acid, Red/"Clan", Green/Clannumber, Blue, Lightness
+
+MONTYPE, Kari, kari1.bmp, ,60, 6, 2, 3, 6, 30, 4, 4, 155, 15, 0, .4,
+MONTYPE, Red Naga, snakewoman2.bmp, ,150, 6, 2, 6, 6, 50, 4, 3, 150, 20, 0,.3
+MONTYPE, Naga, snakewoman2.bmp, ,350, 8, 4, 6, 7, 80, 4, 4, 60, 150, 0,.5
+MONTYPE, Giant Snake, snake1.bmp, ,40, 6, 1, 8, 8, 25, 4, 3, 40, 120, 10,.5
+MONTYPE, Marsh Serpent, snake1.bmp, ,125, 8, 2, 8, 9, 55, 5, 3, 20, 80, 0,.4
+MONTYPE, Giant Worm, worm1.bmp, ,40, 6, 2, 6, 6, 80, 4, 3, 100, 0, 150,.5,
+MONTYPE, Firevines, tendrils1.bmp, Plant,80, 5, 3, 12, 8, 55, 3, 5, 160, 80, 10,.5, 
+MONTYPE, Girlcrunch Plant, venus1.bmp, Plant,120, 8, 1, 4, 18, 80, 1, 6, 50, 100, 10,.5
+MONTYPE, Giant Frog, frog1.bmp, ,25, 4, 1, 4, 12, 15, 4, 2, 100, 160, 10,.5,
+MONTYPE, Slime, slime1.bmp, 40, ,6, 2, 6, 6, 80, 4, 3, 200, 160, 0,.5,
+MONTYPE, Centauress, centauress1.bmp ,,350, 9, 4, 8, 8, 100, 6, 3, 120, 90, 0, 0.5
+MONTYPE, Harpy, harpy1.bmp ,,275, 9, 5, 8, 8, 90, 7, 3, 180, 50, 0, 0.3
+MONTYPE, Sprite, sprite1.bmp, , 60, 8, 4, 8, 9, 40, 7, 3, 150, 100, 250,.8
+MONTYPE, Golden Serpent, snake1.bmp, ,255, 10, 3, 10, 14, 75, 5, 4, 240, 200, 0,.5
+
+#FAVMONSTER, Centauress, 15
+
+#MONTYPE2, Centauress, centauress1.bmp, 7, 120, 90, 0, 0.5
+#MONTYPE2, Harpy, harpy1.bmp , 6, 180, 50, 0, 0.3
+#MONTYPE2, Sprite, sprite1.bmp, 6, 150, 100, 250,.8
+#MONTYPE2, Golden Serpent, snake1.bmp, 8, 240, 200, 0,.5
+#MONTYPE2, Kari, kari1.bmp, 5, 135, 45, 0, .4,
+
+/RANDOMMONSTERS, Type (Or ALL), number, x zone start, y zone start, x end, y end
+
+#RANDOMMONSTERS, ALL, 450, 0,0,0,0
+#RANDOMMONSTERS, Centauress, 100, 0,0,0,0
+RANDOMMONSTERS, Firevines, 50, 0,0,0,0
+
+#MONTYPE2, Girlcrunch Plant, venus1.bmp, 10, 50, 100, 10,.5
+#RANDOMMONSTERS, Girlcrunch Plant, 100, 0,0,0,0
+RANDOMMONSTERS, Giant Frog, 200, 0,0,0,0
+
+

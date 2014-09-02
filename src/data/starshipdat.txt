@@ -1,0 +1,44 @@
+ships(a).graphnum = 0
+ships(a).owner = 2
+ships(a).graphname = "ship" & roll(15) & "s.bmp"
+ships(a).X = roll(800): ships(a).Y = roll(600)
+ships(a).speed = 4 + roll(10): ships(a).turnspeed = roll(4) + 1
+
+ships(a).energymax = 500
+ships(a).energyregen = 1
+ships(a).shieldmax = 50
+ships(a).shieldregen = 10
+ships(a).hpmax = 50
+ships(a).hp = 50
+addsys ships(a).weapons(1), "Weapon", "Phaser", 3, 4, 0
+addsys ships(a).weapons(1), "WeaponFire", 3, 12, 10
+addsys ships(a).weapons(1), "Bulletinfo", roll(16), 12, 100, 1
+
+"Weapon", Name, Dice, Damage, Bonus
+"Bulletinfo", Graphnumber, Speed, Duration, Maxhits
+"WeaponFire", ???, fire wait, power use, 
+
+'1 = Red Blaster
+'2 = Green Blaster
+'3 = Blue Blaster
+'4 = Purple Blaster
+'5 = Red Phaser
+'6 = Green Phaser
+'7 = Blue Phaser
+'8 = Purple Phaser
+'9 = Red Laser
+'10 = Green Laser
+'11 = Blue Laser
+'12 = Purple Laser
+
+'13 = Orange Phaser
+
+#SHIP, Name, graphic, speed, turnspeed, armor, shields, shieldregen, energy, energyregen, hp
+#WEAPON, Name,  Dice, Damage, Bonus, Graphnumber, Speed, Duration, Maxhits, ???, fire wait, power use
+
+#SHIP, Ironbelly Heavy Cruiser, ship12s.bmp, 3, 2, 3, 80, 25, 300, 1.8, 165
+#WEAPON, Blaster,  2, 8, 4, 1, 14, 80, 1, ???, 6, 10
+
+#SHIP, Ironbelly Light Cruiser, ship8s.bmp, 4, 2, 3, 40, 20, 300, .8, 65
+#WEAPON, Blaster,  2, 8, 4, 4, 14, 80, 1, ???, 12, 10
+

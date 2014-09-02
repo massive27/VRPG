@@ -1,0 +1,22 @@
+Thirsha's Lair
+
+#TERSTR, Now entering Thirsha's Lair...
+
+#LEVEL, 50
+
+RANDOMSEED, 723762
+#MAPSIZE, 60, 60
+#FILLMAP, 19
+
+#DUNGEON, 1,1,60,60,19,12, 0
+
+MONTYPE, Thirsha, thirsha1.bmp, , 50000, 22, 20, 20, 18, 80000, 8, 30, 30, 30, 80, 1
+
+#MONTYPE2, Thirsha, thirsha1.bmp, 55:::10, 30, 30, 80, 1
+#MONTYPE2, Black Wyvern, wyvern1.bmp, 40:::2, 30, 30, 80, 1
+
+#RANDOMMONSTERS, Thirsha, 1, 0,0,0,0
+#RANDOMMONSTERS, Black Wyvern, 50, 0, 0, 0, 0
+
+#QUESTMONSTER, Thirsha
+

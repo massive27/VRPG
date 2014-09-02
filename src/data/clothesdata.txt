@@ -1,0 +1,495 @@
+
+//CLOTHES, name, graph, armor, weight, wear1, wear2, material type (Metal, Cloth, Cyber)
+//WEAPON, Name, graph, weight, dice, damage, type (Sword, Fast, Axe, Spear, Bow, Staff, Mace), material type (Metal, Wood, Gem)  (Material "armor" adds to damage and/or dice)
+//MATERIAL, type, name, r, g, b, armor, weight, worth, goldmult                   'RGB are 0 if color is variable
+	/TRANSLUCENT
+	/EFFECT, eff1, eff2, eff3, eff4, eff5
+
+Have material bonuses multiply by weight?
+
+
+//TREASUREOBJECT, Name, Graph, R, G, B, CraftType/Category (Or "None"), Time Point Cost (If any), Rarity (For monster drops), Level (For crafting.  0 = Normal, 3=Master)
+	/EFFECT, eff1, eff2, eff3, eff4, eff5
+Categories are Cloth, Metal, Magical, Reagent, Conjured (For Tailoring, Armor/Weaponsmithing, Enchanting, Potions, and Conjuration respectively)
+
+
+Katelle
+Veyla
+58 70
+
+--'WEAPONS
+
+//WEAPON, Name, graph, weight, dice, damage, type (Sword, Fast, Axe, Spear, Bow, Staff, Mace), material type (Metal, Wood, Gem)
+Sword: Reduced fatigue
+Fast: Extra Attack
+Spear: Dex adds to damage (dex x5%)
+Bow: Ranged Attack
+Axe: Strength adds to damage (strength x5%)
+Mace: 25% Chance to stun
+Staff: 25% chance to block
+
+WEAPON, Name, graph, weight, dice, damage, type, material
+#WEAPON, Sword, sword1.bmp, 6, 3, 8, Sword, Metal
+#WEAPON, Chaos Blade, sword2.bmp, 12, 6, 8, Sword, Metal
+#WEAPON, GemSword, gemsword1.bmp, 6, 4, 8, Sword, Metal
+#WEAPON, Katana, katana1.bmp, 7, 5, 8, Sword, Metal
+#WEAPON, Demonslayer, demonblade1.bmp, 14, 7, 8, Sword, Metal
+#WEAPON, Longsword, sword3.bmp, 10, 5, 8, Sword, Metal
+
+#WEAPON, Giant Cleaver, cleaver1.bmp, 9, 6, 6, Axe, Metal
+#WEAPON, Battleaxe, battleaxe1.bmp, 12, 9, 6, Axe, Metal
+#WEAPON, Handaxe, battleaxe1.bmp, 6, 4, 6, Axe, Metal
+
+#WEAPON, Spear, spear1.bmp, 8, 2, 12, Spear, Metal
+#WEAPON, Gemspear, spear2.bmp, 12, 3, 12, Spear, Metal
+#WEAPON, Winged Spear, spear3.bmp, 14, 4, 12, Spear, Metal
+
+#WEAPON, Mace, mace2.bmp, 4, 3, 4, Mace, Metal
+#WEAPON, Morningstar, mace1.bmp, 6, 4, 4, Mace, Metal
+#WEAPON, War Hammer, warhammer1.bmp, 14, 9, 4, Mace, Metal
+#WEAPON, Chained Mace, flail1.bmp, 12, 7, 4, Mace, Metal
+#WEAPON, Flail, flail2.bmp, 20, 15, 4, Mace, Metal
+
+#WEAPON, Bow, bow2.bmp, 6, 3, 6, Bow, Metal
+#WEAPON, Long Bow, bow3.bmp, 10, 6, 6, Bow, Metal
+#WEAPON, Grand War Bow, bow4.bmp, 14, 10, 6, Bow, Metal
+
+#WEAPON, Simple Staff, staff3.bmp, 3, 1, 4, Staff, Metal
+#WEAPON, Crook Staff, staff2.bmp, 4, 2, 4, Staff, Metal
+#WEAPON, Apprentice Staff, staff1.bmp, 5, 3, 4, Staff, Metal
+#WEAPON, Winged Staff, staff4.bmp, 6, 4, 4, Staff, Metal
+
+
+
+#WEAPON, Knife, dagger1.bmp, 2, 1, 5, Fast, Metal
+#WEAPON, Battle Dagger, dagger3.bmp, 6, 3, 6, Fast, Metal
+#WEAPON, Dagger, dagger4.bmp, 4, 2, 5, Fast, Metal
+#WEAPON, Claws, claws1.bmp, 7, 4, 5, Fast, Metal
+
+
+If aroll = 1 Then name = "Sword": graph = "sword1.bmp": basarm = 4: weight = 8: wear2 = "Sword"
+If aroll = 2 Then name = "Knife": graph = "dagger1.bmp": basarm = 3: wear1 = "3": wear2 = "Fast": weight = 1
+If aroll = 3 Then name = "Chaos Blade": graph = "sword2.bmp": basarm = 3: wear1 = "12": wear2 = "Sword":: weight = 9: If worth < 4 Then GoTo 3
+If aroll = 4 Then name = "Cleaver": graph = "cleaver1.bmp": basarm = 3: wear1 = "8": wear2 = "Axe": weight = 3: If worth < 3 Then GoTo 3
+If aroll = 5 Then name = "Gemsword": graph = "Gemsword1.bmp": basarm = 6: wear1 = "12": weight = 6: If worth < 4 Then GoTo 3
+If aroll = 6 Then name = "Mace": graph = "mace1.bmp": basarm = 3: weight = 6
+If aroll = 7 Then name = "Battleaxe": graph = "battleaxe1.bmp": basarm = 5: weight = 12
+If aroll = 8 Then name = "Spear": graph = "Spear1.bmp": basarm = 2: wear1 = 8: wear2 = "Spear": weight = 8
+If aroll = 9 Then name = "Fine Bow": graph = "bow1.bmp": basarm = 4: wear1 = 8: wear2 = "Bow": weight = 3
+If aroll = 10 Then name = "Bow": graph = "bow2.bmp": basarm = 4: wear1 = 6: wear2 = "Bow": weight = 4
+If aroll = 11 Then name = "Long Bow": graph = "bow3.bmp": basarm = 5: wear1 = 10: wear2 = "Bow": weight = 5
+If aroll = 12 Then name = "Grand War Bow": graph = "bow4.bmp": basarm = 6: wear1 = 12: wear2 = "Bow": weight = 6: If worth < 4 Then GoTo 3
+If aroll = 13 Then name = "Morningstar": graph = "flail1.bmp": basarm = 6: wear1 = "4": wear2 = "Axe": weight = 10
+If aroll = 14 Then name = "Flail": graph = "flail2.bmp": basarm = 5: wear1 = "8": wear2 = "Axe": weight = 14
+If aroll = 15 Then name = "Gemspear": graph = "Spear2.bmp": basarm = 2: wear1 = 20: wear2 = "Spear": weight = 12: If worth < 2 Then GoTo 3
+If aroll = 16 Then name = "Winged Spear": graph = "Spear3.bmp": basarm = 3: wear1 = 24: wear2 = "Spear": weight = 14: If worth < 4 Then GoTo 3
+If aroll = 17 Then name = "Katana": graph = "katana1.bmp": basarm = 3: wear1 = "20": wear2 = "Sword": weight = 9: If worth < 4 Then GoTo 3
+If aroll = 18 Then name = "Demon Blade": graph = "demonblade1.bmp": basarm = 8: wear1 = "12": wear2 = "Sword": weight = 15: If worth < 6 Then GoTo 3
+If aroll = 19 Then name = "Fine Sword": graph = "sword3.bmp": basarm = 6: weight = 6: wear2 = "Sword"
+If aroll = 20 Then name = "Short Sword": graph = "dagger3.bmp": basarm = 3: wear1 = "6": wear2 = "Fast": weight = 5
+If aroll = 21 Then name = "Dagger": graph = "dagger4.bmp": basarm = 3: wear1 = "4": wear2 = "Fast": weight = 2
+If aroll = 22 Then name = "Claws": graph = "claws1.bmp": basarm = 3: wear1 = "5": wear2 = "Fast": weight = 2: If worth < 4 Then GoTo 3
+
+--'STANDARD CLOTHING
+
+#CLOTHES, name, graph, armor, weight, wear1, wear2, material
+
+#CLOTHES, Panties, panties1.bmp, 2, 0, Panties, , Cloth
+#CLOTHES, Lace Panties, panties2.bmp, 3, 0, Panties, , Cloth
+#CLOTHES, Briefs, panties4.bmp, 1, 0, Panties, , Cloth
+#CLOTHES, G-String, panties5.bmp, 3, 0, Panties, , Cloth
+#CLOTHES, Panties, panties1.bmp, 2, 0, Panties, , Cloth
+#CLOTHES, Lace Panties, panties2.bmp, 3, 0, Panties, , Cloth
+#CLOTHES, Briefs, panties4.bmp, 1, 0, Panties, , Cloth
+#CLOTHES, G-String, panties5.bmp, 3, 0, Panties, , Cloth
+
+
+#CLOTHES, Bikini Top, Bra1.bmp, 1, 0, Bra, , Cloth
+#CLOTHES, Bra, Bra2.bmp, 1, 0, Bra, , Cloth
+#CLOTHES, Sports Bra, Bra4.bmp, 2, 0, Bra, , Cloth
+#CLOTHES, Corset Bra, Bra3.bmp, 3, 0, Bra, , Cloth
+#CLOTHES, Lace Bra, Bra5.bmp, 3, 0, Bra, , Cloth
+#CLOTHES, Frilly Bra, Bra6.bmp, 3, 0, Bra, , Cloth
+#CLOTHES, Bodytop, leathertop1.bmp, 3, 0, Bra, , Cloth
+#CLOTHES, Corset, corset1.bmp, 4, 1, Bra, , Cloth
+
+#CLOTHES, Cut-out Swimsuit, swimsuit1.bmp, 3, 0, Panties, Bra, Cloth
+#CLOTHES, Undersuit, leathersuit1.bmp, 4, 1, Panties, Bra, Cloth
+#CLOTHES, Tank Swimsuit, swimsuit2.bmp, 3, 1, Panties, Bra, Cloth
+#CLOTHES, Teddy, teddy1.bmp, 3, 0, Panties, Bra, Cloth
+#CLOTHES, Embroidered Teddy, teddy2.bmp, 4, 0, Panties, Bra, Cloth
+#CLOTHES, Bikini Wrap, wrap1.bmp, 3, 0, Panties, Bra, Cloth
+#CLOTHES, Bodice, bodice1.bmp, 4, 0, Panties, Bra, Cloth
+
+
+#CLOTHES, Pants, pants2.bmp, 4, 1, Lower, , Cloth
+#CLOTHES, Loose Pants, pants1.bmp, 3, 1, Lower, , Cloth
+#CLOTHES, Skirt, skirt1.bmp, 3, 1, Lower, , Cloth
+#CLOTHES, Loincloth, loincloth1.bmp, 1, 0, Lower, , Cloth
+#CLOTHES, Running Shorts, leatherbottom1.bmp, 3, 1, Lower, , Cloth
+#CLOTHES, Robe Skirt, robebottom1.bmp, 3, 1, Lower, , Cloth
+#CLOTHES, Shorts, shorts1.bmp, 3, 1, Lower, , Cloth
+#CLOTHES, Short Skirt, skirt2.bmp, 3, 1, Lower, , Cloth
+#CLOTHES, Slit Skirt, skirt3.bmp, 3, 1, Lower, , Cloth
+#CLOTHES, Rune Skirt, skirt5.bmp, 3, 1, Belt, , Cloth
+#CLOTHES, Thigh Boots, boots1.bmp, 4, 1, Lower, , Cloth
+#CLOTHES, Fine Skirt, skirt4.bmp, 3, 0, Lower, , Cloth
+#CLOTHES, Skull Overskirt, skullskirt1.bmp, 3, 1, Belt, , Cloth
+
+#CLOTHES, Doublet Shirt, doublet1.bmp, 3, 1, Upper, , Cloth
+#CLOTHES, Vestshirt, leathertop2.bmp, 3, 1, Upper, , Cloth
+#CLOTHES, Shirt, shirt1.bmp, 3, 1, Upper, , Cloth
+#CLOTHES, Jungle Shirt, shirt2.bmp, 3, 0, Upper, , Cloth
+#CLOTHES, Robe Shirt, robeshirt1.bmp, 3, 1, Upper, , Cloth
+#CLOTHES, Drape Shirt, robeshirt2.bmp, 4, 1, Upper, Jacket, Cloth
+#CLOTHES, Frilly Nightshirt, frillyover.bmp, 4, 0, Upper, Bra, Cloth
+#CLOTHES, Lace Corset, corset2.bmp, 4, 1, Upper, Bra, Cloth
+#CLOTHES, Ribbon Top, ribbontop1.bmp, 3, 0, Upper, , Cloth
+#CLOTHES, Overteddy, teddy2.bmp, 3, 1, Upper, , Cloth
+#CLOTHES, Skull Robe Shirt, skullshirt1.bmp, 3, 1, Upper, , Cloth
+
+#CLOTHES, Combat Dress, chunli1.bmp, 10, 3, Upper, Lower, Cloth
+#CLOTHES, Fine Dress, dress2.bmp, 9, 3, Upper, Lower, Cloth
+//CLOTHES, Bodysuit, leathersuit1.bmp, 12, 4, Upper, Lower, Cloth
+#CLOTHES, Short Dress, dress1.bmp, 8, 2, Upper, Lower, Cloth
+#CLOTHES, Dress, dress3.bmp, 11, 3, Upper, Lower, Cloth
+#CLOTHES, Tribal Dress, dress4.bmp, 9, 1, Upper, Lower, Cloth
+#CLOTHES, Evening Dress, dress5.bmp, 9, 3, Upper, Lower, Cloth
+#CLOTHES, Peasant Dress, dress6.bmp, 9, 3, Upper, Lower, Cloth
+
+
+#CLOTHES, Gloves, gloves1.bmp, 3, 1, Arms, , Cloth
+
+#CLOTHES, Fishnet Stockings, fishnets1.bmp, 1, 0, Legs, , Cloth
+#CLOTHES, Panty Hose, fishnets2.bmp, 1, 0, Legs, , Cloth
+#CLOTHES, Boots, boots2.bmp, 2, 1, Legs, , Cloth
+
+CLOTHES, Uniform, uniform1.bmp, 3, 1, Bra, Upper, Cloth
+CLOTHES, Uniform Dress, uniform2.bmp, 3, 1, Upper, Lower, Cloth
+CLOTHES, Uniform 2, uniform3.bmp, 3, 1, Upper, , Cloth
+CLOTHES, Uniform Bottom, uniform4.bmp, 3, 1, Lower, , Cloth
+CLOTHES, Pirate Uniform, uniform5.bmp, 3, 1, Upper, Lower, Cloth
+CLOTHES, Uniform 3, uniform6.bmp, 3, 1, Upper, , Cloth
+CLOTHES, Uniform 4, uniform7.bmp, 3, 1, Upper, , Cloth
+
+#CLOTHES, Jacket, jacket1.bmp, 5, 2, Jacket, , Cloth
+#CLOTHES, Shortcape, cape1.bmp, 4, 1, Jacket, , Cloth
+#CLOTHES, Shoulder Sash, sash1.bmp, 3, 1, Jacket, , Cloth
+#CLOTHES, Biker Jacket, jacket2.bmp, 5, 2, Jacket, , Cloth
+#CLOTHES, Overcoat, piratecoat1.bmp, 6, 3, Jacket, , Cloth
+
+
+#CLOTHES, Light Belt, belt3.bmp, 1, 0, Belt, , Cloth
+#CLOTHES, Heavy Belt, belt4.bmp, 2, 0, Belt, , Cloth
+
+#CLOTHES, , robeshirt2.bmp, 4, 1, Upper, Jacket, Cloth
+
+CLOTHES, Shit, shitongirl1.bmp, 9, 3, Shit, , Cloth
+CLOTHES, Acid, bodyacid2.bmp, 9, 3, Acid, , Cloth
+CLOTHES, Orange Acid, bodyacid1.bmp, 9, 3, Acid, , Cloth
+#CLOTHES, Corset Shirt, corset3.bmp, 4, 1, Arms, Shirt, Cloth
+
+
+
+//MATERIAL, type, name, r, g, b, armor, weight, worth, goldmult                   'RGB are 0 if color is variable
+#MATERIAL, Cloth, Cloth, 0, 0, 0, 1, 1, 2, 1
+#MATERIAL, Cloth, Hide, 0, 0, 0, 0.5, 1, 1, 1
+#MATERIAL, Cloth, Cotton, 0, 0, 0, 2, 1, 3, 1
+#MATERIAL, Cloth, Leather, 0, 0, 0, 4, 1, 7, 1
+#MATERIAL, Cloth, Velvet, 0, 0, 0, 6, 1, 12, 1
+#MATERIAL, Cloth, Silk, 0, 0, 0, 8, 1, 15, 1.1
+#MATERIAL, Cloth, Sheer Silk, 0, 0, 0, 7, 0, 18, 1.1
+#TRANSLUCENT
+#MATERIAL, Cloth, Magicweave, 0, 0, 0, 10, 1, 30, 1.2
+#EFFECT, BONMP,15, , ,
+#MATERIAL, Cloth, Enchanted Silk, 0, 0, 0, 12, 1, 40, 1.3
+#MATERIAL, Cloth, Steelsilk, 0, 0, 0, 8, 5, 20, .8
+#MATERIAL, Cloth, Ghost Silk, 0, 0, 0, 6, 0, 22, 1.2
+#TRANSLUCENT
+#EFFECT, BONSKILL,1,Dodge, ,
+
+
+If aroll = 1 Then armn = "Cloth": r = 255: g = 255: b = 255: l = 0.5: colorstr = "": armult = 1: weight = 1
+If aroll = 2 Then armn = "Hide": r = 105: g = 75: b = 0: l = 0.4: colorstr = "": armult = 0.5: weight = 1
+'If aroll = 3 Then armn = "Black Hide": r = 55: g = 55: b = 55: l = 0.3: colorstr = "": armult = 1
+If aroll = 3 Then armn = "Cotton": armult = 2: weight = 1
+If aroll = 4 Then armn = "Leather": armult = 4: weight = 1
+If aroll = 5 Then armn = "Velvet": armult = 6: weight = 1
+If aroll = 6 Then armn = "Silk": armult = 8: weight = 1
+If aroll = 7 Then armn = "Magicweave": armult = 10: weight = 1
+If aroll = 8 Then armn = "Enchanted Silk": armult = 12: weight = 1
+
+
+--ARMOR
+
+#CLOTHES, Halter, halter1.bmp, 7, 1, Upper, Bra, Metal
+
+#CLOTHES, Chainmail Bikini, panties3.bmp, 4, 2, Panties, , Metal
+
+#CLOTHES, Chainmail Swimsuit, chainswimsuit2.bmp, 10, 4, Panties, Bra, Metal
+#CLOTHES, Armored Teddy, armorswimsuit1.bmp, 10, 3, Panties, Bra, Metal
+
+
+#CLOTHES, Chain Shirt, chainshirt1.bmp, 10, 3, Upper, , Metal
+#CLOTHES, Breastplate, breastplate3.bmp, 15, 6, Upper, Jacket, Metal
+#CLOTHES, Heartplate, breastplate2.bmp, 14, 4, Upper, , Metal
+
+#CLOTHES, Che'Rel Breastplate, breastplate9.bmp, 12, 4, Upper, , Metal
+#CLOTHES, Viola Breastplate, breastplate10.bmp, 10, 3, Upper, , Metal
+#CLOTHES, Vellanne Heartplate, breastplate8.bmp, 13, 3, Upper, Jacket, Metal
+#CLOTHES, Halfplate, breastplate4.bmp, 11, 3, Upper, , Metal
+#CLOTHES, Light Breastplate, breastplate12.bmp, 8, 2, Upper, , Metal
+
+
+#CLOTHES, Full Plate, breastplate5.bmp, 20, 8, Upper, Jacket, Metal
+#CLOTHES, Heavy Plate, breastplate6.bmp, 17, 10, Upper, Jacket, Metal
+#CLOTHES, Skull Plate, breastplate14.bmp, 18, 7, Upper, Jacket, Metal
+
+
+#CLOTHES, Brace Plate, breastplate11.bmp, 7, 3, Jacket, , Metal
+#CLOTHES, Wingbrace, breastplate13.bmp, 10, 4, Jacket, , Metal
+#CLOTHES, Hash Plate, breastplate7.bmp, 8, 4, Upper, , Metal
+
+#CLOTHES, Chainmail Bodysuit, chainswimsuit.bmp, 15, 4, Upper, Lower, Metal
+
+#CLOTHES, Armored Skirt, armorskirt1.bmp, 7, 2, Lower, , Metal
+#CLOTHES, Chain Skirt, chainskirt1.bmp, 10, 4, Lower, , Metal
+#CLOTHES, Leg Plates, legplates1.bmp, 12, 6, Lower, Legs, Metal
+#CLOTHES, Plated Boots, greaves1.bmp, 5, 3, Legs, , Metal
+#CLOTHES, Heavy Leg Plates, legplates2.bmp, 14, 8, Lower, Legs, Metal
+
+
+#CLOTHES, Light Bracers, bracers1.bmp, 3, 1, Arms, , Metal
+#CLOTHES, Full Bracers, bracers2.bmp, 4, 2, Arms, , Metal
+#CLOTHES, Arm Plates, armplates1.bmp, 5, 3, Arms, , Metal
+#CLOTHES, Heavy Arm Plates, armplates2.bmp, 8, 4, Jacket, Arms, Metal
+
+
+#CLOTHES, Brace Belt, belt5.bmp, 2, 1, Belt, , Metal
+#CLOTHES, Double Brace Belt, belt1.bmp, 3, 2, Belt, , Metal
+#CLOTHES, Armored Belt, belt2.bmp, 4, 2, Belt, , Metal
+
+
+#CLOTHES, Symbiot, symbiote1.bmp, 3, 1, Cyberbody, , Symbiot
+
+#CLOTHES, Light Cyberlegs, cyberlegs2.bmp, 3, 1, Cyberlegs, , Cyber
+#CLOTHES, Cyberlegs, cyberlegs1.bmp, 4, 2, Cyberlegs, , Cyber
+#CLOTHES, Heavy Cyberlegs, cyberlegs3.bmp, 5, 3, Cyberlegs, , Cyber
+
+#CLOTHES, Light Cyberarms, cyberarms2.bmp, 3, 1, Cyberarms, , Cyber
+#CLOTHES, Cyberarms, cyberarms1.bmp, 4, 2, Cyberarms, , Cyber
+#CLOTHES, Heavy Cyberarms, cyberarms3.bmp, 5, 3, Cyberarms, , Cyber
+
+#CLOTHES, Cyberbody, cyberbody1.bmp, 6, 1, Cyberbody, , Cyber
+#CLOTHES, Advanced Cyberbody, cyberbody2.bmp, 9, 1, Cyberbody, , Cyber
+
+//MATERIAL, type, name, r, g, b, armor, weight, worth, goldmult
+
+#MATERIAL, Cyber, Mesh Armor, 150, 150, 150, 2, 1, 5, .5
+#EFFECT, BONHP, 45, , ,
+#TRANSLUCENT
+
+#MATERIAL, Cyber, Standard, 150, 150, 150, 3, 1, 15, 2
+#EFFECT, BONSTR, 1, , ,
+#EFFECT, BONEND, 2, , ,
+#EFFECT, BONHP, 20, , ,
+
+#MATERIAL, Cyber, Combat, 250, 30, 0, 3, 1, 20, 3
+#EFFECT, BONSTR, 2, , ,
+#EFFECT, BONEND, 2, , ,
+#EFFECT, BONDEX, 2, , ,
+
+#MATERIAL, Cyber, Titan, 250, 230, 0, 2, 1, 20, 3
+#EFFECT, BONSTR, 4, , ,
+
+#MATERIAL, Cyber, MageTech, 150, 0, 150, 1, 1, 18, 3
+#EFFECT, BONINT, 1, , ,
+#EFFECT, BONMP, 30, , ,
+#EFFECT, BONSKILL, 1, Mana Regeneration, ,
+
+
+//MATERIAL, type, name, r, g, b, armor, weight, worth, goldmult
+#MATERIAL, Metal, Wood, 125, 90, 0, .5, 1, 0.5, 0.5
+#MATERIAL, Metal, Tin, 175, 175, 165, .9, 1, 1, 1
+#MATERIAL, Metal, Bronze, 55, 35, 0, 1.2, 1.8, 2, 1
+#MATERIAL, Metal, Iron, 105, 105, 125, 1.5, 1.8, 4, 1
+#MATERIAL, Metal, Steel, 155, 155, 155, 2.5, 1.7, 8, 1
+#MATERIAL, Metal, Opal, 255, 195, 215, 3.5, 1.6, 14, 1.1
+#TRANSLUCENT
+#MATERIAL, Metal, PinkSteel, 255, 105, 240, 4, 1.6, 18, 1.1
+#MATERIAL, Metal, Enchanted Obsidian, 55, 55, 55, 5, 1.7, 22, 1.1
+#MATERIAL, Metal, BloodSteel, 255, 0, 0, 6, 1.9, 26, 1.1
+#EFFECT, BONHP, 5, , ,
+#MATERIAL, Metal, Blue Adamant, 0, 0, 255, 8, 2.2, 30, 1.2
+#MATERIAL, Metal, Demonic Iron, 105, 15, 10, 10, 2.4, 38, 1.2
+#MATERIAL, Metal, Angelic Steel, 255, 255, 150, 12, 1.5, 40, 1.3
+#EFFECT, BONSKILL, 1, Regeneration, ,
+
+#MATERIAL, Metal, Sorcerous Steel, 40, 15, 100, 4, 0.3, 25, 1.3
+#TRANSLUCENT
+#MATERIAL, Metal, Mage Steel, 100, 15, 100, 3, 0.4, 20, 1.2
+#TRANSLUCENT
+#MATERIAL, Metal, Energy Plate, 255, 255, 100, 4, 0.1, 22, 3
+#TRANSLUCENT
+#EFFECT, BONSKILL,1,Mana Regeneration, ,
+
+#MATERIAL, Metal, Ghost Plate, 187, 255, 209, 2, 0.1, 12, 2
+#TRANSLUCENT
+#EFFECT, BONSKILL,1,Dodge, , ,
+
+
+
+
+************************
+
+TREASURE/CONJURED ITEM TYPES
+
+************************
+'White Purple Blue Green Yellow Orange Red Black
+'  1      2     3    4     5      6     7    8
+'5 (Offense)
+'4
+'3
+'2
+'1 (Defense)
+
+'EFFECT, SMITHABLE/MAGICAL/WEAVABLE, Properties:Properties:etc.
+'Properties:
+'Power:Power (Sets the item's base power)
+'Color:Num
+'Type:Num
+'CShift:Color or Value (Color shift +1, -1, +2 etc, acts on next ingredient)
+'TShift:Amt (Type Shift towards defense, offense.  +1 is offense, -1 is defense.)
+'Powermult:Amt (Alters the power of the next item)
+'WeightAdd:Amt (Alters the weight of the entire item)
+'Weightmult:Amt (Alters the weight of the entire item)
+
+//TREASUREOBJECT, Name, Graph, R, G, B, CraftType/Category (Or "None"), Time Point Cost (If any), Rarity (For monster drops), Level (For crafting.  0 = Normal, 3=Master)
+	/EFFECT, eff1, eff2, eff3, eff4, eff5
+Categories are Cloth, Metal, Magical, Reagent, Conjured (For Tailoring, Armor/Weaponsmithing, Enchanting, Potions, and Conjuration respectively)
+
+//TREASUREOBJECT, Name, Graph, R, G, B, Conjured, Time Point Cost (If any), Rarity (For monster drops), Level (For crafting.  0 = Normal, 3=Master)
+	/EFFECT, eff1, eff2, eff3, eff4, eff5
+Categories are Cloth, Metal, Magical, Reagent, Conjured (For Tailoring, Armor/Weaponsmithing, Enchanting, Potions, and Conjuration respectively)
+
+
+
+
+
+
+
+
+
+
+
+If aroll = 1 Then armn = "Leather": r = 105: g = 75: b = 0: l = 0.4: armult = 1 ': weight = weight * 1.3
+If aroll = 2 Then armn = "Bronze": r = 55: g = 35: b = 0: l = 0.2: armult = 1.5: weight = weight * 1.8
+If aroll = 3 Then armn = "Iron": r = 105: g = 105: b = 125: l = 0.2: armult = 2: weight = weight * 2
+If aroll = 4 Then armn = "Steel": r = 155: g = 155: b = 155: l = 0.7: armult = 2.5: weight = weight * 1.7
+If aroll = 5 Then armn = "Opal": r = 255: g = 195: b = 215: l = 0.5: armult = 3.5: weight = weight * 1.6
+If aroll = 6 Then armn = "PinkSteel": r = 255: g = 105: b = 240: l = 0.5: armult = 4: weight = weight * 1.6
+If aroll = 7 Then armn = "Enchanted Obsidian": r = 155: g = 155: b = 155: l = 0: armult = 5: weight = weight * 1.7
+If aroll = 8 Then armn = "BloodSteel": r = 255: g = 0: b = 0: l = 0.3: armult = 6: weight = weight * 1.9
+If aroll = 9 Then armn = "Blue Adamant": r = 0: g = 0: b = 255: l = 0.4: armult = 8: weight = weight * 2.2
+If aroll = 10 Then armn = "Demonic Iron": r = 105: g = 15: b = 10: l = 0.1: armult = 10: weight = weight * 2.4
+If aroll = 11 Then armn = "Angelic Steel": r = 255: g = 225: b = 150: l = 0.6: armult = 12: weight = weight * 1.5
+
+
+
+
+
+
+If aroll = 1 Then name = "Halter": graph = "Halter1.bmp": basarm = 7: wear1 = "Upper": wear2 = "Bra"
+If aroll = 2 Then name = "Chain Shirt": graph = "chainshirt1.bmp": basarm = 10: wear1 = "Upper": weight = 3
+If aroll = 3 Then name = "Chain Skirt": graph = "chainskirt1.bmp": basarm = 10: wear1 = "Lower": weight = 3
+If aroll = 4 Then name = "Heartplate": graph = "Breastplate2.bmp": basarm = 14: wear1 = "Upper": weight = 4
+If aroll = 5 Then name = "Breastplate": graph = "Breastplate3.bmp": basarm = 15: wear1 = "Upper": wear2 = "Jacket": weight = 6
+If aroll = 6 Then name = "Halfplate": graph = "Breastplate4.bmp": basarm = 11: wear1 = "Upper": weight = 3
+If aroll = 7 Then name = "Bracers": graph = "Bracers1.bmp": basarm = 4: wear1 = "Arms": weight = 1
+If aroll = 8 Then name = "Armored Skirt": graph = "armorskirt1.bmp": basarm = 7: wear1 = "Lower": weight = 2
+If aroll = 9 Then name = "Full Plate": graph = "Breastplate5.bmp": basarm = 20: wear1 = "Upper": wear2 = "Jacket": weight = 8
+If aroll = 10 Then name = "Arm Plates": graph = "armplates1.bmp": basarm = 7: wear1 = "Arms": weight = 2
+If aroll = 11 Then name = "Leg Plates": graph = "legplates1.bmp": basarm = 12: wear1 = "Lower": weight = 6
+If aroll = 12 Then name = "Heavy Plate": graph = "Breastplate6.bmp": basarm = 17: wear1 = "Upper": wear2 = "Jacket": weight = 10
+If aroll = 13 Then name = "Chainmail Bodysuit": graph = "chainswimsuit.bmp": basarm = 15: wear1 = "Upper": wear2 = "Lower": weight = 4
+If aroll = 14 Then name = "Brace Belt": graph = "belt5.bmp": basarm = 2: wear1 = "Belt" ': wear2 = "Lower"
+If aroll = 15 Then name = "Double Brace Belt": graph = "belt1.bmp": basarm = 3: wear1 = "Belt" ': wear2 = "Lower"
+If aroll = 16 Then name = "Armored Belt": graph = "belt2.bmp": basarm = 4: wear1 = "Belt": weight = 2 ': wear2 = "Lower"
+If aroll = 17 Then name = "Chainmail Bikini": graph = "panties3.bmp": basarm = 4: wear1 = "Panties": wear2 = "Lower"
+If aroll = 18 Then name = "Chainmail Swimsuit": graph = "chainswimsuit2.bmp": basarm = 10: wear1 = "Bra": wear2 = "Panties"
+'If aroll = 19 Then name = "Ridged Plate": graph = "Breastplate7.bmp": basarm = 15: wear1 = "Upper"
+
+'If aroll = 9 Then name = "Chainmail Dress": graph = "chaindress1.bmp": basarm = 20: wear1 = "Upper": wear2 = "Lower"
+
+
+
+
+
+
+If aroll = 1 Then name = "Bikini Top": graph = "Bra1.bmp": basarm = 1: wear1 = "Bra"
+If aroll = 2 Then name = "Bra": graph = "Bra2.bmp": basarm = 1: wear1 = "Bra"
+If aroll = 3 Then name = "Panties": graph = "panties1.bmp": basarm = 1: wear1 = "Panties"
+If aroll = 4 Then name = "Sports Bra": graph = "Bra4.bmp": basarm = 2: wear1 = "Bra"
+If aroll = 5 Then name = "Corset Bra": graph = "Bra3.bmp": basarm = 3: wear1 = "Bra"
+
+If aroll = 6 Then name = "Cut-out Swimsuit": graph = "swimsuit1.bmp": basarm = 3: wear1 = "Panties": wear2 = "Bra"
+If aroll = 7 Then name = "Tank Swimsuit": graph = "swimsuit2.bmp": basarm = 3: wear1 = "Panties": wear2 = "Bra"
+
+If aroll = 8 Then name = "Combat Dress": graph = "chunli1.bmp": basarm = 10: wear1 = "Upper": wear2 = "Lower"
+If aroll = 9 Then name = "Pants": graph = "pants2.bmp": basarm = 4: wear1 = "Lower"
+If aroll = 10 Then name = "Doublet Shirt": graph = "doublet1.bmp": basarm = 3: wear1 = "Upper"
+If aroll = 11 Then name = "Gloves": graph = "gloves1.bmp": basarm = 4: wear1 = "Arms"
+If aroll = 12 Then name = "Jacket": graph = "jacket1.bmp": basarm = 5: wear1 = "Jacket"
+If aroll = 13 Then name = "Running Shorts": graph = "leatherbottom1.bmp": basarm = 3: wear1 = "Lower"
+If aroll = 14 Then name = "Bodysuit": graph = "leathersuit1.bmp": basarm = 12: wear1 = "Upper": wear2 = "Lower"
+If aroll = 15 Then name = "Bodytop": graph = "leathertop1.bmp": basarm = 3: wear1 = "Bra"
+If aroll = 16 Then name = "Vestshirt": graph = "leathertop2.bmp": basarm = 4: wear1 = "Upper"
+If aroll = 17 Then name = "Loincloth": graph = "loincloth1.bmp": basarm = 1: wear1 = "Lower"
+If aroll = 18 Then name = "Loose Pants": graph = "pants1.bmp": basarm = 3: wear1 = "Lower"
+If aroll = 19 Then name = "Skirt": graph = "skirt1.bmp": basarm = 3: wear1 = "Lower"
+If aroll = 20 Then name = "Undersuit": graph = "leathersuit1.bmp": basarm = 5: wear1 = "Panties": wear2 = "Bra"
+
+
+If aroll = 21 Then name = "Lace Bra": graph = "Bra5.bmp": basarm = 3: wear1 = "Bra"
+If aroll = 22 Then name = "Lace Panties": graph = "panties2.bmp": basarm = 3: wear1 = "Panties"
+If aroll = 23 Then name = "Fine Dress": graph = "dress2.bmp": basarm = 9: wear1 = "Upper": wear2 = "Lower"
+If aroll = 24 Then name = "Short Dress": graph = "dress1.bmp": basarm = 8: wear1 = "Upper": wear2 = "Lower"
+If aroll = 25 Then name = "Shirt": graph = "shirt1.bmp": basarm = 3: wear1 = "Upper"
+If aroll = 26 Then name = "Longshirt": graph = "longshirt1.bmp": basarm = 7: wear1 = "Upper": wear2 = "Lower"
+If aroll = 27 Then name = "Shortcape": graph = "cape1.bmp": basarm = 4: wear1 = "Jacket"
+If aroll = 28 Then name = "Robe Shirt": graph = "robeshirt1.bmp": basarm = 3: wear1 = "Upper"
+If aroll = 29 Then name = "Robe Skirt": graph = "robebottom1.bmp": basarm = 3: wear1 = "Lower"
+If aroll = 30 Then name = "Shorts": graph = "shorts1.bmp": basarm = 3: wear1 = "Lower"
+
+
+If aroll = 31 Then name = "Dress": graph = "dress3.bmp": basarm = 11: wear1 = "Upper": wear2 = "Lower"
+If aroll = 32 Then name = "Tribal Dress": graph = "dress4.bmp": basarm = 9: wear1 = "Upper": wear2 = "Lower"
+
+If aroll = 33 Then name = "Drape Shirt": graph = "robeshirt2.bmp": basarm = 4: wear1 = "Upper": wear2 = "Jacket"
+If aroll = 34 Then name = "Short Skirt": graph = "skirt2.bmp": basarm = 3: wear1 = "Lower"
+If aroll = 35 Then name = "Slit Skirt": graph = "skirt3.bmp": basarm = 3: wear1 = "Lower"
+If aroll = 36 Then name = "Thigh Boots": graph = "boots1.bmp": basarm = 4: wear1 = "Lower"
+
+If aroll = 37 Then name = "Corset": graph = "corset1.bmp": basarm = 4: wear1 = "Bra" ': wear2 = "Bra"
+
+If aroll = 38 Then name = "Frilly Nightshirt": graph = "Frillyover.bmp": basarm = 3: wear1 = "Upper": wear2 = "Bra"
+If aroll = 39 Then name = "Frilly Bra": graph = "Bra6.bmp": basarm = 3: wear1 = "Bra"
+
+'Repeats of more common clothes
+If aroll = 40 Then name = "Lace Panties": graph = "panties2.bmp": basarm = 3: wear1 = "Panties"
+If aroll = 41 Then name = "Pants": graph = "pants2.bmp": basarm = 4: wear1 = "Lower"
+If aroll = 42 Then name = "Bra": graph = "Bra2.bmp": basarm = 1: wear1 = "Bra"
+If aroll = 43 Then name = "Panties": graph = "panties1.bmp": basarm = 1: wear1 = "Panties"
+
+If aroll = 44 Then name = "Fishnet Stockings": graph = "fishnets1.bmp": basarm = 1: wear1 = "Legs"
+If aroll = 45 Then name = "Panty Hose": graph = "fishnets2.bmp": basarm = 1: wear1 = "Legs"
+If aroll = 46 Then name = "Teddy": graph = "teddy1.bmp": basarm = 3: wear1 = "Panties": wear2 = "Bra"
+If aroll = 47 Then name = "Lace Corset": graph = "corset2.bmp": basarm = 5: wear1 = "Upper": wear2 = "Bra"
+If aroll = 48 Then name = "Shoulder Sash": graph = "sash1.bmp": basarm = 2: wear1 = "Jacket" ': wear2 = "Bra"
+'If aroll = 49 Then name = "Cape": graph = "cape2.bmp": basarm = 6: wear1 = "Jacket"
+If aroll = 49 Then name = "Light Belt": graph = "belt3.bmp": basarm = 1: wear1 = "Belt" ': wear2 = "Bra"
+If aroll = 50 Then name = "Heavy Belt": graph = "belt4.bmp": basarm = 2: wear1 = "Belt" ': wear2 = "Bra"
+If aroll = 51 Then name = "Bikini Wrap": graph = "wrap1.bmp": basarm = 2: wear1 = "Panties": wear2 = "Bra"
+If aroll = 52 Then name = "Fine Skirt": graph = "skirt4.bmp": basarm = 4: wear1 = "Lower"
+If aroll = 53 Then name = "Ribbon Top": graph = "ribbontop1.bmp": basarm = 3: wear1 = "Upper"
+If aroll = 54 Then name = "Biker Jacket": graph = "jacket2.bmp": basarm = 8: wear1 = "Jacket"

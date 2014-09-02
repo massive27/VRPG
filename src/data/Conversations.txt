@@ -1,0 +1,2080 @@
+Conversation Window Size 715x535
+
+/CONVERSATION, Name
+/TEXT, text
+/SAY, text
+/IMAGE, Filename
+/CHOICE[req], text, Goto/Command
+	Commands:
+	/SELLCLOTHES[:Color:Wear1:Wear2]
+	/SELLARMOR[:Worth (By number)]
+	/CHANGESTART:Newstart:Goto
+	/TAKEOBJ:GOTO
+	/EFFECT:Goto:eff1:eff2:eff3:eff4:eff5
+	/EATME
+	/DAMAGE:Goto:Amt
+	/DIGESTTO:Goto:Amt
+	/GIVESKILL:Skillname:Goto
+	/ADDQUEST:Questname:Goto
+	Requirements:
+	:SAYONCE
+	:IFQUEST:Questname
+	:IFNOTQUEST:Questname
+	:DEX:Dexneeded (Also INT and STR)
+	:NOTDEX:Dexneeded (NOTINT, NOTSTR)
+	:IFSAID:WhatsaidBywhatobject (As in, "What do you do here?Annabelle".  No colon in between.  Object name must match conversation name for this to work)
+
+
+	
+/ITEM, text, itemname:goto
+/QUEST:SAYONCE, Questdata
+/ADDCHOICES
+/EFFECT, eff1:eff2:eff3:eff4:eff5  (Sets up dummy object for TAKEOBJ command--each instance of EFFECT adds a new effect)
+
+'Standard quest is QuestName(make sure it's unique):Map:Description:Givenby:Experience:Gold:Type("KILL", "RETRIEVE", "COMPLETED" etc):Extra stuff after this
+'KILL:Monstertype:Num:Color:Level:R:G:B (Decremented each time you kill one--when it hits 0, the quest is achieved)
+'RETRIEVE:Item:Giveto:Lose Y/N:R:G:B:Graph (Have the item in your inventory when you speak to Giveto.  Lose determines if it takes it from your inventory)'COMPLETED (Quest is completed)
+'If you have accomplished a quest but it isn't marked 'Completed', the conversations with any character named 'Givenby'
+'switch to the conversation named '(givenby)(questname)'
+'So if a girl named Rasella gives a quest called 'DestroyKaris' it will go to the conversation 'RasellaDestroyKaris'
+
+
+				-----[[ HELP SECTION ]]-----
+
+#CONVERSATION, ABOUT
+#BRANCH, MAIN
+#SAY, "Duamutef's Glorious Vore RPG, Version $VERSION.  Made in it's entirety by DUAMUTEF.  (With the exception of a few graphics people sent me after the first release.  Special thanks to all those people, who's names I can no longer remember.)  Any praise, bugs, suggestions, money, or unfocused teen angst should be directed to Duam9@hotmail.com.  Enjoy.  (P.S. Worship me!  WORSHIP MEEEEEE!!)"
+#EXIT, (EXIT)
+
+#CONVERSATION, HELP
+
+BRANCH, MAIN
+SAY, VRPG is played primarily using the number pad.  Make sure Num Lock is turned on (The Num Lock key turns it on and off) and simply hit the number pad keys to move.  You attack the same way--if there is a monster standing in the direction you indicate/ your character will attack it automatically.  Your character will attack once each time you press against a monster, so to keep attacking, keep pressing in that direction.  The same goes for items and NPCs--to talk to an NPC/ simply press in the direction they're standing/ and to pick up an item/ simply walk over it.  For more information on particular aspects of gameplay/ select one from the list below.
+ADDCHOICES, MAIN2
+
+#BRANCH, MAIN2
+#SAY, "VRPG is played primarily using the number pad.  Make sure Num Lock is turned on (The Num Lock key turns it on and off) and simply hit the number pad keys to move.  (If at any point you find yourself unable to move, chances are you hit the numlock key by mistake, since it's right next to the movement keys.)  You attack the same way--if there is a monster standing in the direction you indicate, your character will attack it automatically.  Your character will attack once each time you press against a monster, so to keep attacking, keep pressing in that direction.  The game goes as fast as you do, so attacking faster just means your enemies will as well, so beware.  The same goes for items and NPCs--to talk to an NPC, simply press in the direction they're standing, and to pick up an item, simply walk over it.  For more information on particular aspects of gameplay, select one from the list below."
+
+#CHOICE, Differences from the Origional Version, DIFF
+#CHOICE, Basic Gameplay, MAIN2
+#CHOICE, Inventory and Items, INV
+#CHOICE, Combat Basics, COMBAT
+#CHOICE, Fatigue, FATIGUE
+#CHOICE, Being Eaten, EATEN
+#CHOICE, Potions And Other Means of Not Dieing, POTIONS
+
+#CHOICE, (MORE), MORE
+#EXIT, (EXIT)
+
+#BRANCH, MORE
+#CHOICE, Magic and Spells, MAGIC
+#CHOICE, Magic Items, MAGICITEMS
+#CHOICE, Gems and Runes, GEMS
+#CHOICE, Passive Skills, PASSIVESKILLS
+#CHOICE, Combat Skills, COMBATSKILLS
+#CHOICE, (MORE), MORE2
+#CHOICE, (BACK), MAIN2
+#EXIT, (EXIT)
+
+#BRANCH, MORE2
+#CHOICE, Weapon Classes, WEAPONS
+#CHOICE, Miscellaneous, MISC
+#CHOICE, Character Screen, CP
+#CHOICE, Enchantment Spells, ENCHANT
+#CHOICE, (BACK), MAIN
+#EXIT, (EXIT)
+
+#BRANCH, ENCHANT
+#SAY, "Some spells are capable of enchanting items.  To use these spells, select them in the spell window and hit the 'cast' button.  You will be prompted to select a target.  You can then double-click on an item in your inventory to enchant it.  Be aware that if you cast an enchantment spell on an invalid target (Casting a weapon enchantment on a piece of armor, for example) the enchantment is wasted."
+#ADDCHOICES, MORE2
+
+#BRANCH, CP
+#SAY, "By clicking on your character's stats, you are taken to the character screen.  In this screen, you can change your character's body type by clicking on her, or change her hair color or style by clicking on the buttons to the left of the character portrait.  You also gain 1 character point each time you gain a level, which can be spent on this screen.  You can use them to increase your stats, or to give yourself extra HP, MP, or combat skill points."
+#ADDCHOICES, MORE2
+
+
+#BRANCH, WEAPONS
+#SAY, "There are several different weapon classes in the game.  These are Mace, Axe, Staff, Fast (daggers and knives, usually), Sword, Spear, and Bow.  Each weapon class has a special ability.  Maces have a chance to stun any opponent hit (And this is cumulative with the Stun ability).  Axes gain an increase in damage equal to 5% per point of strength your character has, and spears gain the same multiplier from dexterity instead.  Fast weapons grant an extra attack (Similar to the frenzy ability).  Swords use 20% less fatigue than normal, and staffs have a 25% chance of blocking any incoming attack but have very low basic damage.  Bows have a ranged attack (obviously) and gain damage from dexterity rather than strength.  Thus, high dex characters favor spears and bows, and magic users benefit from the special abilities of maces and staffs.  Balanced characters benefit from swords and fast weapons."
+#ADDCHOICES, MORE2
+
+
+#BRANCH, MISC
+#SAY, "You can resize the game window and the graphics will automatically size themselves to fit, so you can play the game full-screen.  You can change the gameplay keys and gameplay speed via the File menu.  If you rest by standing still, your mana and endurance will begin to replenish faster."
+#ADDCHOICES, MAIN2
+
+#BRANCH, DIFF
+#SAY, "First of all, being swallowed is a bit different than it was before (See 'Being Eaten').  The game also uses a fatigue system (See 'Fatigue').  Potions no longer heal instantly and are automatically made more effective (and expensive) as you gain levels, but potion boosts still make them more powerful.  Many aspects of the combat system have changed, but you still fight the same way in general.  Important items, such as quest characters, items and monsters, are now marked as X's on the minimap (Oh yeah, there's a minimap now), and cannot be accidentally (or intentionally) eaten.  Each town also has a portal gem that you can use to return to the town simply by using it from your inventory.  Different weapon classes have different advantages, and you can change your character's appearance and choose which stats raise when you gain levels.  Characters now only have access to certain secondary skills, depending on their class."
+#ADDCHOICES, MAIN2
+
+#BRANCH, EATEN
+#SAY, "Sometimes, a monster will grab you and attempt to swallow you.  When this happens, you will be yanked very close to the monster, which will generally have it's mouth open in anticipation of shoving you inside.  You can struggle against them using the movement keys, and if your strength is high enough, you will escape from them.  If not, they will swallow you.  When swallowed, there is still some hope that you can claw your way back out of their throat, but if you don't it's only a matter of time before you reach their stomach.  When this happens, escape becomes all but impossible (it requires an exceptionally high strength and squirm skill), and they will begin to digest you.  At this point, you can either continue to struggle, or hope you survive until they shit you out a little while later.  (They cannot hold you in their stomachs forever.)  Monsters are more likely to eat you if your HP or fatigue are low."
+#ADDCHOICES, MAIN2
+
+#BRANCH, FATIGUE
+#SAY, "The yellow bar below your mana and life bars (In the bottom center of the screen) is your stamina or 'fatigue' bar.  Your character becomes tired during combat, and when she runs low on stamina, her strength and dexterity scores will drop.  Fatigue use is based on how much weight your character has equipped and how strong she is.  Wearing heavy armor and wielding heavy weapons costs much more fatigue for a weak character than it does for a strong character.  Generally, you shouldn't equip weapons that weigh much more than your strength score, and you should keep your total weight as close to your strength as possible.  Basic stamina use is based on your weapon's weight, so this makes the biggest difference.  Being overweighted can also reduce your dexterity regardless of your fatigue.  Your Endurance stat determines how quickly you regain lost fatigue, and how much total fatigue you have."
+#ADDCHOICES, MAIN2
+
+#BRANCH, COMBAT
+#SAY, "Combat is based primarily on your strength and dexterity scores.  The higher your dexterity, the more likely you are to hit and the less likely you are to be hit. The higher your strength, the more damage you will do aside from your basic weapon damage, and the heavier of weapons and armor you can equip.  Damage also increases simply based on what level you are.  If you get swallowed by something (A fairly frequent occurrence), just wriggle around using the normal movement keys until you either get out or end up utterly digested.  (This is the only way to actually die in the game.  So long as some significant part of your anatomy remains unabsorbed, you can escape and be healed.)  If you are using a missile weapon, such as a bow, left-clicking in the main window will fire it at the spot you click on.  Your strength will not affect missile weapon damage, but your dexterity and level will."
+#ADDCHOICES, MAIN2
+
+#BRANCH, MAGICITEMS
+#SAY, "Certain items have magical bonuses associated with them, such as attribute bonuses, skill bonuses, extra hit points and so forth.  These items generally give you their bonuses so long as they are being used--for example, if you're wearing a piece of magical clothing, you will gain all the bonuses it has so long as you're still wearing it.  Such bonuses are listed when you examine the item by clicking on it in your inventory."
+#ADDCHOICES, MAIN2
+
+#BRANCH, GEMS
+#SAY, "Every once in a while, you will get ahold of a Gemstone, Rune or other nifty item that you can insert into another item.  Generally, you will insert these into weapons, armor or clothing, and once done, the item will give you the bonuses listed on the gem.  In order to insert a gem or rune into an item, double-click on it in the inventory, then double-click on the item you want to put it in.  You should then get a message in the message window saying that the gem was inserted.  You can insert as many gems as you want into an item, but there is a limit to how many powers an item can have, and it's useless to add a power to it that it already has (Magical effects are not cumulative as far as gems are concerned).  The game will not tell you when an item has too many powers, so be prudent when adding gems to things, particularly items that already have magical effects.  (Generally, you shouldn't add gems to an item that already has four or more effects, or add a gem with an effect the item already has)"
+#ADDCHOICES, MAIN2
+
+#BRANCH, COMBATSKILLS
+#SAY, "Combat skills are bought in the Skills window, just like normal skills.  Once you have at least one level in them/ you can activate them and use them as you fight.  You can only have one combat skill active at a time, and they each drain Combat Points to varying degrees.  The easiest way to activate combat skills is to hit the '+' key on the number pad, as this will cycle through each combat skill you have available.  (In other words/ hit '+' to change which combat skill you're using)  Most combat skills will only use combat points when they're actually having an effect, and when you run out of combat points, the skill will no longer function."
+#ADDCHOICES, MAIN2
+
+#BRANCH, PASSIVESKILLS
+#SAY, In the lower right side of the screen is a button labelled 'Skills'.  This is where you can view your current skill levels/ and purchase new ones.  Each skill displays it's description and effect when you move the mouse over it/ and clicking on a particular skill raises it by one point--assuming you have the skill points neccessary to purchase it.  The skills in the leftmost column are 'Class Skills' for your character--they cost half as much to raise as other skills.  The combat skills are also listed in this window/ and they are purchased with combat skill points rather than skill points.  You gain more of both as you gain levels.
+#ADDCHOICES, MAIN2
+
+#BRANCH, POTIONS
+#SAY, Potions are quite easy to use.  The '1' key (The one that isn't on the number pad) uses life potions and the '2' key uses mana potions.  You can also use life potions with the '.' key on the number pad.  The amount of life that potions restore is variable and depends on your level, and certain quests can give you 'potion enhancements' that cause each potion to restore more life. There are also a few other ways to restore life/ such as regeneration skills and healing fountains that can be found in most towns/ and if you get the skills neccessary to eat monsters/ you regain hit points as you digest them.
+#ADDCHOICES, MAIN2
+
+#BRANCH, MAGIC
+#SAY, If you have learned any spells/ they will appear on the left side of the screen just above your inventory.  To cast a spell/ select it in the list/ then either right-click on your target in the main window or hit the 'Cast Spell' button.  If you hit 'Cast Spell' or are using a Spell scroll/ you may be prompted to pick your target/ in which case you left-click in the main window on the spot you want to cast the spell on.
+#ADDCHOICES, MAIN2
+
+#BRANCH, MAGIC2
+#SAY, "If you have learned any spells, they will appear on the left side of the screen just above your inventory.  To cast a spell, select it in the list, then either right-click on your target in the main window or hit the 'Cast Spell' button.  If you hit 'Cast' or are using a Spell scroll, you may be prompted to pick your target, in which case you left-click in the main window on the spot you want to cast the spell on.  You learn spells by purchasing spell skills in the skills window.  For example, every time you purchase a point in 'Fire Magic', you learn new fire spells, and/or your existing fire spells become more powerful.  If a spell's mana cost is listed as 'PERM', that means it temporarily takes away from your maximum mana which will be restored the next time you gain a level."
+#ADDCHOICES, MAIN2
+
+#BRANCH, BASIC
+#SAY, "VRPG is played primarily using the number pad.  Make sure Num Lock is turned on (The Num Lock key turns it on and off) and simply hit the number pad keys to move.  You attack the same way--if there is a monster standing in the direction you indicate/ your character will attack it automatically.  The same goes for items and NPCs--to talk to an NPC/ simply press in the direction they're standing/ and to pick up an item/ simply walk over it.  You can redefine the keys for movement and such by selecting 'Reassign Keys' in the file menu."
+#ADDCHOICES, MAIN2
+
+#BRANCH, INV
+#SAY, On the left side of your screen is your inventory.  Simply double-clicking on an item uses it.  Single-clicking causes it's statistics to be listed in the message window.  Selecting an item in the list and hitting "Sell Item" immediately sells it for half of it's listed gold value, and hitting "Drop Item" simply drops it whereever you're currently standing.  Items will remain on the map/ so you can come back and retrieve them at a later time.
+#ADDCHOICES, MAIN2
+
+
+
+	-----[[HOME TOWN]]------
+
+#CONVERSATION, Birth
+#BRANCH, MAIN
+#IMAGE, intro1.jpg
+#TEXT, Your mind swims in a soft/ dreamy state/ floating gradually out of the nothingness.  You seem saturated with warmth/ with peace.  Thought and awareness rise up like a slow tide/ allowing you to know the warmth/ and eventually to know of yourself.  
+#CHOICE, (MORE), M1
+
+#BRANCH, M1
+#TEXT,You drift upon the clouds of your own being--your own birth.  Hours pass/ or days/ who knows.  The feelings begin to coalesce.  Become real.  Become focused.  The feeling of your skin begins to form itself--defining borders/ hands/ fingers.  Legs.  Flesh.
+#CHOICE, (MORE), M2
+
+#BRANCH, M2
+#TEXT, Soon/ another feeling appears.  A different feeling.  Vague at first/ but growing.  Like skin.  You gradually realize the feeling must be arms/ and legs; you can feel them growing/ feel a warm tingling against them.  You can feel your skin/ soft and new.  Feel the warmth against it/ through it.  Soon your body has fused into one solid piece/ one solid perception.
+#CHOICE, (MORE), M3
+
+#BRANCH, M3
+#TEXT, A strange black pitch descends upon your perception.  It makes you realize you have eyes.  Surprised/ you open them/ and suddenly your perceptions include colors/ and shapes.
+#CHOICE, (MORE), M4
+
+#BRANCH, M4
+#IMAGE, intro2.jpg
+#TEXT, You are in an egg.  Suspended in transparent goo/ with some sort of membranous outer layer.  Small bubbles drift lazily upward/ tickling your body.
+#CHOICE, (MORE), M5
+
+#BRANCH, M5
+#TEXT, Your mind begins to focus as well--you start to think/ to reason/ to know.  You begin to realize things--to know things.  You know how to speak/ how to fight/ how to bend the forces of magic to your will.  You realize that you *are*. You move your view downward--you look upon your body/ moving your fingers up to your view.  You sense that your emergence is imminent.  Your skin begins to tingle as your mind comes into it's full presence.  With that presence comes a final realization--you have a name.  You are $NAME.
+#CHOICE, (MORE), M6
+
+#BRANCH, M6
+#IMAGE, (NONE)
+#TEXT, The egg slowly begins to split/ the membranes slowly pulling apart from one another and peeling downwards to the floor. With them the slime that covered your body begins to ooze onto the ground--the air is cool against your wet skin.  As the egg casing finally retreats to the floor/ you raise your head and get your first good look at your surroundings...
+#EXIT, (EXIT)
+
+
+#CONVERSATION, Intro
+
+#BRANCH, MAIN
+#IMAGE, intro3.jpg
+#TEXT, You emerge from the cave and into a brilliant shaft of sunlight/ batting your new eyes against the unexpected glare.  Your skin is still moist/ allowing you to acutely detect the soft breeze that wafts across the grass in your new home.
+#CHOICE, (MORE), IN2
+
+#BRANCH, IN2
+#TEXT, As you look around in wonder at your surroundings/ you begin to see *people*.  You suddenly realize they're all staring at you/ speaking to one another in hushed tones.  Almost immediately you are approached by someone; a strong and intelligent looking woman/ flanked by a muscular girl in black leather.  They look at you/ seemingly in...awe.  It should not be this strange to see a newborn.
+#CHOICE, Who...who are you?, IN3
+
+#BRANCH, IN3
+#TEXT, They continue to simply stare for a moment.  Finally/ the lead woman breaks into a huge smile and speaks to you.
+#CHOICE, (MORE), IN4
+
+#BRANCH, IN4
+#SAY, My name is Tanna.
+#IMAGE, portrait1.jpg
+#CHOICE, Why are you all looking at me like that?, IN5
+
+#BRANCH, IN5
+#SAY, It...it was prophesied--Wait/ perhaps I am getting ahead of myself.  Our queen/ the woman who lays the eggs that all of us grow from/ was killed a short time ago. It was by a giant dragoness/ with ebony black skin and scales like thorns/ who rampaged through our city and ate dozens of girls--including our queen.  We also had a priestess/ a woman by the name of Atriel.  After our queen was lost/ she made a prophecy that the prodigy of our queen's final egg--the last egg to hatch--would go forth and slay this dragoness.  There was only one egg left before you emerged from that cave.  Your egg/ my dear/ was the last our queen ever laid.
+#CHOICE, Wait...you mean I'm supposed to be your big savior?, IN6
+#CHOICE, Did I mention that I hate prophecies?, IN6
+
+#BRANCH, IN6
+#SAY, I know you may not feel you are ready for this/ but we truly need you.  Without our queen/ our young city is in danger of extinction.  The great dragonness/ Thirsha/ continues to venture out from her lair/ her bottomless stomach leaving nothing but dessicated bones where women once walked.  I wish this were not true/ but only you can defeat her.  The great clans squabble around us/ and our own guardswomen begin to fall even now to the monsters at our gates.  Only you can defeat her/ as the last daughter of our people!  Only you can venture forth into her lair and slay her while she lays at rest/ her ill-gotten gains stewing in her belly as she laughs at us.  I know you can defeat her.  You can save our people.
+#CHOICE, Why me?, WHY
+#CHOICE, This Thirsha sounds rather dangerous.  What makes you think I can defeat her?, WHY
+#CHOICE, Very well.  I shall go forth and slay this Thirsha/ and bring her head back on a wagon!, HOW
+
+BRANCH, MAINOLD
+TEXT, You see Tanna/ wisewoman of the city you call home.  A cloud of doubt hovers over her weathered face. She has a look of sad determination as she approaches you.
+CHOICE, (MORE),MORE
+CHOICE, Test NPC digestion code (3).,#DIGESTTO:GOODBYE:3
+CHOICE, Test NPC digestion code (4).,#DIGESTTO:GOODBYE:4
+CHOICE, Test NPC damage code (30).,#DAMAGE:GOODBYE:30
+CHOICE:SAYONCE, This should only be selectable once.,MAIN
+CHOICE, Test clothing merchant code.,#SELLCLOTHES:Jade:Bra:Panties
+CHOICE, Test armor merchant code.,#SELLARMOR:1
+CHOICE, Test default changer thingy, #CHANGESTART:WHY:STUFF
+CHOICE, Test new item code junk.,#EFFECT:MAIN:GiveGold:50000
+EFFECT, GiveGold:69
+EFFECT, Lifeplus:1
+EFFECT, Manaplus:1
+CHOICE, Test OTHER new item code junk.,#TAKEOBJ:MAIN
+
+#BRANCH, MORE
+#SAY, You may not feel you are ready for this/ $NAME/ but now we need you.  A great danger has arisen in our young city.  The great dragonness/ Thirsha/ has begun venturing out from her lair/ her bottomless stomach leaving nothing but dessicated bones where women once walked.  I wish this were not true/ but only you can defeat her.  The great clans squabble around us/ and our own guardswomen begin to fall even now to the monsters at our gates.  Only you can defeat her/ $NAME.  Only you can venture forth into her lair and slay her while she lays at rest/ her ill-gotten gains stewing in her belly as she laughs at us.  I know you can defeat her.  You can save our people.
+#CHOICE, Why me?, WHY
+#CHOICE, I have heard of this Thirsha.  What makes you think I can defeat her?, WHY
+#CHOICE, Very well.  I shall go forth and slay this Thirsha/ and bring her head back on a wagon!, HOW
+
+#BRANCH, WHY
+#SAY, Because only you hold the potential I see in so few others these days.  In you is the possibility for greatness.  Certainly Allanna's sword is quicker--certainly Yratta's mind is faster.  But I fear they have reached their potential.  They cannot grow beyond their roles--already/ their duties consume them.  But in you I sense a great spark.  Only you may survive the bellies of our monstrous enemies and see us through to victory/ as Atriel prophesied.
+#CHOICE, Do I have a choice?,CHOICE
+#CHOICE, Your words ring true/ Tanna.  But how shall I pursue this victory?, HOW
+
+#BRANCH, CHOICE
+#SAY, Of course/ my dear.  But of all the daughters of our village/ only you can succeed.
+#CHOICE, Very well/ Tanna.  I accept.,ACCEPT
+#CHOICE, Fine.  It's not like I have anything better to do.,ACCEPT
+
+#BRANCH, ACCEPT
+#SAY, You are a brave girl indeed.
+#CHOICE, So how are we gonna do this?,HOW
+
+#BRANCH, HOW
+#SAY, First/ speak to the more experienced warriors of this village.  Their wisdom shall greatly enhance your chances. Be sure to speak to Yratta/ our clan consort--she knows of how you may reach Thirsha. Then equip yourself well--you will be walking a dangerous path/ and only a fool faces the brambles of fate naked.  
+#CHOICE, Ya think?,STUFF
+#CHOICE, I shall do my best/ Tanna.,STUFF
+#CHOICE, That's an odd coincidence/ actually...I do seem to be naked.,STUFF
+
+#BRANCH, STUFF
+#SAY, Worry not/ for we knew you would require equipment.  We have prepared these items for you.  
+#CHOICE, (MORE), STUFF3
+
+#BRANCH, STUFF3
+#TEXT, Tanna sends one of the other girls to fetch something.  Very quickly she returns with a pile of clothing in her arms/ and a sack of gold.
+#CHOICE, (TAKE THEM), #BASEEQUIP:STUFF4
+
+#BRANCH, STUFF4
+#SAY, Beyond this/ all the aid I can give is to heal your wounds and provide you with council.  (She thinks for a moment) But...take these items.  They shall aid you as well.
+#CHOICE,(MORE), STUFF2
+
+#BRANCH, STUFF2
+#TEXT, Tanna reaches into her dress and withdraws a number of small vials--healing potions.  She holds them out to you.
+#EFFECT, Lifepotion:10
+#CHOICE,(TAKE THEM), #TAKEOBJ:GOODBYE2
+
+
+#BRANCH, GOODBYE2
+#SAY, And before you leave...what name shall we know you by?
+#CHOICE, My name is $NAME., GOODBYE
+
+#BRANCH, GOODBYE
+#SAY, Then go with the wind/ $NAME/ and journey safely.
+#EXIT, Righto.  Thirsha/ here I come!
+#EXIT, Thank you.  Here's hoping I don't get eaten...
+#EXIT, Great.  I'm stomach-fodder...
+
+
+#CONVERSATION, Tanna
+
+#BRANCH, MAIN
+#SAY, Welcome back/ my child.  How may I aid you?
+#CHOICE, Do you have any advice for me?, ADVICE
+#CHOICE, What do you know about Thirsha?,THIRSHA
+#EXIT, Nothing.  Just stopping by.
+
+#BRANCH, ADVICE
+#SAY, Speak to Allanna in the armory in the northwest corner of the city.  She has much combat experience--she can tell you much of the ways of the adventurer.  Also/ you may wish to speak with Zettia.  She is learned in the ways of magic/ whereas Allanna is not.
+#CHOICE, Thanks.  What do you know about Thirsha?,THIRSHA
+#EXIT, Thanks.  Goodbye.
+
+#BRANCH, THIRSHA
+#SAY, I know she has a voracious appetite and many/ many enemies.  She refuses to feed on the other beasts near her lair/ choosing instead to travel to the cities in the region and devour their citizens.  This is the reason why the monsters have become so numerous--the city guard for each town are becoming more and more depleted as Thirsha swoops down from the sky and swallows dozens at a time.
+#CHOICE, How can I defeat such a creature?, DEFEATT
+#CHOICE, Sounds like I've got my work cut out for me.  Any other advice?,ADVICE
+#EXIT, Thanks.  Farewell.
+
+#BRANCH, DEFEATT
+#SAY, Thirsha may be powerful/ but she is also mortal.  She has grown sloppy in her power.  If you can catch her in her lair/ where she cannot take flight/ you can defeat her.
+#CHOICE, Easier said than done.  Any other advice?,ADVICE
+#EXIT, Thanks.  Farewell.
+
+
+#CONVERSATION, Allanna
+
+#BRANCH, MAIN
+#TEXT, You see a cute young girl.  She has small lockes of wavy hair that curve down her face.
+#CHOICE, What is your name?, NAME
+
+
+#ITEM, Can I hire some mercenaries?, Mercenary Girl2
+
+
+#CHOICE, What do you know about the monsters in this region?, MONSTERS
+#CHOICE, Do you have any advice on fighting?, ADVICE
+#EXIT, Thank you.  Goodbye.
+
+#BRANCH, NAME
+#SAY, My name is Allanna.  I command the guard in this town and protect it from the depradations of beasts.
+#CHOICE, What can you tell me about the guard?, GUARD
+#CHOICE, What can you tell me about the mercenaries you sell?, ABOUTMERCS
+#CHOICE, What beasts are you referring to?, MONSTERS
+#EXIT, Thanks. That's all I wanted to know.
+
+#BRANCH, ADVICE
+#SAY, Quite a bit.  I am captain of the guard/ and this has it's perks as far as battlefield experience.  The first thing to keep in mind is to keep your energy up.  Healing potions are the only real way to do this.  Watch your health carefully--if you begin to weaken/ monsters can take advantage of it.  Every monster has one thing on it's mind: Food.  They'd rather eat you than fight you/ and they'll try to swallow you with practically every attack they make.
+#CHOICE, Swallow me?, SWALLOW
+#CHOICE, Is there any way to keep from being eaten?, KEEPFROM
+#CHOICE, What happens if one of them does swallow me?, WHATIF
+#EXIT, I'll keep that in mind.  Thanks.
+
+#BRANCH, SWALLOW
+#SAY, That's right.  We're all just a bunch of walking picnics to the monsters.  They want their nutrition/ and there's no quicker source of it than us.  They don't seem to care what happens to us once we're in their stomachs.
+#CHOICE, You mean they'll swallow me WHOLE?, WHOLE
+#CHOICE, Well/ I'd like to have something to say about that., KEEPFROM
+#EXIT, Sounds dangerous.  Farewell.
+
+#BRANCH, SWALLOW
+#SAY, Oh yes.  You get to feel them digesting you and everything.
+#CHOICE, You mean they swallow me WHOLE?, WHOLE
+#CHOICE, Is there any way to escape?, WHATIF
+
+#BRANCH, WHOLE
+#SAY, You bet.  Monsters can stretch their stomachs quite a bit--more than you would guess from looking at them.  Even small monsters can make enough room for someone your size.  They'll just pin you down and force you down their throats/ right into their stomachs.  Whole/ and alive.  Apparently they enjoy feeling their prey squirm as their stomach absorbs it.
+#CHOICE, Sounds horrible. Is there any way to escape if you get swallowed?, WHATIF
+#EXIT, I don't think I want to talk about this anymore.  Goodbye.
+
+#BRANCH, WHATIF
+#SAY, It is possible to escape/ technically.  Most monsters' throat muscles are quite strong/ and most monsters likewise tend to try their best to keep their food in their stomachs.  However/ if you're strong enough/ you can sometimes shove your way back out.  You may as well try.  The only other alternative is to be digested alive.
+#CHOICE, Sounds bad.  Is there any way to keep from getting eaten in the first place?
+#EXIT, Thanks for the info.  Goodbye.
+
+#BRANCH, KEEPFROM
+#SAY, The best way is to keep your energy up and be quick on your feet.  A high dexterity means you are less likely to be eaten--it also helps to be skilled in dodging your opponent's blows.  They can't eat you if they can't touch you.
+#CHOICE, Thanks.  I had some other questions...,MAIN
+#EXIT, Thank you.  Goodbye.
+
+#BRANCH, ABOUTMERCS
+#SAY, You can purchase mercenaries in any town.  Mercenaries go into your inventory until you decide to use them.  They will fight alongside you/ but just like you/ they can be damaged and even swallowed whole by monsters.  If they are eaten/ you can save them by killing the monster who swallowed them.  Likewise/ in the unfortunate event that you yourself are eaten/ they can save you.  They are thus quite a good investment/ though you do not gain experience from monsters that they kill.
+#CHOICE, Thanks. I had another question about the guard...,GUARD
+#CHOICE, Thanks. I was wondering about the monsters in this region...,MONSTERS
+#EXIT, Thanks. That's all I wanted to know.
+
+#BRANCH, GUARD
+#SAY, The guard is the squadron of girls that keeps the monsters out.  I lose a few to the beast's appetites every few days/ but it's necessary to keep the whole town from becoming a banquet.  It's hard to keep recruitment up when the girls keep seeing members of the guard devoured whole/ but I do my best to keep them safe.
+#CHOICE, Can I join the guard?, JOIN
+#ADDCHOICES, NAME
+#EXIT, Thanks. That's all I wanted to know.
+
+#BRANCH, JOIN
+#SAY, I've heard you're going after Thirsha the Dragon.  I think that's dangerous enough.
+#ADDCHOICES, NAME
+
+#BRANCH, MONSTERS
+#SAY, This town is practically in the center of everything/ but seems to be in the midst of a calm spot.  To the North is the Plain of Beasts/ which contains dangerous Harpies/ Karis and Duamutef knows what else.  To the south are the marshes and the swamps/ which contain all manner of reptiles/ any of which would love to make a meal out of any of us.  And to the east and west is the Forest of Doubts--less dangerous perhaps than the swamp or the plains/ but don't think they're safe. Far from it.  And practically everywhere around here are the slime vines...They'll wrap around you and secrete acidic goo while they hold you tight/ dissolving you right where you stand.
+#CHOICE, Tell me about the monsters in the Forest., FOREST
+#CHOICE, Tell me about the reptiles in the Marsh.,MARSH
+#CHOICE, Tell me about the beasts in the Plains.,PLAINS
+#EXIT, Thanks. That's all I wanted to know.
+
+#BRANCH, FOREST
+#SAY,  The forest is mostly home to Karis--giant creatures that are half woman/ half spider.  Their oversized abdomens are designed for only one thing: holding large prey/ say about your size/ inside their body so that they can digest them efficiently.  They're tough monsters/ and take quite a few hits to bring down.  
+#CHOICE, Thanks.  I had another question about the monsters...,MONSTERS
+
+#BRANCH, MARSH
+#SAY, The marsh is full of reptiles.  Snakes/ frogs/ nagas/ you name it; if it slithers/ it's in there.  Besides being slimy/ they all have one other thing in common--they're all hungry/ all the time.  You see a snake opening it's maw/ you get the hell out of the way/ because it's probably aimed at you.  The frogs are almost as bad.  They'll flick their tongue out and yank you right in without so much as a peep/ and few things smell worse than the gunk in a Frog's stomach.
+#CHOICE, Thanks.  I had another question about the monsters...,MONSTERS
+
+#BRANCH, PLAINS
+#SAY, The Plain of Beasts is so named because it is/ obviously/ full of beasts.  You'll see karis and slime vines there/ of course/ but what's really scary are the harpies.  Deadly fast/ nigh unhittable/ and with a temper to match.  You'd best watch your step.  Nobody wants to end up a meal for one of those merciless hags.  Not that they plan to give you a choice.
+#CHOICE, Thanks.  I had another question about the monsters...,MONSTERS
+
+
+
+#CONVERSATION, Myida
+#BRANCH, MAIN
+#SAY, Yeah?
+#CHOICE, Who are you?,WHO
+#CHOICE, What do you know about Thirsha the Dragon?,THIRSHA
+#CHOICE, What can you tell me about this region?,REGION
+#EXIT, Never mind.
+
+#BRANCH, WHO
+#CHOICE, I'm Myida.  I live here in town.
+#ADDCHOICES, MAIN
+
+#BRANCH, THIRSHA
+#SAY, The Dragon Queen?  She's a horrible thing/ all teeth and scales and stomach/ each one waiting to slice you to shreds!  Be wary/ because rumor has it she eats an average of a dozen girls a day/ and it's only a matter of time before her appetite sends her down here!
+#CHOICE, Do you know anything that might help me defeat her?, DEFEAT
+#CHOICE, Thanks.  What do you know about this area?,REGION
+#EXIT, Thanks.  Bye bye then.
+
+#BRANCH, DEFEAT
+#SAY, Say what? You mean you're going to FIGHT her!?  Look/ I know the fame and glory have got to be great and all/ but let's be realistic here.  If you go up against Thirsha/ you'll go down her throat and out whatever her scaled hide considers to be her ass.
+#CHOICE, Well/ somebody's got to do it.  Do you know anything about her?, DEFEAT2
+#CHOICE, You're right.  I'm a retard.  I had another question...,MAIN
+#EXIT, You obviously don't have any faith in me.  I'm leaving.
+
+#BRANCH, DEFEAT2
+#SAY, Oh/ I suppose...I hear she lives in a cave far to the north/ past the deserts and the volcanic region.  I hear the Demonguts and the Firebellies live up near there/ too...as if Thirsha wasn't dangerous enough.  If you're going to fight her/ you'll need to be very powerful.
+#CHOICE, Neat.  I had another question...,MAIN
+
+#BRANCH, REGION
+#SAY, This city is pretty much in the middle of the Forest of Doubts/ in sort of a thin area.  You could say this city pretty much crosses right through the middle--you can go from the marshes to the desert without even going through the forest if you come through this city.  There's another town called the City of Angels to the west which is friendly to us--unfortunately, that's about all I know.
+#CHOICE, Thanks. I had another question...,MAIN
+
+
+#CONVERSATION,  Yratta
+#SAY, Greetings.  I am Yratta/ clan consort of our town.
+#CHOICE, Clan consort?,CONSORT
+#CHOICE, What can you tell me about the clans?, CLANS
+#CHOICE, What do you know about Thirsha the Dragon?, THIRSHA
+#EXIT, Nice to meet you.  Bye.
+
+#BRANCH, CONSORT
+#SAY, Yes.  I speak for our town in all of our official contacts with the clans.  It is beneficial to have a diplomat/ as our town is not a member of any clan.  Neutrality has it's benefits/ but only when one can exploit them.  The City of Angels/ to the west/ is also neutral.  You may wish to visit them.
+#CHOICE, What is our relationship with the other clans?,RELATE
+#CHOICE, What can you tell me about the clans?, CLANS
+#CHOICE, What do you know about Thirsha the Dragon?, THIRSHA
+#EXIT, Ah/ I see.  Goodbye.
+
+#BRANCH, RELATE
+#SAY, Most of the clans are content to ignore us.  They have enough problems of their own--primarily each other.  Nearly every clan has at least one arch-enemy; the Firebellies and the Demonguts/ the Darkswallows and the Whitethroats...Wars are fairly common/ even among non-rivals.  Thankfully/ I have been able to make sure that none of them has any particular reason to attack us.  That doesn't mean they're entirely safe to be around/ however.
+#CHOICE, What can you tell me about the clans?, CLANS
+#CHOICE, What do you know about Thirsha the Dragon?, THIRSHA
+#EXIT, Ah/ I see.  Goodbye.
+
+#BRANCH, CLANS
+#SAY, There are five major clans represented in this region.  Clans Demongut/ Darkswallow and Firebelly can be found to the north/ whereas the unusual Clan Gurglemeister is rumored to have a city to the south.  Also/ we have heard tales of a city belonging to the enigmatic Velvet Intestine clan far to the east/ beyond the volcanic pass.
+#CHOICE, Tell me about Clan Demongut., DEMONGUT
+#CHOICE, Tell me about Clan Firebelly., FIREBELLY
+#CHOICE, Tell me about Clan Gurglemeister., GURG
+#CHOICE, Tell me about Clan Darkswallow., DS
+#CHOICE, Tell me about Clan Velvet Intestine., VI
+#CHOICE, Sounds fascinating. What can you tell me about Thirsha the Dragon?, THIRSHA
+#EXIT, Sounds fascinating. But I have to go.
+
+#BRANCH, VI
+#SAY, Clan Velvet Intestine is an enigmatic and mysterious clan/ given over to magic and subtlety. They are slow to anger compared to other clans/ but like most/ one had best not encounter them while they are hungry.  Their lake city is far/ far to the east/ and you must travel through the volcanic pass in the northeast in order to reach it.  They are the only ones who know of the location of the blue Key of Thirsha/ however/ so it is inevitable that you will have to find them.
+#ADDCHOICES, CLANS
+
+#BRANCH, DS
+#SAY, The most conniving of the clans may well be the black clan Darkswallow.  Of the clans most tended towards diplomacy/ the Darkswallows and the Whitethroats/ the Darkswallows are the only relevant ones to us because there are no known Whitethroats in this region.  Do not let their names fool you; the Whitethroats are no less treacherous/ and the Darkswallows can be cordial enough when it suits them to do so.  They have a city to the northwest/ in the mountainous regions.  Both clans are highly secretive/ and highly wary of one another.  The closest Darkswallow city is Blackscouge, in the mountainous region west of the northern deserts.  It may be useful to visit the city if you're in the area/ provided you watch your step.
+#ADDCHOICES, CLANS
+
+#BRANCH, DEMONGUT
+#SAY, Clan Demongut is a wanton and chaotic clan.  They care only for their own firey appetites/ owing little to honor or even strategy.  Nonetheless/ they are fierce warriors and intensely dangerous simply because of this ferocity.  The one reliable thing about the Demonguts is their animosity towards the Firebellies; the two have a feud that has stretched back as long as anyone can remember.  The Demonguts have a castle far to the north/ just west of Thirsha's Volcano and north of the Darkswallow city of Blackscourge.
+#ADDCHOICES, CLANS
+
+#BRANCH, FIREBELLY
+#SAY, Clan Firebelly is cruel and sadistic/ but cunning just the same.  It is possible to deal with them/ but their hunger often overrides any feigned friendship they may have with you.  Always watch the Firebellies--one moment in their lap/ the next in their belly/ so it is said.  They have an intense hatred for the Demonguts--the one time you can be assured of your safety is when they have these much more preferable enemies around.  There is a Firebelly city to the northwest in the volcanic region.  It is called Skinbane.
+#ADDCHOICES, CLANS
+
+#BRANCH, GURG
+#SAY, The Gurglemeisters are an odd group.  Sociable as a whole/ but still unsettling in their obsession with their own digestive tracts.  You'd best watch your step around them--they may swallow you just as a prank/ but they're not about to burp you back up and risk ruining the joke...We're not sure where the Gurglemeisters live/ that is if they have a city at all/ but several have come from the south.
+#ADDCHOICES, CLANS
+
+#BRANCH, THIRSHA
+#SAY, I have heard of your quest to defeat Thirsha the dragon.  All my hopes go with you in your travels.  Know this--Thirsha is powerful indeed/ but she knows that there are some who could defeat her/ especially if the clans were to combine to hunt her down. Thus/ she has secured her lair with three magical doors/ each requiring a different key.  These keys have been scattered throughout the land/ requiring that whomever seeks to challenge her seek the keys first.
+#CHOICE, And where are these keys?,KEYS
+
+#BRANCH, KEYS
+#SAY, The first key is said to be in a cave far to the south.  Last I heard the caves were filled with dangerous worms; giant fanged grubs that will pick yank a girl right off her feet and chomp her down right there. Sadly/ that may be the easiest key for you to get.  The other keys have found their way into the hands of the clans--the second key is held by Clan Demongut/ and the third is in the hands of Clan Velvet Intestine.  Neither may be willing to give them up for nothing.
+#CHOICE, Thanks.  I had some other questions...,CLANS
+#EXIT, Then I suppose I had best seek them out.  Farewell.
+
+Anthandra
+
+
+
+#CONVERSATION, Zettia
+#BRANCH, MAIN
+#SAY, Greetings.  I know your name--it is $NAME.  I am called Zettia.
+#CHOICE:IFQUEST:Naga Queen, I have destroyed the Naga Queen.,#CHANGESTART:MAIN2:KILLEDQUEEN
+#CHOICE, How do you know my name?,NAME
+#CHOICE, Zettia? Are you a sorceress?, SORC
+#CHOICE, What can you tell me about magic in general?, MAGIC
+#CHOICE, What can you tell me about the different styles of magic?, SCHOOLS
+#CHOICE, Do you sell potions?, POTIONS
+#EXIT, Farewell.
+
+#BRANCH, FIREMAGIC
+#SAY, "Fire magic is generally focused on destruction and flames.  Fire magic has the most powerful and numerous low-level attack spells of all the different magical schools.  Not only do you obtain firebolt at level 1, but you gain a powerful spell called Flaming Aura at level 2 that inflicts damage on all enemies who attack you.  At level 3 you gain Blaze, which shoots flame in all directions and is devastating at close quarters.  Later on you gain fireballs, which inflict damage over a wide area, and even the ability to summon fire elementals.  The ultimate spell of the Fire school is Supernova, a spell which creates an expanding sphere of flame that inflicts massive damage."
+#CHOICE, What can you tell me about water magic?, WATERMAGIC
+#CHOICE, What can you tell me about earth magic?, EARTHMAGIC
+#CHOICE, What can you tell me about air magic?, AIRMAGIC
+#CHOICE, What can you tell me about other magics?, RMAGIC
+#EXIT, Thank you.  Farewell.
+
+#BRANCH, SCHOOLS
+#SAY, "Each 'element' of magic is essentially a style.  They are used as mental and emotional focuses for particular effects.  Thinking of a particular element tends to make certain magical effects easier, so most mages think of their magics in such terms.  Though there are other styles and schools, the most common are the elemental styles.  Fire and Air are the favorites of combat mages, with Fire being the more offensive of the two, and air being the more balanced.  Enchantresses and warriors prefer Water and Earth--Water is an enigmatic element that provides many enchantment abilities, and Earth is the ultimate expression of strength and endurance--combined, the two are both strongly associated with life.  More generic magic without an element is generally called sorcery or grey magic."
+#CHOICE, What can you tell me about fire magic?, FIREMAGIC
+#CHOICE, What can you tell me about water magic?, WATERMAGIC
+#CHOICE, What can you tell me about earth magic?, EARTHMAGIC
+#CHOICE, What can you tell me about air magic?, AIRMAGIC
+#CHOICE, What can you tell me about other magics?, RMAGIC
+#EXIT, Thank you.  Farewell.
+
+
+#BRANCH, RMAGIC
+#SAY, "The most common non-elemental style is called sorcery.  It is the element of magic itself--sorcery grants spells that increase your spellcasting abilities, and include teleportation spells, charm spells, and some generic summoning abilities.  Grey magic is also called enchantment, and it focuses primarily on magics that improve items or stats.  It has the best set of enchantment spells of any school, but can do little else."
+#CHOICE, What can you tell me about fire magic?, FIREMAGIC
+#CHOICE, What can you tell me about water magic?, WATERMAGIC
+#CHOICE, What can you tell me about earth magic?, EARTHMAGIC
+#CHOICE, What can you tell me about air magic?, AIRMAGIC
+#EXIT, Thank you.  Farewell.
+
+#BRANCH, WATERMAGIC
+#SAY, "Water magic is unusually broad, as water has many uses and natures.  An interesting fact is that though acid is widely considered to be both fire and water, it falls under the water school of magic.  Water has a very inexpensive basic healing spell at level 2, some very useful but unpredictable enchantments, a weak but very inexpensive attack spell, and the ability to summon water elementals.  The ultimate spell of water magic is an enchantment spell that can give any article of clothing a regeneration bonus--when placed on multiple items of clothing, these bonuses can become incredibly high."
+#CHOICE, What can you tell me about fire magic?, FIREMAGIC
+#CHOICE, What can you tell me about earth magic?, EARTHMAGIC
+#CHOICE, What can you tell me about air magic?, AIRMAGIC
+#CHOICE, What can you tell me about other magics?, RMAGIC
+#EXIT, Thank you.  Farewell.
+
+#BRANCH, AIRMAGIC
+#SAY, "Air magic is the magic of air, light, and energy.  Air magic is a favorite of sorceresses, because it has a heavy spectrum of excellent attack spells along with several useful defensive and healing spells.  First off, it contains a large variety of lightning spells, many of which allow you to hit multiple targets.  The Air Aura you gain at level 2 aids you on dodging attacks.  At level 3 you gain healing light, which is an expensive but very effective healing spell.  At level 4 you gain chain lightning, and at level 5 you gain a spell that allows you to enchant a bow to give a bonus to your split arrow skill along with a teleportation spell.  Level 6 gives you lightning wave, and the ultimate spell lets you summon a lightning dragon."
+#CHOICE, What can you tell me about water magic?, WATERMAGIC
+#CHOICE, What can you tell me about fire magic?, FIREMAGIC
+#CHOICE, What can you tell me about earth magic?, EARTHMAGIC
+#CHOICE, What can you tell me about other magics?, RMAGIC
+#EXIT, Thank you.  Farewell.
+
+#BRANCH, EARTHMAGIC
+#SAY, "Earth magic is almost entirely defensive.  It has no attack spells, but is a favorite of warriors because it can increase the strength and endurance of anyone many times over.  The first level of Earth magic gives you aura of Earth, which not only increases your endurance and strength, but protects you from damage.  At second level you gain regeneration, which is one of the most powerful spells in any school, as it allows you to regain hit points much faster than the regeneration skill.  While weak when you first learn it, at higher levels this spell can make you all but invincible.  You gain the ability to summon Earth elementals at level 3, and at higher levels you gain the ability to enchant armor and weapons to make them stronger."
+#CHOICE, What can you tell me about water magic?, WATERMAGIC
+#CHOICE, What can you tell me about fire magic?, FIREMAGIC
+#CHOICE, What can you tell me about air magic?, AIRMAGIC
+#CHOICE, What can you tell me about other magics?, RMAGIC
+#EXIT, Thank you.  Farewell.
+
+
+#BRANCH, KILLEDQUEEN
+#SAY, Excellent work/ $NAME.  You are apparently more formidable than you appear.  There may be something to this prophecy after all...I shall enhance your mana potions at once.
+#CHOICE, Thank you/ Zettia.  Happy to be of service.,#EFFECT:MAIN2:Manaplus:1
+
+#BRANCH, MAIN2
+#SAY, *Zettia nods* What can I do for you?
+#CHOICE, How do you know my name?,NAME
+#CHOICE, Zettia? Are you a sorceress?, SORC
+#CHOICE, What can you tell me about magic?, MAGIC
+#CHOICE, Do you sell potions?, POTIONS
+#EXIT, Farewell.
+
+#BRANCH, NAME
+#SAY, It shouldn't be too surprising.  Word of your quest has spread all over town.  I might have a little job for you/ if you're eager to prove yourself.
+#CHOICE, Okay/ I'm game.  What's this job?,QUEST
+#CHOICE, No thanks.  I had some questions/ though., MAIN2
+#EXIT, Sorry.  Not interested.
+
+#BRANCH, QUEST
+#SAY, I have learned of a Naga Queen who lives in the caves far to the south/ past the marshes and the reptile bog. Her serpentine followers have been eating our girls for months.  I have tired of my apprentices ending up as Naga-excrement. I can provide you with an enhancement for your mana potions for your trouble if you can destroy her for me.  Remember/ though/ that you'd have to fight through not only the reptile bog but also the cave itself.  I wouldn't recommend you try it unless you're already a powerful warrior.
+#CHOICE, I'll keep a look out for her.  I had some other questions...,MAIN2
+#EXIT, Not interested.  Goodbye.
+
+#BRANCH, QUESTIONS
+#SAY, Yes?
+#CHOICE, Are you a sorceress?, SORC
+#CHOICE, What can you tell me about magic?, MAGIC
+#CHOICE, Do you sell potions?, POTIONS
+#EXIT, Farewell.
+
+#BRANCH, POTIONS
+#SAY, Not personally.  If it's potions you want/ you should speak to Arrianna.  She's in a building on the west side of town--the one with the trees in front of it.
+#CHOICE, Are you a sorceress?, SORC
+#CHOICE, What can you tell me about magic?, MAGIC
+#EXIT, I think I'll do that. Farewell.
+
+#BRANCH, SORC
+#SAY, I am indeed.  All of the powers of the arcane arts are at my disposal--I would like to see the monster that could stuff the mighty Zettia down it's greedy maw.
+#CHOICE, I bet Thirsha could.,THIRSHA
+#CHOICE, Could you teach me about magic then?,MAGIC
+#EXIT, Fascinating.  I'll see you later.
+
+#BRANCH, THIRSHA
+#SAY, Thirsha indeed!  That whelp of a lizard could never challenge me.
+#CHOICE, Why don't you come with me then?,JOIN
+#CHOICE, I don't think so.  I think you'd be sliding through her intestines before you even knew what happened.,MAD
+#EXIT. Whatever. Goodbye.
+
+#BRANCH, JOIN
+#SAY, I would/ but I am forbidden.  A rival sorceress of mine/ a Darkswallow by the name of Rutara/ would instantly set upon me if I were to leave here.  And while I could handle her/  I have my doubts that I could defeat both her and Thirsha simultaneously.
+#CHOICE, Whatever. Pansy.,MAD
+#CHOICE, That's a pretty lame excuse. Honestly.,MAD
+#CHOICE, Makes sense.  Can I ask you about something else?,QUESTIONS
+
+#BRANCH, MAD
+#SAY, How dare you speak to me in such a fashion.  I have half a mind to shrink you down and swallow you myself!  See if a few hours wallowing in my vomit would teach you some manners.  If only you weren't Tanna's little pet hero...
+#EXIT, Whatever/ bitch.  I'm leaving.
+#CHOICE, Look/ I'm sorry.  Can I ask you something?,QUESTIONS
+
+#BRANCH, MAGIC
+#SAY, Magic is like any other combat skill. It has it's advantages and it's drawbacks. The advantage of magic is that you can attack beasts from a distance--the disadvantage is that if you don't kill it in the first few shots/ it's almost guaranteed to come after you with it's mouth wide open/ waiting to stuff you down it's throat where your spells won't mean a lot.  Most people cannot summon the concentration to cast spells while they're busy being digested.  There are a few ways to escape from a monster's belly besides squirming your way out--particularly scrolls and mercenaries.
+#CHOICE, But what happens if a mercenary kills a monster while I'm inside it?,INSIDE
+#CHOICE, What good would a scroll do inside a monster's belly?, SCROLLMEAN
+#CHOICE, What can you tell me about the different styles of magic?, SCHOOLS
+CHOICE, What do you know about Black Magic in particular?,BLACK
+CHOICE, What can you tell me about White Magic?, WHITE
+CHOICE, Do you know anything about Grey Magic?, GREY
+#EXIT, Thank you.  That's all I need to know.
+
+#BRANCH, SCROLLMEAN
+#SAY, Well/ I don't think I even need to TELL you the benefits of using a teleportation scroll when you're about to be shoved down a monster's intestines.  Other than that/ only a few spells are directly helpful under such circumstances.  Most attack spells--even spells that flare out/ like Blaze--will appear just outside the monster/ failing to harm it.  We believe this must be some sort of interior defensive mechanism that monsters have to allow them to digest mages safely.  We do tend to wonder why this same mechanism doesn't protect them from external spells/ however...In any case/ superheating a monster you happen to be inside at the time might not be the best idea even if you could...
+#CHOICE, What do you know about Black Magic in particular?,BLACK
+#CHOICE, What can you tell me about White Magic?, WHITE
+#CHOICE, Do you know anything about Grey Magic?, GREY
+#EXIT, Thank you.  That's all I need to know.
+
+#BRANCH, INSIDE
+#SAY, You escape/ no worse for the wear except for perhaps having stomach goop soaked into your clothing.
+#CHOICE, What do you know about Black Magic in particular?,BLACK
+#CHOICE, What can you tell me about White Magic?, WHITE
+#CHOICE, Do you know anything about Grey Magic?, GREY
+#EXIT, Thank you.  That's all I need to know.
+
+#BRANCH, WHITE
+#SAY, White magic is the magic of healing and strength.  I don't know much about it/ because as a sorcereress I rarely use it.  Most white magic involves regaining hit points/ but many white spells can make your attacks hit harder/ and there are even a few offensive white spells.
+#CHOICE, What do you know about Black Magic?,BLACK
+#CHOICE, Do you know anything about Grey Magic?, GREY
+#EXIT, Thank you.  That's all I need to know.
+
+#BRANCH, GREY
+#SAY, Of course I know about Grey magic.  Grey magic is the magic of enchantment--changing things to suit your will.  Most enchantresses and other practitioners of the Grey arts focus on changing themselves/ making themselves faster/ stronger and smarter than they would be.  Many grey spells can also offer protection or defenses against monsters.  The downfall of Grey magic is that it possesses almost no direct offensive capabilities/ so you had best have another way to destroy your foes or all of your enchantments will be for naught.
+#CHOICE, What do you know about Black Magic then?,BLACK
+#CHOICE, What can you tell me about White Magic?, WHITE
+#EXIT, Thank you.  That's all I need to know.
+
+#BRANCH, BLACK
+#SAY, Black magic is the magic of offense.  It is for those who tire of enigmatic means and decide simply to reduce their enemies to ashes.  Black magic is primarily attack spells/ but the Black school also contains many rituals which boost the caster's intelligence--increasing the potency of any spells cast henceforth.
+#CHOICE, What can you tell me about White Magic?, WHITE
+#CHOICE, Do you know anything about Grey Magic?, GREY
+#EXIT, Thank you.  That's all I need to know.
+
+
+#CONVERSATION, Ralyrra
+
+#BRANCH, MAIN
+#SAY, *Ralyrra looks up to you cheerfully* Good morning.  What can I do for you?
+#CHOICE:SAYONCE, Who are you?,NAME
+CHOICE, JACKETS (Get rid of me),#SELLCLOTHES::Jacket
+#CHOICE, I would like to buy some clothes.,#SELLCLOTHES::Upper:Lower
+#CHOICE, I would like to buy some lingirie.,#SELLCLOTHES::Bra:Panties
+#CHOICE, What can you tell me about the clothing you sell?,ABOUTCLOTHES
+#EXIT, Thanks Ralyrra.  That will be all.
+
+#BRANCH, NAME
+#SAY, My name is Ralyrra.  I sell clothing of all types/ of the highest quality...or at least/ the highest quality you can find around here.  Truth is/ it's hard to find the higher quality materials--silk/ velvet and so forth--way out here.  I'd certainly make clothes out of them/ if I had them...
+#CHOICE, Why can't you get better materials?,WHY
+#CHOICE, I would like to buy some clothes.,#SELLCLOTHES::Upper:Lower
+#CHOICE, I would like to buy some lingirie.,#SELLCLOTHES::Bra:Panties
+#CHOICE, What can you tell me about the clothing you sell?,ABOUTCLOTHES
+#EXIT, Thanks Ralyrra.  That will be all.
+
+#BRANCH, WHY
+#SAY, Mostly just that the monsters have become so thick lately that trade between cities is virtually nonexistant.
+#CHOICE, I would like to buy some clothes.,#SELLCLOTHES::Upper:Lower
+#CHOICE, I would like to buy some lingirie.,#SELLCLOTHES::Bra:Panties
+#CHOICE, What can you tell me about the clothing you sell?,ABOUTCLOTHES
+#EXIT, Thanks Ralyrra.  That will be all.
+
+#BRANCH, ABOUTCLOTHES
+#SAY, Clothing is your best protection against monsters/ short of actual armor.  It reduces the damage you take from beasts attacking you/ and can even absorb some of the acid in the unfortunate circumstance that you are swallowed by one.
+#CHOICE, Swallowed!? Eww!!,EWW
+#CHOICE, Go on.,MORE
+#EXIT, I don't think that'll happen.  Well/ I have to go now.
+
+#BRANCH, MORE
+#SAY, This does/ however/ mean that your clothes will eventually be digested by whatever beast has swallowed you.  A partially-digested set of clothing is not only atrocious-smelling/ but itchy and uncomfortable--and worth significantly less as far as stopping enemy attacks.  A shredded/ acid-soaked shirt is little defense against a set of claws.
+#CHOICE, Okay/ now you're REALLY grossing me out.,EWW
+#CHOICE, I'll keep that in mind.  Can I buy some clothes now?,MAIN
+#EXIT, That's nasty. I'm leaving.
+
+#BRANCH,EWW
+#SAY, Well/ the digestive process may be gross/ but you're going to get a firsthand lesson in it if you're not careful.  Proper clothing can help prevent you from meeting an untimely end in some beasty's belly.
+#CHOICE, Alright.  You've convinced me.  What have you got?,#SELLCLOTHES::Upper:Lower
+#EXIT, That doesn't mean you have to talk about it.  I'm leaving.
+#EXIT, Thanks for the warning.  Farewell.
+
+
+#CONVERSATION, Ettra
+
+#BRANCH, MAIN
+#TEXT, Ettra looks at you expectantly.
+#CHOICE:SAYONCE, Who are you?,WHO
+#CHOICE, I would like to buy some armor.,#SELLARMOR:1
+#CHOICE, What can you tell me about the armor you sell?,ABOUTARMOR
+#EXIT, Never mind.
+
+#BRANCH, WHO
+#SAY, I am Ettra.  I sell armor.  I am the only armorsmith currently working in this town.
+#CHOICE, Ah.  Can I buy some armor then?,#SELLARMOR:1
+#CHOICE, What can you tell me about the armor you sell?,ABOUTARMOR 
+#EXIT, Thanks.  Goodbye.
+
+#BRANCH, ABOUTARMOR
+#SAY, Armor takes the direct approach in defending you from enemies.  Each piece of armor you wear reduces the damage you take from enemy attacks/ and makes digesting you a painful proposition at best.
+#CHOICE, Digesting me?,DIGEST
+#CHOICE, What kinds of armor work best?,BEST
+#CHOICE, What's the difference between armor and clothing?,DIFF
+#CHOICE, Can I buy some armor?,#SELLARMOR:1
+#EXIT, That'll be all/ thanks.
+
+#BRANCH, DIGEST
+#SAY, Wake up/ girl.  The forest is full of creatures with only one thing on their mind: Food.  And their primary diet is girls just like you.  If you go out and fight them/ sooner or later one of them is going to gobble you up like a piece of lettuce.  And when that happens/ you'll be glad you're wearing plate mail in the meantime/ because it can take a while to force your way back out.  If you can/ that is.
+#CHOICE, So is it possible for a monster to digest armor?,DIGARM
+#CHOICE, I see.  I had some other questions about armor...
+#EXIT, Thank you for the information.  Farewell.
+
+#BRANCH, DIGARM
+#SAY, Unfortunately/ yes.  The beasts around here can digest practically *anything*/ but it will usually take a lot longer to digest armor than it would normal clothing.
+#CHOICE, Thanks.  I had some other questions about armor...,ABOUTARMOR
+#EXIT, Thanks/ that's all I wanted to know.  Farewell.
+
+#BRANCH, BEST
+#SAY, There are two things that go into armor's effectiveness: It's type and it's material.  Armorsmiths will tell you the armor rating of each piece of armor they show you.  You can use this to make a decision/ but keep in mind that certain items--generally the top-of-the-line pieces that are difficult to make--have a higher price than their armor value would reflect.
+#CHOICE, Go on...,BEST2
+
+#BRANCH, BEST2
+#SAY, Ultimately/ though/ the effectiveness of the armor you can buy is limited by what it's made of.  Due to this damned monster blockade/ I have been reduced to using hardened leather hides to make my armor.  The City of Angels still has a decent supply of bronze/ however/ so you may be able to get some better armor there...if you can afford it.
+#CHOICE, Thanks.  I had some other questions about armor...,ABOUTARMOR
+#EXIT, Thanks/ that's all I wanted to know.  Farewell.
+
+#BRANCH, DIFF
+#SAY, The biggest difference is in the level of protection you can get.  Armor is almost always a better choice/ but is also pretty pricey by comparison.  There's also the question of fashion/ if you're into that kind of thing.  Functionally/ the only limit to armor is it's limited variety/ and it's price.  You can't buy a breastplate for the same ten gold you might by a bra with.  The closest thing is a halter/ but they're both a bra and a breastplate--good defense for a bra/ but you can't wear anything overtop of them.  They are one of the cheapest pieces of armor you can buy/ however...
+#CHOICE, Thanks.  I had some other questions about armor...,ABOUTARMOR
+#EXIT, Thanks/ that's all I wanted to know.  Farewell.
+
+
+
+								---[[[ CITY OF ANGELS ]]] ---
+
+#CONVERSATION, Likaysha
+#BRANCH, MAIN
+#SAY, Welcome to the City of Angels/ traveller.  My name is Likaysha.  You are $NAME/ are you not?  Your powers are already known in this city.  I have a task for you/ if you would take it.
+#CHOICE:IFQUEST:Giantess, I have killed the Giantess., #CHANGESTART:MAIN2:KILLEDGIANTESS
+#CHOICE, What can you tell me about this city?, CITY
+#CHOICE, What can you tell me about the surrounding area?, AREA
+#CHOICE, What is this task you want me to do?, QUEST
+#EXIT, Farewell.
+
+#BRANCH, MAIN2
+#SAY, Welcome/ $NAME.  I am at your service.
+#CHOICE, What can you tell me about this city?, CITY
+#CHOICE, What can you tell me about the surrounding area?, AREA
+#EXIT, Farewell.
+
+#BRANCH, KILLEDGIANTESS
+#SAY, Excellent!  I shall now increase the power of your life potions/ as promised.
+#CHOICE, Thank you., #EFFECT:MAIN2:Lifeplus:1
+
+#BRANCH, QUEST
+#SAY, To the northwest is a temple.  It is called the Temple of Yppiz/ and is filled with a depraved cult who are raising a giantess.  They have been feeding themselves to her willingly/ and with each meal she grows larger/ stronger and more bold.  She has even begun venturing out of the temple/ and has eaten many of our guardswomen.  I can enhance your life potions if you are able to destroy her for us.
+#CHOICE, How do I reach her?, REACH
+#CHOICE, How powerful are these cultists?, CULTISTS
+#CHOICE, I'll consider it.  I had some other questions., MAIN
+
+#BRANCH, REACH
+#SAY, It is very closeby.  You will simply have to travel directly west/ into the Mora Plains/ and then head north.
+#CHOICE, What do you know about these Mora Plains?, MORA
+#CHOICE, How powerful are these cultists?, CULTISTS
+#CHOICE, I'll consider it.  I had some other questions., MAIN
+
+#BRANCH, MORA
+#SAY, The Mora Plains are home to a more powerful breed of monster than you might be used to.  Like the Forests/ it is filled with dangerous plant life/ but the lower humidity seems to have made the plants there more aggressive in seeking out living prey.
+#CHOICE, How powerful are these cultists?, CULTISTS
+#CHOICE, I'll consider it.  I had some other questions., MAIN
+
+#BRANCH, CULTISTS
+#SAY, They are powerful indeed.  So powerful that every time our guards have attempted to deal with them/ they have failed.  And by failed/ I mean been shit out by a cultist after being digested alive.  We have even observed magical acolytes in their cult--the novice ones fling fireballs at trespassers/ and the advanced have learned to vomit their own bile at the enemy--they don't even have to swallow you to start digesting you!  (The way she describes them/ it sounds as though they average about 16th level)
+#CHOICE, Sounds dangerous.  How can I reach them?,REACH
+#CHOICE, I'll consider it.  I had some other questions., MAIN
+
+#BRANCH, AREA
+#SAY, To the east is the Forest of Doubts/ which you've probably seen.  Directly south of here is the Forest Glade--an area that looks idyllic/ but is probably the most dangerous area directly bordering our city.  It is filled with sprites and other magical creatures--creatures that will enchant you with their beautiful eyes right before they ram you bodily down their throats.  To the west are the Mora Plains--slightly less dangerous/ but only slightly.  They're full of carnivorous plants--giant/ two-jawed monstrousities that will snap shut around a girl and start digesting her then and there.
+#CHOICE, What can you tell me about this city?, CITY
+#EXIT, Thanks.  Farewell.
+
+#BRANCH, CITY
+#SAY, This is the City of Angels.  We are a peaceful bunch of women/ and try to stay neutral in all the clan conflicts that go on around here.  Our only serious problem has been the Temple of Yppiz.
+#CHOICE:IFNOTQUEST:Giantess, Temple of Yppiz?, QUEST
+#CHOICE, What kinds of stuff can I find around here?, FIND
+
+#BRANCH, FIND
+#SAY, Well/ like most cities/ we have girls who sell armor/ clothes and weapons.  Also/ if you can find Melanca/ she sells magical scrolls that can aid you significantly if you have no magical skills of your own.
+#CHOICE, Thanks.  I had some other questions...,MAIN
+#EXIT, Thank you.  Farewell.
+
+
+#CONVERSATION, Melanca
+
+#BRANCH, MAIN
+#SAY, Greetings/ traveler.  I am Melanca/ and I sell magical scrolls and potions.  Might I interest you in any?
+#CHOICE, What are scrolls?, WHAT
+#CHOICE, What kind of scrolls to you sell?, SCROLLS
+#CHOICE, Is it possible for me to make my own scrolls?, MAKE
+#ITEM, I would like to buy some scrolls.,Sellscrolls
+#CHOICE, I would like to buy some potions., #SELLPOTIONS
+#EXIT, No thanks.
+
+#BRANCH, WHAT
+#SAY, Scrolls are items that essentially cast spells for you.  It can be difficult to make your way through the Beast Central Station we call our home without any magical capabilities/ and if you're of a more physical bent/ scrolls allow you to make up for any lack of more exotic skills.  Even if you're already a mage/ scrolls can help in a pinch because they don't require any mana to cast them.
+#ADDCHOICES, MAIN
+
+#BRANCH, SCROLLS
+#SAY, I sell several attack spells--Blaze/ Lightning Storm and Supernova/ which can all damage a number of monsters near you.  I also sell Teleportation scrolls/ excellent for getting treasure out of those hard-to-reach places.  I sell enhancement scrolls which can make you more powerful/ and I even sell All-Dye scrolls which/ when used/ will change the color of all the clothes you may be wearing.  You'll have to put them back on/ though--a side effect is that your clothes are taken off when the spell is cast.
+#ADDCHOICES, MAIN
+
+#BRANCH, MAKE
+#SAY, Nope! HAHA HAHAHAHAHAAAH HAHAHAAAH HAHAHAHAAH HAHAAAAAAAH HAAAAAAAAAHHHHHHHHHHHHH!!
+#CHOICE, ...A simple 'No' would have sufficed.,KILL
+#CHOICE, ...Don't make me kill you.,KILL
+#ADDCHOICES, MAIN
+
+#BRANCH, KILL
+#SAY, Sorry.
+#ADDCHOICES, MAIN
+
+
+
+#CONVERSATION,  Rudiia
+
+#BRANCH, MAIN
+#SAY, Good evening/ traveller.  My name is Rudiia.  What can I do for you?
+#CHOICE, What do you do/ Rudiia?, DO
+#CHOICE, What can you tell me about Thirsha the Dragon?, THIRSHA
+#CHOICE, I'd like to buy some bronze armor., #SELLARMOR:2
+#CHOICE, I'd like to buy some iron armor., #SELLARMOR:4
+#CHOICE, I'd like to buy some magical armor., #SELLMAGICARMOR:4
+#EXIT, Nothing.  Never mind.
+
+#BRANCH, THIRSHA
+#SAY, That monster?  She's been attacking every settlement in the region/ snatching up city guards and swallowing them whole/ leaving the helpless girls in the city to be devoured by the monsters.  Our city is only a shell of what it was--many of those wrecked buildings in the Forest of Doubts once belonged to us.  Now/ no one lives to inhabit them/ save the Karis.  But now that you're here/ she'll get what she deserves.
+#ADDCHOICES, MAIN
+
+#BRANCH, MAIN2
+#SAY, Yes?
+#CHOICE, What do you do/ Rudiia?, DO
+#CHOICE, What can you tell me about Thirsha the Dragon?, THIRSHA
+#CHOICE, I'd like to buy some bronze armor., #SELLARMOR:2
+#CHOICE, I'd like to buy some iron armor., #SELLARMOR:3
+#CHOICE, I'd like to buy some magical armor., #SELLMAGICARMOR:3
+#EXIT, Never mind.
+
+#BRANCH, BUYARMOR
+#SAY, Certainly.  What kind were you looking for?
+#CHOICE, I'd like to buy some bronze armor., #SELLARMOR:2
+#CHOICE, I'd like to buy some iron armor., #SELLARMOR:3
+#CHOICE, I'd like to buy some magical armor., #SELLMAGICARMOR:3
+#EXIT, Never mind.
+
+#BRANCH, DO
+#SAY, I am the City of Angels' premiere Armorsmith.  I am the only one fully entrusted with our dwindling supply of Iron.
+#CHOICE, Why are you the only one?, WHY
+#CHOICE, Does that mean you sell iron armor?, BRONZE
+#CHOICE, What's the difference between bronze and leather?, DIFF
+
+#BRANCH, BRONZE
+#SAY, Yes.  I personally manufacture several different defensive pieces/ all out of iron.  Unlike most armor/ some of mine is magical as well.
+#CHOICE, Can I buy some?, BUYARMOR
+#CHOICE, What's the difference between bronze and leather?, DIFF
+
+#BRANCH, DIFF
+#SAY, Iron is an actual metal/ unlike leather which is essentially just a very hard cloth.  As such/ it is far stronger and more durable.  Unfortunately/ despite the fact that it is practically the lowest rung of armor metals besides bronze/ even it is rare due to the monster blockades/ and so it's also more expensive than leather.
+#CHOICE, Can monsters digest iron as easily as they digest leather?, DIGEST
+#EXIT, I see.  That will be all.
+
+#BRANCH, DIGEST
+#SAY, Not usually/ but that doesn't mean they can't digest it.  It doesn't even mean they can't digest it quickly.  But it will generally take longer for them to digest a bronze or iron piece of armor than a leather one/ and the armor will thus continue to protect you longer.  The smell also doesn't tend to soak into metal as easily/ either...
+#CHOICE, Ah.  Can I ask you something else?, MAIN2
+#EXIT, I see.  That will be all.
+
+#BRANCH, WHY
+#SAY, Because I have greater skill both in forging armor and in how to use it--my knowledge allows me to make my armor more comfortable/ not to mention effective.  Though there are a few other merchants in town selling bronze and even iron armor/ my armor is far superior both in quality and due to it's magical abilities/ so I am given much more to work with.
+#CHOICE, What did you mean/ 'how to use it'?, HOW
+#CHOICE, I see.  So you sell iron armor?, BRONZE
+#CHOICE, Can I buy some armor from you then?, BUYARMOR
+#EXIT, I see.  Perhaps I'll come back and test your merchandise sometime.  Farewell.
+
+#BRANCH, HOW
+#SAY, There is more to making the most of your armor than simply strapping it to your chest and wading into battle.  A true warrior knows how to move the right way to catch blows on the strongest plates/ and how to evade in such a way that claws and teeth deflect from plates rather than sink in.
+#CHOICE:SAYONCE, Can you teach me?, TEACH
+#CHOICE, Oh.  I get it.  Can I ask you something else?, MAIN2
+#EXIT, I understand.  Farewell.
+
+#BRANCH, TEACH
+#SAY, I'd be delighted to.  First/ you must learn when to roll with an attack and when to block it/ and when you should simply get out of the way...
+#CHOICE, (MORE), #GIVESKILL:Defence:TEACH2
+
+#BRANCH, TEACH2
+#TEXT, You have gained one point in the Defence skill.
+#CHOICE, (MORE), TEACH3
+
+#BRANCH, TEACH3
+#SAY, ...So there you have it.  I could probably teach you more/ but I'm not a full-time instructor...those pointers I gave you should be enough.
+#CHOICE, Thank you/ Rudiia.  Can I ask you something else?, MAIN2
+#EXIT, I'm sure they will be/ Rudiia.  Farewell.
+
+
+#CONVERSATION, Salyna
+
+#BRANCH, MAIN
+#SAY, "Greetings, newcomer.  My name is Salyna."
+#CHOICE, "What do you do here, Salyna?", WHATDO
+#EXIT, "(Leave)"
+
+#BRANCH, WHATDO
+#SAY, "I was a jeweler until recently.  Unfortunately, I've lost my jeweling kit.  I was in the enchanted glade a few weeks ago when a wave of sprites came out of nowhere.  There were dozens of them, and I had to drop my kit to get away.  So, if you've come to buy gems, you'll have to wait until I get a new one."
+#QUEST, Salyna's Kit:forestglade.txt:Get Salyna's jewelling kit back for her.  She lost it in the Forest Glade south of the City of Angels.:Salyna:3000:3000:RETRIEVE:Salyna's Jewelling Kit:Salyna:Y:255:0:255:treasure1.bmp
+#CHOICE, "What if I could get it back for you?", WHATIF
+#ADDCHOICES, JEWELQUESTIONS
+
+#BRANCH, WHATIF
+#SAY, "Well, I could start producing jewels once again, and could probably sell a few to you at a significant discount."
+#CHOICE, "What about payment?", PAYMENT
+#CHOICE, "I'll find it for you, then.", FORYOU
+#EXIT, "(Leave)"
+
+#BRANCH, PAYMENT
+#SAY, "I could give you 3000 gold for your trouble."
+#CHOICE, "It's a deal.", FORYOU
+#CHOICE, "Can't you do better than that?", BETTER
+#EXIT, "(Leave)"
+
+#BRANCH, JEWELQUESTIONS
+#SAY, "I'm sorry.  I've been out of business for weeks now, and that's all I could afford."
+#ADDCHOICES, JEWELQUESTIONS
+
+#BRANCH, FORYOU
+#SAY, "Thank you!  I hope you can find it...the glade has been overrun with sprites ever since I left."
+#ADDCHOICES, JEWELQUESTIONS
+
+#BRANCH, JEWELQUESTIONS
+#SAY, "What would you like to know?"
+#CHOICE, "What can you tell me about gems?", ABOUTGEMS
+#CHOICE, "Where can I find gems?", FINDGEMS
+CHOICE, "How do I use gems?", USEGEMS
+#EXIT, "(Leave)"
+
+#BRANCH, ABOUTGEMS
+#SAY, "Gems are naturally occurring stones that possess magical properties.  The type of magic depends on the type of gem, but as a general rule, they have  a magical effect on anything that touches them.  If you place a gem in a piece of jewelry or clothing, you'll always be touching the gem and so you'll gain it's benefits until you remove it.  It's the same way with weapons--if you place a gem in a weapon, it will have a magical effect on you as long as you have the weapon in your hand."
+#ADDCHOICES, JEWELQUESTIONS
+
+#BRANCH, USEGEMS2
+#SAY, "Mounting a gem on an item is fairly simple--many items have sockets built especially for gems.  If they do, simply place the gem in the socket and it will remain there.  (To add a gem or rune to an item, double-click on the gem or rune in your inventory, then double-click on the item you want to add it to.) It's almost impossible to get them out again, though, so make sure you want the gem in the item before you place it in there.  If they don't have any sockets, you'll need to add them.  Jewellers such as myself often sell socket kits that will allow you to add sockets to an item."
+#CHOICE, "And how do these socket kits work?", SOCKETKITS
+#ADDCHOICES, JEWELQUESTIONS
+
+#BRANCH, SOCKETKITS
+#SAY, "Socket kits function more like runes do.  Runes can be placed on any item, regardless of whether it has sockets.  Essentially, a socket kit is just a rune that adds a socket to an item.  They are added just like any other rune.  Socket kits are available from most jewellers, but they are kind of expensive."
+#ADDCHOICES, JEWELQUESTIONS
+
+#BRANCH, FINDGEMS
+#SAY, "Gems are fairly common in most lands.  Many monsters carry them and you can retrieve them when they are killed.  Sometimes you can find them in abandoned buildings as well.  And, of course, you can buy them from a jeweller."
+#ADDCHOICES, JEWELQUESTIONS
+
+#BRANCH, SalynaSalyna's Kit
+#SAY, "Oh, you found my jewelling kit!  Thank you.  Here, this is for your trouble.  (You have gained 3000 Gold and 30000 Experience)"
+#CHOICE, "You're welcome.", #CHANGESTART:MAIN2:MAIN2
+
+#BRANCH, MAIN2
+#SAY, "Welcome back!  What can I do for you?"
+#CHOICE, "I'd like to buy some gems.", #SELLGEMS:1
+#CHOICE, "What can you tell me about gems?", ABOUTGEMS
+#CHOICE, "Where can I find gems?", FINDGEMS
+CHOICE, "How do I use gems?", USEGEMS
+#EXIT, "(Leave)"
+
+
+/ITEM, text, itemname:goto
+/QUEST:SAYONCE, Questdata
+/ADDCHOICES
+/EFFECT, eff1:eff2:eff3:eff4:eff5  (Sets up dummy object for TAKEOBJ command--each instance of EFFECT adds a new effect)
+
+'Standard quest is QuestName(make sure it's unique):Map:Description:Givenby:Experience:Gold:Type("KILL", "RETRIEVE", "COMPLETED" etc):Extra stuff after this
+'KILL:Monstertype:Num:Color:Level:R:G:B (Decremented each time you kill one--when it hits 0, the quest is achieved)
+'QuestName(make sure it's unique):Map:Description:Givenby:Experience:Gold:RETRIEVE:Item:Giveto:Lose Y/N:R:G:B:Graph (Have the item in your inventory when you speak to Giveto.  Lose determines if it takes it from your inventory)
+'COMPLETED (Quest is completed)
+'If you have accomplished a quest but it isn't marked 'Completed', the conversations with any character named 'Givenby'
+'switch to the conversation named '(givenby)(questname)'
+'So if a girl named Rasella gives a quest called 'DestroyKaris' it will go to the conversation 'RasellaDestroyKaris'
+
+
+
+
+								---[[[ CITY OF WORMGUT ]]]---
+
+#CONVERSATION, Brigette
+#BRANCH, MAIN
+#SAY, Oh.  Hello/ stranger.  What's your name?
+#CHOICE, Who wants to know?, WHO
+#CHOICE, My name is $NAME., #CHANGESTART:MAIN2:NAME2
+#EXIT, Uh/ never mind...I'm just passing through...
+
+#BRANCH, WHO
+#SAY, My name is Brigette.  And you are?
+#CHOICE, My name is $NAME., #CHANGESTART:MAIN2:NAME2
+#EXIT, Never you mind.  Goodbye.
+
+#BRANCH, NAME
+#SAY, Pleased to meet you/ $NAME.  My name is Brigette.
+#ADDCHOICES, MAIN2
+
+#BRANCH, NAME2
+#SAY, Nice to meet you/ $NAME.  What can I do for you?
+#ADDCHOICES, MAIN2
+
+#BRANCH, MAIN2
+#SAY, Good morning/ $NAME.  What can I do for you?
+#CHOICE, Do you know where I can find any of Thirsha's Keys?, KEYS
+#CHOICE, What can you tell me about the Gurglemeister clan?, CLAN
+#CHOICE, Why don't the worms in this cave eat you?, WORMS
+#EXIT, Never mind.
+
+#BRANCH, KEYS
+#SAY, Yeah/ actually.  One of them is supposed to be in the cave west of here.  Unfortunately/ the worms in that particular cave have few qualms about ingesting poor/ succulent Gurglemeisters/ so we kinda keep out.
+#CHOICE, Thanks.  Can I ask you something else?, MAIN3
+
+#BRANCH, CLAN
+#SAY, Well/ I can tell you that we like our food like we like our girlfriends--squirming and entirely helpless.  (She giggles)  Actually/ that's not entirely true.  The only real similarity between our girlfriends and food is that our girlfriends usually ARE food.
+#CHOICE, Uh huh...anything else?, ELSE
+#CHOICE, You eat your friends!?, FRIENDS
+#CHOICE, I see.  Can I ask you something else?, MAIN3
+#EXIT, Uh huh...I don't like where this conversation is going.  Goodbye.
+
+#BRANCH, FRIENDS
+#SAY, Who better to have inside you than someone you like and admire?  And who better to be digested by than someone who cares about you?
+#CHOICE, Who better not to be digested by?  How about NOBODY?, NOBODY
+#CHOICE, Remind me to never get too friendly with you. Anything else?, ELSE
+#EXIT, Ick.  I'm leaving.
+
+#BRANCH, NOBODY
+#SAY, Aw/ come on.  Being digested isn't really that bad.  Just ask Jeritia.  She LIKES it.
+#CHOICE, Jeritia LIKES being digested!?, #ADDQUEST:Jeritia:JERITIA
+
+#BRANCH, ELSE
+#SAY, Well/ there is one other thing/ that you may have figured out already...as you know/ girls who get swallowed once too often tend to/ well/ start to like it.  I think this might happen to us faster than others.  We love to swallow things/ and a few of us even like to BE swallowed sometimes...especially Jeritia.  She's jumping down things' throats all the time...
+#CHOICE, Jeritia LIKES being digested!?, #ADDQUEST:Jeritia:JERITIA
+
+#BRANCH, JERITIA
+#SAY, Yup.  Crazy/ ain't it?  If you're into being swallowed yourself/ or if you just want to mock her/ you could go talk to her...She's around here somewhere...
+#CHOICE, With THAT kind of a hobby/ I'm very surprised she's not dead., DEAD
+#CHOICE, Maybe I will.  Can I ask you something else?, MAIN3
+#CHOICE, Sounds like somebody I would pay money NOT to have to talk to.  Can I ask you something else?, MAIN3
+#EXIT, I think I've heard just about every fact about the Gurglemeisters that I can stand...goodbye.
+
+#BRANCH, DEAD
+#SAY, Actually/ she's supposedly refined the skill of escaping from monster's bellies to the point that she can wriggle her way out of almost anything.  At least/ she's wriggled her way out of everything so far...granted/ it's just a matter of time before she underestimates how strong some monster's gastrointestinal muscles are and ends up being squirted out the monster's business end as something less than she was...
+#CHOICE, Probably.  Can I ask you something else?, MAIN3
+#EXIT, Actually/ maybe she could give me some pointers on escaping from monsters...I've got to go.
+
+#BRANCH, MAIN3
+#SAY, What did you want to know?
+#ADDCHOICES, MAIN2
+
+#BRANCH, WORMS
+#SAY, Who says they don't?  Personally/ I just think they eventually got sick of having the same old Gurglemeisters for breakfast/ lunch and dinner...Actually/ we've been breeding them to protect us from other monsters.  Some of our mages can actually control the worms/ but unfortunately their sheer numbers has begun to make our control more and more precarious...we already don't control any of the worms in the adjacent caves/ and every once in a while one of the worms will just turn around and gobble one of us right up...
+#CHOICE, Why haven't you just killed them?, KILLED
+#CHOICE, Ah.  Can I ask you something else?, MAIN3
+
+#BRANCH, KILLED
+#SAY, You haven't exactly looked around/ have you?  If we were to go to war with this many worms/ the only real threat we'd pose is that they would eventually starve to death because there weren't enough of us to go around.
+#CHOICE, Well/ I'M not having much of a problem with them...Can I ask you something else?, MAIN3
+#CHOICE, I can see your point.  Can I ask you something else?, MAIN3
+#EXIT, You're just wimps.  I'm outta here.
+
+
+
+#CONVERSATION, Jeritia
+#BRANCH, MAIN
+#SAY, Yes?
+#CHOICE, Who are you?, WHO
+#CHOICE, Why do your people live in this worm-infested cave?, WHY
+#CHOICE, What can you tell me about the Gurglemeister clan?, CLAN
+#EXIT, That's all.  Thanks.
+
+#BRANCH, CLAN
+#SAY, We are the Gurglemeisters/ most intelligent and beautiful of all the clans and best cooks in all the known planets.
+#CHOICE, Suuuuuuure.  Can I ask you something else?, MAIN
+#CHOICE, Cooks?, COOKS
+#CHOICE, How do you get along with the other clans?, GETALONG
+
+#BRANCH, COOKS
+#SAY, You bet!  Nothing can compare to our exquisite Gurglemeister cuisine.
+#CHOICE, Would that cuisine/ by any chance/ tend to have breasts and usually scream as you're eating it?, SCREAM
+CHOICE, Where can I get some?, GETSOME
+#EXIT, Ah.  I must be going now.
+
+#BRANCH, SCREAM
+#SAY, Ummm...well...er...(She points behind you) What's that!? (She runs away)
+#EXIT, ...Well...that figures...
+
+#BRANCH, GETALONG
+#SAY, Basically/ we get along as well as they will allow us to...most take needless offense at our offers to let them explore the wonders of our digestive tracts.
+#CHOICE, I wonder why.  Can I ask you something else?, MAIN
+#EXIT, Ah.  Must make you quite popular.  I've got to go now.
+
+#BRANCH, WHY
+#SAY, We haven't managed to build ourselves a real city yet.  This cave was origionally mostly empty--it's just recently that the worms and the nagas have started crowding us in.
+#CHOICE, Why aren't the worms eating you?, WHYNOTEAT
+
+#BRANCH, WHYNOTEAT
+#SAY, We've managed to cast a spell on them to prevent them from eating Gurglemeisters.  I'm not sure exactly how it works.  Apparently most of them are raised from birth on this spell/ so that they won't eat us...You'll have to ask someone else if you want to know more.
+#CHOICE, Ah.  Can I ask you something else?, MAIN
+
+#BRANCH, WHO
+#SAY, My name is Jeritia.
+#CHOICE:IFQUEST:Jeritia, The Jeritia who gets off on being swallowed by people?, GETSOFF
+#CHOICE, Pleased to meet you.  I'm $NAME.  Can I ask you some questions?, MAIN
+#EXIT, Ah.  That's all then.
+
+#BRANCH, GETSOFF
+#SAY, My/ you're direct/ aren't you?  Well/ I'm the only Jeritia in town/ so I must be the one.
+#CHOICE, I must just say that that is TOTALLY gross., GROSS
+#CHOICE, What makes you enjoy it?, ENJOY
+#CHOICE, How do you even survive a hobby like that?, SURVIVE
+
+#BRANCH, ENJOY
+#SAY, Just the feeling of sliming around inside a hot belly is so...stimulating.  It's incredible/ the way the chunks coat your skin/ feeling your limbs push into the spongy flesh...
+#CHOICE, Did you know you're a very sick person?, GROSS
+#CHOICE, Yeah/ but you sorta tend to get DIGESTED when that happens., SURVIVE
+#EXIT, Eeewww.  I most DEFINATELY have to go now.
+
+#BRANCH, GROSS
+#SAY, Hey/ to each her own.  Actually/ I've heard most girls end up like me if they ever get swallowed one too many times...
+#CHOICE, Not me.  I've been swallowed more times than Bill Clinton and it STILL grosses me out., STILL
+#CHOICE, You know/ I did actually enjoy it once or twice..., MEENJOY
+#CHOICE, Suuuuuuuure.  Can I ask you something else?, MAIN
+
+#BRANCH, STILL
+#SAY, Well/ maybe you just haven't been swallowed by the right thing.  Just find the sexiest/ most desirable woman you can find/ then piss her off.  I guarantee you'll enjoy what happens.
+#EXIT, You are just too surreal.  I'm leaving.
+#CHOICE, You know/ there were a few times where I WAS kind of curious what some of those girls felt like inside...,MEENJOY
+#CHOICE, Um/ can we just change the subject please?, MAIN
+
+#BRANCH, MEENJOY
+#SAY, See?  Everybody denies it/ of course...I mean/ it IS gross/ but at the same time/ it feels so GOOD...
+#CHOICE, The only problem is the whole 'Get-digested-and-die' thing..., SURVIVE
+#CHOICE, Wierd/ ain't it?  Can I ask you something else?, MAIN
+#EXIT, Yeah.  Well/ I gotta go now.
+
+#BRANCH, SURVIVE
+#SAY, Well/ the trick is knowing how to get out before they really start to digest you.  You've got to find the right footholds/ the right handholds/ and learn how to move your body properly so you can actually get somewhere without just sliding around in the slippery flesh.  It's an art form that few girls get the opportunity to master.
+#CHOICE, I'm...sure it is.  Can we talk about something else?, MAIN
+#CHOICE:SAYONCE, I'm almost afraid to ask this/ but could you teach me?, TEACH
+#CHOICE, OKAY.  LET'S STOP TALKING ABOUT THIS., MAIN
+#EXIT, Uh huh...I'm out of here.
+
+#BRANCH, TEACH
+#TEXT, Jeritia gets an unnatural-looking grin.
+#CHOICE, (MORE), TEACH2
+
+#BRANCH, TEACH2
+#SAY, Why/ I'd be delighted! 
+#CHOICE, (MORE), TEACH3
+
+#BRANCH, TEACH3
+#TEXT, Before you can protest/ or change your mind/ Jeritia has grabbed you and shoved you down her throat.  Just that quickly/ you find yourself inside her stomach/ filled almost to the brim with hot/ lumpy liquid.
+#CHOICE, WHAT THE HELL!?  JERITIA!!, TEACH4
+#CHOICE, I knew I shouldn't have even asked...,TEACH4
+
+#BRANCH, TEACH4
+#TEXT, As Jeritia's stomach starts to slowly churn/ you hear her voice from somewhere outside/ muffled by her flesh but amplified by your apparent proximity to her lungs.
+#CHOICE, (MORE), TEACH5
+
+#BRANCH, TEACH5
+#SAY, Okay/ now the first thing to remember is not to panic.  It's a little known fact that many monster's digestive tracts are actually stimulated by the presence of struggling prey.  You must stay calm and take stock in your situation.
+#CHOICE, TAKE STOCK!?  JERITIA/ I'M IN YOUR F#$@ING STOMACH!!, TEACH6
+#CHOICE, Um/ look/ I can't exactly take notes in here..., TEACH6
+#CHOICE, Okay...I'm listening...please speak quickly..., TEACH6
+
+#BRANCH, TEACH6
+#SAY, The next thing to do is to form a plan of escape.  If your enemy's mouth empties right into it's stomach/ like with a frog or a Kari/ then the most important thing is just to get one or two of your limbs out of it's mouth to find some solid part of the monster's exterior to leverage against.  If your enemy is something with a long throat/ such as a snake or/ say/ me/ your job becomes a bit tougher.
+#CHOICE, ALRIGHT!! POINT MADE!! LET ME OUT!!!, TEACH7
+#CHOICE, Can we hurry this up?  Your breakfast is beginning to fill my clothing., TEACH7
+
+#BRANCH, TEACH7
+#SAY, In cases like that you'll need concentration and a lot of brute strength.  And don't forget about your weapon--though it's well-known that it's impossible to cut your way out of a monster's stomach/ you can still use it as a makeshift crowbar in order to pry the predator's throat open., TEACH8
+#CHOICE, JERITIA/ I'M GOING TO COUNT TO THREE..., TEACH8
+#CHOICE, By any chance/ have you been eating waffles?, TEACH8
+
+#BRANCH, TEACH8
+#SAY, Finally/ you should always try to use the stomach's natural movements to your advantage.  Concentrate on holding your ground when they push you towards the intestines/ and use any opposite movements to drive yourself towards the entrance to the throat or mouth.  If the stomach simply squeezes you downward/ use the tightness as a form of traction and use it to pull yourself upward.
+#CHOICE, IIIIICK!! DO YOU KNOW WHAT JUST FLOATED PAST MY SHOULDERS!?, TEACH9
+#CHOICE, Yes/ funny/ your stomach DOES seem to be moving quite a bit..., TEACH9
+#CHOICE, You realize I'm going to kill you when I get out of here., TEACH9
+
+#BRANCH, TEACH9
+#SAY, Well/ that's about it.  If you haven't been trying my advice so far/ I recommend you do so now.
+#CHOICE, You mean you're NOT GOING TO LET ME OUT!?, TEACH10
+#CHOICE, (Try to escape), TEACH11
+
+#BRANCH, TEACH10
+#SAY, Come on/ I know you can do it.  Force your way out of my belly.  You don't want to wait until it shoves you into my intestines/ do you?
+#CHOICE, That does it...,TEACH11
+#CHOICE, (Try to escape), TEACH11
+
+#BRANCH, TEACH11
+#TEXT, You struggle against her stomach/ using the techniques she 'taught' you.  Surprisingly/ they seem to work fairly well/ and you actually manage to pull yourself out of her stomach.  (You have gained one point in the Squirm skill.) As you flop to the dirt/ rivulets of vomit still trailing from your body to her chin/ she smiles.
+#CHOICE, (MORE), #GIVESKILL:Squirm:TEACH12
+
+#BRANCH, TEACH12
+#SAY, See?  I knew you could do it.  Just follow my lead and nothing will be able to keep you down.
+#CHOICE, (Attack her), #DIGESTTO:ATTACK:1
+#CHOICE, Er...thanks/ I guess., #DIGESTTO:THANKS:1
+#CHOICE, Don't you EVER do that again., #DIGESTTO:EVER:1
+
+#BRANCH, THANKS
+#SAY, My pleasure.  And if you ever want the *advanced* lesson/ just swing on by.  You might want to bring some antacids/ and maybe a sack lunch...
+#CHOICE, Um...thanks/ but no thanks...can I ask you something else before I go?,MAIN
+
+#BRANCH, EVER
+#SAY, Aww/ come on.  You didn't even get to my intestines.
+#CHOICE, You'll get to MINE if you ever think of something like that again.,EVER2
+
+#BRANCH, EVER2
+#SAY, Don't worry.  If I had really wanted to digest you/ I wouldn't have filled up on waffles first.  *tee-hee!*
+#CHOICE, Uggg...can I at least ask you something else?, MAIN
+#CHOICE, That's it.  You're going down., ATTACK
+#EXIT, Laugh it up.  I'm leaving.
+
+#BRANCH, ATTACK
+#TEXT, Your revenge is rather swift.  You grab her face/ still oozing a little with her own digestive juices/ and shove it down your throat.
+#CHOICE, There.  See how YOU like it.  *BURP*, #EATME
+
+
+
+
+
+
+
+
+								   ---[[[ SKINBANE ]]]---
+
+
+#CONVERSATION, Rayszia
+#BRANCH, MAIN
+#SAY, What do you want/ outsider?
+#CHOICE:IFQUEST:Demongut Queen, About the queen of the Demonguts...,#EFFECT:QUEEN:Lifeplus:1
+#CHOICE, Who are you?,WHO
+#CHOICE, I just want some information.,INFO
+#CHOICE, What can you tell me about your city?,CITY
+#CHOICE, What can you tell me about your clan?,CLAN
+#CHOICE, What can you tell me about this area?,AREA
+#EXIT, Nothing.  Sorry to bother you.
+
+#BRANCH, QUEEN
+#SAY, What about her?
+#CHOICE, She's a grease spot.,KILLED
+#CHOICE, I have destroyed her.,KILLED
+#CHOICE, Does the term '$NAME Feces' mean anything to you?,KILLED
+
+#BRANCH, KILLED
+#TEXT, Rayszia's mouth curls into a broad smile/ revealing her bright/ glistening teeth.
+#ITEM, (MORE), Lifeplus:MORE
+
+#BRANCH, MAIN2
+#SAY, Welcome/ $NAME.  How may I serve you?
+#ITEM, I would like to hire some mercenaries.,Mercenary Girl
+#CHOICE, What can you tell me about your city?,CITY
+#CHOICE, What can you tell me about your clan?,CLAN2
+#CHOICE, What can you tell me about this area?,AREA
+#EXIT, Nothing.  Sorry to bother you.
+
+#BRANCH, CLAN2
+#SAY, Our clan is vast/ but our holdings in this area are minimal.  We have found it difficult to juggle the hostilities of all the other clans in this region--we're none too fond of the other clans/ in case you had not guessed.  We have yet to produce a queen of our own for this city.  Until we do/ we will be fighting a defensive battle.  Your attack on the Demonguts has aided us greatly in that respect; they now face the same problem we do.  The odds are even.
+#CHOICE, Glad to help out.  Can I ask you something else?, MAIN2
+
+#BRANCH, MORE
+#SAY, You have done well/ $NAME.  You are now a friend to the Firebellies.  I shall enhance your life potions immediately.
+#CHOICE, Thank you/ Rayszia.,#CHANGESTART:MAIN2:MAIN2
+
+#BRANCH, WHO
+#SAY, My name is Rayszia.  And just who are you?
+#CHOICE, My name is $NAME.,NAME
+#CHOICE, That is not your concern.,NOPE
+#EXIT, Never mind.  I have to leave.
+
+#BRANCH, NOPE
+#SAY, You had best learn some manners then/ whore.  Or you just might end up as somebody's dinner.
+#EXIT, (Leave)
+
+#BRANCH, NAME
+#SAY, Well then/ $NAME/ what did you want from me?
+#CHOICE, What do you do here?, WHAT
+#CHOICE, I just want some information.,INFO
+#CHOICE, What can you tell me about your city?,CITY
+#CHOICE, What can you tell me about your clan?,CLAN
+#CHOICE, What can you tell me about this area?,AREA
+#EXIT, Nothing.  Sorry to bother you.
+
+#BRANCH, WHAT
+#SAY, I am the lord of this town.  I coordinate our defenses against the Demonguts.
+#ITEM, Can I buy some mercenaries from you then?.,Mercenary Girl
+#CHOICE,  You're having trouble with the Demonguts?,PROBLEMS
+#CHOICE, The Demonguts attack you?,PROBLEMS
+
+#BRANCH, PROBLEMS
+#SAY, Of course.  After all/ we think they should be wiped off the face of the planet.  This tends to upset them.
+#CHOICE, Is there any way I can help?, HELP
+#CHOICE, I might be willing to help you/ for a price., HELP
+#CHOICE, I had some other questions...,NAME
+#EXIT, I see.  Farewell.
+
+#BRANCH, HELP
+#SAY, So you want to help us?  Strange.  Though I imagine anyone who has ever met a Demongut would agree that they need to be scourged from the planet entirely.  Alright/ here's what you can do.  The Demonguts have holed up in their castle to the northwest.  We have been unable to attack them directly/ because the Darkswallows claim every path through the area as their own and refuse to allow us passage.  We obviously cannot fight them both/ much as we would like to.  However/ that doesn't mean we can't still strike them a blow.  If you can sneak into their castle and destroy their queen/ you will prove yourself a friend to Clan Firebelly.
+#CHOICE, So what's in it for me?,INIT
+#CHOICE, Very well.  I shall find this queen and destroy her.,YES
+#CHOICE, The Demonguts have done me no harm.  I shall not assassinate their queen.,NO
+#CHOICE, This sounds dangerous.  What defenses will the Queen have?,DEFENSES
+#EXIT, I'll think about it.  Farewell.
+
+#BRANCH, INIT
+#SAY, You'll have my tolerance/ for one thing--a rare commodity/ as you've probably guessed.  I'll also see to it that your Life Potions are enhanced.  That should be enough incentive.
+#CHOICE, Very well.  I shall find this queen and destroy her.,YES
+#CHOICE, The Demonguts have done me no harm.  I shall not assassinate their queen.,NO
+#CHOICE, This sounds dangerous.  What defenses will the Queen have?,DEFENSES
+#EXIT, I'll think about it.  Farewell.
+
+#BRANCH, DEFENSES
+#SAY, Well/ the obvious danger would be the queen herself.  You'll know her when you see her/ and I'm sure she'd have few qualms about devouring any would-be assassins that step through her gates.  Besides that/ I imagine there will be plenty of Demongut warriors in the castle...nothing you can't handle/ I'm sure.
+#CHOICE, So what's in it for me?,INIT
+#CHOICE, Very well.  I shall find this queen and destroy her.,YES
+#CHOICE, The Demonguts have done me no harm.  I shall not assassinate their queen.,NO
+#EXIT, I'll think about it.  Farewell.
+
+#BRANCH, YES
+#SAY, Wise choice.  Return to me when the deed is done.
+#EXIT, (Leave)
+
+#BRANCH, NO
+#SAY, Very well/ Outlander.  I had not suspected you would.
+#ADDCHOICES, NAME
+
+#BRANCH, INFO
+#SAY, Fine.  But make it quick.
+#CHOICE, What can you tell me about your city?,CITY
+#CHOICE, What can you tell me about your clan?,CLAN
+#CHOICE, What can you tell me about this area?,AREA
+#EXIT, Never mind.
+
+#BRANCH, CITY
+#SAY, This is Skinbane/ citadel of Clan Firebelly.  Those who cross us find we live up to our name.
+#CHOICE, What about the surrounding region?,AREA
+#CHOICE, Tell me more about your clan.,CLAN
+#EXIT, Thank you.  Farewell.
+
+#BRANCH, CLAN
+#SAY, We are clan Firebelly.  We treat our friends well/ and see too it that our enemies find their bodies slowly annihilated within our innards.  I see no reason to tell you more.
+#CHOICE, I guess that's all I really need to know...can I ask you something else?, INFO
+#EXIT, I see.  Farewell then. 
+
+#BRANCH, AREA
+#SAY, I would think you'd know the area/ what with most likely having travelled through it to get here.  What in particular did you want to know?
+#CHOICE, What can you tell me about the other cities in this area?,CITIES
+#CHOICE, What can you tell me about the monsters around here?,MONSTERS
+#CHOICE, Good point.  I had something else I wanted to ask you...,INFO
+
+#BRANCH, MONSTERS
+#SAY, In all directions are the succubi.  There is an old saying that describes most creatures in our world/ and it applies very well to them:  'they're not much more than pretty faces slapped on an elaborate digestive tract.'  Besides them/ there are also fire grubs and nightvines/ both of which are typically voracious but not often as dangerous.  To the southeast is the Volcanic pass/ which leads to the largely unexplored lakeland region.  This pass is guarded by full-fledged demonesses/ and we suspect it may also be part of the reason there are so many succubi in the area.
+#CHOICE, Thank you.  Can I ask you something else?, INFO
+#EXIT, That should be very useful.  Goodbye.
+
+#BRANCH, CITIES
+#SAY, Far to the west is a Darkswallow city called Blackscourge.  Just head into the mountainous regions and look around.  You'll find it.  To the northwest is a castle owned by the Demonguts/ much as we wish there wasn't.  You'd make quite a few friends if you got rid of it...
+#CHOICE, You don't like the Demonguts/ eh?,PROBLEMS
+#CHOICE, What can you tell me about the monsters around here?,MONSTERS
+#CHOICE, I'm sure.  I had something else I wanted to ask you...,INFO
+
+
+
+
+#CONVERSATION, Vulkuca
+#BRANCH, MAIN
+#TEXT, You see a black-clad/ severe-looking woman.  She scowls as you approach.
+#CHOICE, Greetings., MYNAME
+#CHOICE, Who are you?, WHO
+#EXIT, Never mind.
+
+#BRANCH, WHO
+#SAY, Who are YOU/?
+#CHOICE, My name is $NAME.,NAME
+#CHOICE, I asked you first.,ASKED
+#EXIT, I can see you're not in the mood...farewell.
+
+#BRANCH, NAME
+#SAY, And what are you doing in Skinbane?
+#CHOICE, Look/ I just wanted your name.,#CHANGESTART:WANT:MYNAME
+#CHOICE, I am searching for Thirsha's Keys.,#CHANGESTART:WANT:KEYS
+#EXIT, Never mind...
+
+#BRANCH, MYNAME
+#SAY, My name is Vulkuca.  What do you want?
+#CHOICE, I am searching for Thirsha's Keys.  Do you know where I might find them?, KEYS
+#CHOICE, What can you tell me about your clan?, CLAN
+#CHOICE, You seem unhappy.  Is something wrong?,UNHAPPY
+#EXIT, Never mind.
+
+#BRANCH, CLAN
+#SAY, Very little.  I don't even know you/ and I don't think I like you.  What I will say is that we are the fiercest warriors in the world/ and have few qualms about proving it.
+#CHOICE, I see.  Can I ask you something else?, WANT
+#EXIT, I can see you're not in the mood to talk.  I'll just wander off now.
+
+#BRANCH, WANT
+#SAY, (Vulkuca looks at you) What is it?
+#CHOICE, I am searching for Thirsha's Keys.  Do you know where I might find them?, KEYS
+#CHOICE, What can you tell me about your clan?, CLAN
+#CHOICE, What do you do?, DO
+#CHOICE, You seem unhappy.  Is something wrong?,UNHAPPY
+#EXIT, Never mind.
+
+#BRANCH, WANTDIGEST
+#SAY, (Vulkuca looks at you and smiles) Ah/ what brings *you* back here?  Looking for another tour of my digestive tract?
+#CHOICE, I'm here for a rematch/ Vulkuca., REMATCH
+#CHOICE, I am searching for Thirsha's Keys.  Do you know where I might find them?, KEYS
+#CHOICE, What can you tell me about your clan?, CLAN
+#CHOICE, What do you do?, DO
+#CHOICE, You seem unhappy.  Is something wrong?,UNHAPPY
+#EXIT, Never mind.
+
+#BRANCH, REMATCH
+#SAY, Well/ I'm more than happy to repeat our last performance.  I hope you enjoy my stomach as much as you did last time!
+#CHOICE, (MORE), FIGHT
+
+#BRANCH, UNHAPPY
+#SAY, (She scowls at you lopsidedly/ as if she wasn't sure she heard you right)  I seem unhappy to you/ do I/ little $NAME?  Perhaps it is because I find it painful to remain so polite while such a delicious and nutritious looking body stands in front of me asking such stupid questions.
+#CHOICE, Ah.  Sorry.  Can I just ask you one more thing?,WANT
+#CHOICE, Yeah.  Or maybe it's just because you're a belligerent bitch., ASKED
+#EXIT, Ah.  I can take a hint.  Goodbye.
+
+#BRANCH, DO
+#SAY, I am a sorceress.  I serve my clan/ and serve the searing acids of my stomach to it's enemies.
+#CHOICE, Which enemies might those be?, ENEMIES
+#CHOICE, Never mind.  I had some other questions...,WANT
+
+#BRANCH, ENEMIES
+#SAY, Anyone who crosses the Firebellies.  Take care you don't become one of them.
+#CHOICE, I've heard you girls have it in for the Demonguts in particular., DEMONGUTS
+#CHOICE, Never mind.  I had some other questions...,WANT
+
+#BRANCH, DEMONGUTS
+#SAY, You could say that.  More than a few of them have been crushed into feces in my digestive tract.
+#CHOICE, Why do you hate the Demonguts so much?, HATE
+#CHOICE, Never mind.  I had some other questions...,WANT
+
+#BRANCH, HATE
+#SAY, A stereotype, to be sure.  (She glares) But an accurate one.  We're not the only clan with a hatred for the Demonguts.  We're just the only ones willing to face them.  The Darkswallows have their treaty with us only out of cowardice.
+#CHOICE, The Darkswallows have a treaty with you?, TREATY
+#CHOICE, So why does EVERYBODY hate the Demonguts?, HATE2
+#CHOICE, I see.  I had some other questions...,WANT
+
+#BRANCH, TREATY
+#SAY, Yes.  We have found the terms of the treaty to be to our liking/ except the glaringly painful stipulation that we cannot move through their territory--meaning we cannot attack the Demonguts.
+#CHOICE, Why wouldn't the Darkswallows want you fighting the Demonguts?, WHYTREAT
+#CHOICE, Maybe what you need is someone to go after them for you., KILL
+#CHOICE, I see.  I had some other questions...,WANT
+
+#BRANCH, WHYTREAT
+#SAY, The Darkswallows aren't stupid/ nor are they trusting.  They don't want us moving armies through their territory because they don't trust us not to turn and attack them instead of the Demonguts.
+#CHOICE, Sounds reasonable enough.  Can I ask you something else?, WANT
+#EXIT, Makes sense.  Well/ I'll leave you alone now.
+
+#BRANCH, HATE2
+#SAY,  Because they're a bunch of BITCHES.  What more do you need to know?  (She huffs in frustration) They're merciless criminals/ who attack without provocation.  That should be reason enough.
+#CHOICE, Sounds like what I've heard about the Firebellies/ actually., HEARD
+#CHOICE, And how.  Can I ask you something else?, WANT
+#CHOICE, I see.  Can I ask you something else?, WANT
+
+#BRANCH, HEARD
+#SAY, (She half-smiles/ half-sneers) Then perhaps you had best watch what you say.
+#CHOICE, Don't threaten me/ Vulkuca., ASKED
+#CHOICE, Point taken.  I had some other questions..., WANT
+#EXIT, Er...I have to go to the store...(Leave)
+
+#BRANCH, ASKED
+#SAY, You are trying my patience.  Do not anger me.
+#CHOICE, I don't care for your 'beneath-my-notice' Firebelly attitude.  And you don't scare me.,#CHANGESTART:WANTDIGEST:SCARE
+#CHOICE, Sorry.  Look/ I just had some questions..., #CHANGESTART:WANT:WANT
+#EXIT, Fine.  Be that way.  I'm leaving.
+
+#BRANCH, SCARE
+#SAY, Then perhaps it is time that I DID scare you.
+#CHOICE, (More), FIGHT
+
+#BRANCH, FIGHT
+#TEXT, (Vulkuca starts chanting and moving her fingers--probably not a good sign)
+#CHOICE, (Wait and see what she's doing), WAIT
+#CHOICE:DEX:14, (Attack her), ATTACKWIN
+#CHOICE:NOTDEX:14, (Attack her), ATTACKLOSE
+#CHOICE:DEX:6, (Run), RUNWIN
+#CHOICE:NOTDEX:6, (Run), RUNLOSE
+
+#BRANCH, RUNWIN
+#TEXT, (You book it away from Vulkuca before she manages to do whatever it was she was doing.  She probably mocks you.)
+#EXIT, (EXIT)
+
+#BRANCH, RUNLOSE
+#TEXT, (You do your best to run/ but she sees you turning and grabs your arm.  Her grip is unnaturally strong/ and before you can react she has shoved your arm into her mouth.  As you realize in panic what she is doing/ she swallows--*hard*--and you are dragged in practically one violent motion all the way into her mouth and down her throat.  As you find yourself engulfed in chunky goo/ you realize you are in her stomach.)
+#CHOICE, (Panic), #DIGESTTO:THRASH1:1
+#CHOICE:STR:12, (Try to escape),ESCAPE
+#CHOICE:NOTSTR:12, (Try to escape), #DIGESTTO:THRASH1:1
+#CHOICE, (Just lie back and be digested like a good little meal), DIGEST
+
+
+#BRANCH, WAIT
+#TEXT, (After a few seconds/ she stops moving her fingers.  At first nothing seems to happen.  Unfortunately/ it doesn't take long for you to realize you can't move.  As she grins hungrily and opens her mouth wide/ you suddenly find yourself in a state of motionless panic.  And a few minutes later/ as your paralyzed body is being slowly digested inside her slime-filled depths/ you realize it's true--Firebellies really DO live up to their names.)
+#CHOICE, (EXIT), #DIGESTTO:WAIT:4
+
+#BRANCH, ATTACKWIN
+#TEXT, (With lightning speed/ you grab her by the wrist and yank her towards you.  As she stumbles towards your open mouth/ you grab her neck and shove her whole head in your mouth.  Her arms are flailing wildly at this point/ but you simply begin swallowing her at your liesure/ your whole body engulfed with pleasure as you feel her face stretch the top of your throat as it slides down.  Grabbing her buttocks with both hands/ you start to pull hard as you force her flailing body down your throat.)
+#CHOICE, (MORE), ATTACKWIN2
+
+#BRANCH, ATTACKWIN2
+#TEXT, (She starts violently kicking her legs in the air as you feel her breasts entering your throat/ her struggling arms now pinned against her sides.  With a hard swallow/ her buttocks are pushing against the roof of your mouth.  To accomidate her legs/ you simply make one gentle swallow after another/ and with each one another few inches of her kicking legs dissappear down your throat.  By the twelth swallow, only the lower half of her calves are sticking out of your mouth.  You gently push them down your throat with your hand as you swallow one last time/ eventually closing your mouth over her feet and swallowing her entirely.  After feeling her legs slither all the way down your throat and dissappear into your stomach/ you feel some feeble struggles as your body begins the process of digesting her.)
+#CHOICE, (Exit), #EATME
+
+#BRANCH, ATTACKLOSE
+#TEXT, (You take a swing at her/ but with surprising speed she grabs your arm.  Her grip is unnaturally strong/ and before you can react she has shoved your arm into her mouth.  As you realize in panic what she is doing/ she swallows--*hard*--and you are dragged in practically one violent motion all the way into her mouth and down her throat.  As you find yourself engulfed in chunky goo/ you realize you are in her stomach.)
+#CHOICE, (Panic), #DIGESTTO:THRASH1:1
+#CHOICE:STR:14, (Try to escape),ESCAPE
+#CHOICE:NOTSTR:14, (Try to escape), #DIGESTTO:THRASH1:1
+#CHOICE, (Just lie back and be digested like a good little meal), DIGEST
+
+#BRANCH, THRASH1
+#TEXT, (You thrash around violently as you try to force your way out of Vulkuca's stomach.  You are not successful.  Your eyes are beginning to sting from the hot/ foamy soup that is currently being churned around by your struggles.  You have essentially only managed to cover yourself with it.)
+#CHOICE, (Panic s'more), #DIGESTTO:THRASH2:2
+#CHOICE:STR:12, (Try to escape),ESCAPE
+#CHOICE:NOTSTR:12, (Try to escape), #DIGESTTO:THRASH2:2
+#CHOICE, (Just lie back and be digested like a good little meal), DIGEST
+
+#BRANCH, THRASH2
+#TEXT, (You continue to struggle/ but her stomach acids have begun to burn you noticeably.  Your skin is stinging painfully and the pain and stench is beginning to overcome your senses.)
+#CHOICE, (Panic s'more), #DIGESTTO:THRASH3:3
+#CHOICE:STR:10, (Try to escape),ESCAPE
+#CHOICE:NOTSTR:10, (Try to escape), #DIGESTTO:THRASH3:3
+#CHOICE, (Just lie back and be digested like a good little meal), DIGEST
+
+#BRANCH, THRASH3
+#TEXT, (Vulkuca's stomach begins to try to force you downward/ down through the darkness into what would presumably be her intestines.  If you are shoved that deep into her body/ there is almost no chance you can escape.  You can already feel chunks of your skin beginning to flake off in the burning goop as the stomach grinds against you.)
+#CHOICE:STR:8, (Try to escape),ESCAPE
+#CHOICE:NOTSTR:8, (Try to escape), DIGEST
+#CHOICE, (Just lie back and be digested like a good little meal), DIGEST
+
+#BRANCH, DIGEST
+#TEXT, (Your will gives way as you are forced into the depths of Vulkuca's wormy intestines.  You are pushed through them in the darkness as you feel your body begin to come apart.  Within a surprisingly short time/ your entire body has been utterly digested.)
+#CHOICE:NOTSTR:8, (EXIT), #DIGESTTO:DIGEST:4
+
+#BRANCH, ESCAPE
+#TEXT, (You manage to punch your hands through the sphincterous muscle leading to her throat.  With tremendous effort, you pry it open enough for you to force your way out again.  You fall to the ground/ with half of the former contents of her stomach accompanying you out.  As you lie in the pile if vomit/ your skin still stinging slightly/ she sneers at you.)
+#CHOICE, (MORE), ESCAPE2
+
+#BRANCH, ESCAPE2
+#SAY,  See?  I hope you can better appreciate the values of courtesy from now on.  (She smiles/ burps slightly and walks off)
+#EXIT, (Leave)
+
+#BRANCH, KEYS
+#SAY, You must be thoroughly mad.  But I like that.  It looks like the two of us have a common goal/ then.
+#CHOICE, What do you mean?, MEAN
+#CHOICE, You mean you're going after Thirsha too?, MEAN
+
+#BRANCH, MEAN
+#SAY, I mean that one of Thirsha's Keys is in the hands of the Demonguts.  You're going to have to kill some of them to get it.  (She smiles)  I like that.
+#CHOICE, Why do you hate the Demonguts so much?, HATE
+#CHOICE, In that case/ would you like to come with me?, JOIN
+#EXIT, Oh.  Never mind then.
+
+#BRANCH, JOIN
+#SAY, Don't get too cozy/ $NAME.  I don't like you THAT much.
+#CHOICE, Why not?  You'd get to kill an assload of Demonguts.,KILL
+#EXIT, Very well...goodbye then.
+
+#BRANCH, KILL
+#SAY, True.  But if I have my way/ we'll be invading them all soon enough anyway.  If you're actually interested in assaulting the Demonguts/ talk to Rayszia.
+#CHOICE, Alright...I had some other questions...,WANT
+#EXIT, Very well...goodbye then.
+
+
+
+								---[[[ BLACKSCOURGE ]]] ---
+
+
+#CONVERSATION, Illiana
+
+#BRANCH, MAIN
+#SAY, You're $NAME/ aren't you.  My name is Illiana.
+#CHOICE, Sounds like everybody knows who I am...what can I do for you?, #CHANGESTART:MAIN2:DO
+#EXIT, Nice to meet you.  I've got to be going.
+
+#BRANCH, DO
+#SAY,  I've heard you hunt monsters in exchange for potion enhancements.  I have a proposition for you.  To the north is a large cave that has become a de-facto nest for a hive-like variety of Kari species.  These karis have become quite the nuisance.  We have discovered that a particular breed of Kari is laying all the eggs for the hive. They should be easy to recognize/ for they are white in color.  If you can go through the cave and wipe out these white karis/ I can enhance your life potions.
+#CHOICE, They're as good as dead.,OKAY
+#CHOICE, I'll probably have to go through that area anyway/ so okay.,OKAY
+#CHOICE, I'll keep an eye out for them.,OKAY
+#CHOICE, I'm not really that much of a bounty hunter/ actually., NO
+#CHOICE, Sorry/ you heard wrong.  I'd rather not risk it.,NO
+
+#BRANCH, NO
+#SAY, Very well.  But if you change your mind/ simply kill the beasts and return to me.  The reward will still be waiting for you.
+#EXIT, (Leave)
+
+#BRANCH, OKAY
+#SAY, Excellent.
+#CHOICE, In the meantime/ can I ask you some questions?,QUESTIONS
+#EXIT, (Leave)
+
+#BRANCH, MAIN2
+#SAY, (Illiana nods to you as you approach)  You again.  Was there something you wanted?
+#CHOICE:IFQUEST:White Kari, I have destroyed the White Karis for you., #CHANGESTART:MAIN3:QUESTCOMPLETE
+#CHOICE, I just had some questions., QUESTIONS
+#EXIT, Nope.  Never mind.
+
+#BRANCH, QUESTCOMPLETE
+#SAY, Excellent work/ $NAME.  I shall strengthen your life potions--and here is another small token of my appreciation.  (She hands you a large bag of coins)
+#EFFECT, Lifeplus:1
+#EFFECT, GiveGold:50000
+#CHOICE, Thank you.,#TAKEOBJ:MAIN3
+
+#BRANCH, MAIN3
+#SAY, (Illiana nods to you as you approach)  What can I do for you/ $NAME?
+#CHOICE, I just had some questions., QUESTIONS
+#EXIT, Nothing.
+
+#BRANCH, QUESTIONS
+#SAY, What exactly did you want to know?
+#CHOICE, What can you tell me about your city here?, CITY
+#CHOICE, What can you tell me about this area?, AREA
+#CHOICE, What can you tell me about the Darkswallow clan?, CLAN
+#CHOICE, What do you think of the other clans?, OTHERCLANS
+#EXIT, That's all.  Thank you for your help.
+
+#BRANCH, CITY
+#SAY, Blackscourge is little more than an outpost.  The saturation of monsters in this region has prevented us from expanding/ but our guards have been able to keep the beasts out of our town.
+#ADDCHOICES, QUESTIONS
+
+#BRANCH, AREA
+#SAY, The mountains we have settled in here are treacherous/ to say the least.  Besides the jagged stone and obsidian that you must brave simply to walk around/ it is filled with a huge number of monsters/ just like every other area in this region.  There seems to be a particular concentration of centauresses and harpies around here--doubtless due to their unique ability to traverse the chaotic and rocky terrain.  Both subsist on a steady diet of travellers that try to make their way through the mountains.
+#ADDCHOICES, QUESTIONS
+
+#BRANCH, OTHERCLANS
+#SAY, They're little better than the beasts/ for the most part.  The Demonguts to the north are practically monsters in their own right--they attack anyone who ventures anywhere near their castle.
+#CHOICE, What about the Firebellies/ to the west?, FIREBELLIES
+#CHOICE, Thanks.  I had some other questions...,QUESTIONS
+#EXIT, Thanks.  That's all I needed to know.
+
+#BRANCH, CLAN
+#SAY, We are a powerful clan with a rich history.  Our presence in this region is scarce/ limited only to this city.  As powerful as the guards in this town are/ they are only a trifle compared to the true might of Clan Darkswallow.  More cities belonging to our kind can be found far to the northwest/ but you would not be able to reach them due to the mountains.
+#CHOICE, What is your relationship with the Firebellies to the east?, FIREBELLIES
+#CHOICE, Cool.  I had some other questions...,QUESTIONS
+#EXIT, Thanks/ that's all I needed to know.  Farewell.
+
+#BRANCH, FIREBELLIES
+#SAY, The Firebellies are normally an aggressive and violent clan.  Unfortunately/ our proximity to Castle Demongut makes it most inconvenient to attempt to deal with both.  For that reason/ we have formed a treaty with the Firebellies.  We don't bother them/ they don't bother us.
+#CHOICE, Does this treaty prevent the Firebellies from travelling to Castle Demongut?, PREVENT
+#CHOICE, Cool.  I had some other questions...,QUESTIONS
+#EXIT, Thanks/ that's all I needed to know.  Farewell.
+
+#BRANCH, PREVENT
+#SAY, Yes.
+#CHOICE, But then what's the point?  Why not just let the Firebellies attack the castle and do your fighting for you?, WHY
+#EXIT, Thanks/ that's all I needed to know.  Farewell.
+
+#BRANCH, WHY
+#SAY, Because the Firebellies are far too aggressive for their own good/ and they refuse to admit that the Demonguts have them outgunned.  At the moment/ only the threat of leaving their castle vulnerable to us prevents the Demonguts from marching their forces into Skinbane.  But if the Firebellies were to attack Castle Demongut themselves/ they'd be wiped out/ allowing the Demonguts to spread through the area at their liesure--and with that much territory/ they would begin to pose a serious threat.  But so long as the treaty holds/ the Firebellies won't attack us and neither will the Demonguts--neither wants to weaken themselves so much fighting us that they would be vulnerable to each other.
+#CHOICE, So you're not protecting the Demonguts from the Firebellies...you're protecting the Firebellies from the Demonguts?, PROTECT
+#CHOICE, Whoah.  That's kinda clever.  I had some other questions...,QUESTIONS
+#EXIT, Thanks/ that's all I needed to know.  Farewell.
+
+#BRANCH, PROTECT
+#SAY, In essence.  We're satisfied so long as the two keep one another in check/ because this way we don't have to deal with *either* of them.
+#CHOICE, Cool.  I had some other questions...,QUESTIONS
+#EXIT, Thanks/ that's all I needed to know.  Farewell.
+
+#CONVERSATION,  Licatria
+
+#BRANCH, MAIN
+#SAY, "I am Licatria, primary armorer of the Darkswallow clan.  I think you'll find that our weapons are beyond anything you can find elsewhere."
+#CHOICE, And why is that?, WHY
+#CHOICE, What have you got?, GOT
+#CHOICE, I'd like to buy some obsidian weapons., #SELLMAGICWEAPONS:22
+#CHOICE, I'd like to buy some magical obsidian weapons., #SELLMAGICWEAPONS:22
+#CHOICE, I'd like to buy some obsidian armor., #SELLARMOR:22
+#CHOICE, I'd like to buy some pinksteel armor., #SELLARMOR:18
+#CHOICE, I'd like to buy some pinksteel weapons., #SELLWEAPONS:18
+#EXIT, Nothing.  Never mind.
+
+#BRANCH, WHY
+#SAY, "The weaponsmithing skills of Clan Darkswallow are known throughout the lands.  Our skill with the forge is matched by no one.  However, I believe my wares shall speak for themselves."
+#ADDCHOICES, MAIN
+
+#BRANCH, GOT
+#SAY, "I specialize in enchanted obsidian, the preferred material of Clan Darkswallow.  I have both magical and nonmagical weapons made of this powerful material.  I also sell lower-priced items for those travellers who are in need of protection but do not have the cash for more powerful items."
+#ADDCHOICES, MAIN
+
+				--[[ Allia ]]--
+
+#CONVERSATION, Vonirea
+#BRANCH, MAIN
+#SAY, Good evening/ stranger.  Is there something you wanted?
+#CHOICE, Yes.  Do you have the third Key of Thirsha?, KEY
+#CHOICE, Who are you?, WHO
+#CHOICE, What can you tell me about this area?, AREA
+#EXIT, Never mind.
+
+#BRANCH, WHO
+#SAY, My name is Vonirea of Clan Velvet Intestine.  I am this city's combat instructor.  I teach the city guard how to survive against the beasts in this region.
+#CHOICE, How DO you get them to survive against the stuff around here?, SURVIVE
+#CHOICE, Do you have the third Key of Thirsha?, KEY
+#CHOICE, What can you tell me about this area?, AREA
+#EXIT, Never mind.
+
+#BRANCH, SURVIVE
+#SAY, It isn't easy/ believe me.  The succubusses alone are practically enough to make a quick brunch out of our entire town.  The best tactic I have discovered so far is to teach each of my disciples how to regrow their skin as quickly as possible/ granting them the survivability they need to come back from their guard shifts.  They still can't quite regain their life as fast as a succubus can digest it/ but it certainly gives them a better chance.
+#CHOICE:SAYONCE, You mean you teach regeneration?  Could you teach me?, TEACH
+#CHOICE, I see.  Can I ask you something else?, MAIN2
+
+#BRANCH, TEACH
+#SAY, Theoretically/ but that is a secret of Clan Velvet Intestine.  You'd have to prove yourself a friend of our clan before I could teach you.
+#CHOICE, I'm going after Thirsha the Dragon.  I'm sure that would benefit you as much as anyone., TEACH2
+
+#BRANCH, TEACH2
+#SAY, You--YOU'RE the one going after Thirsha?  We'd heard about you...I was almost sure you were already dead.  What are you doing in Allia?
+#CHOICE, I'm trying to get ahold of the third key to Thirsha's Lair., KEY2
+#CHOICE, I'm trying to get more powerful items to fight her with., ITEMS
+
+#BRANCH, KEY2
+#SAY, Oh yeah...the one that Matrynia was carrying when she was swallowed.  I don't know how you're going to get that key back/ but if you're going after Thirsha/ you're going to need all the help you can get.  I suppose I could teach you...
+#CHOICE, Rock on., TEACH3
+
+#BRANCH, ITEMS
+#SAY, Well/ there is a dungeon to the southeast that has some sort of hyper-powerful weapon.  If you're going after it OR Thirsha/ you're going to need all the help you can get.  I suppose I could teach you...
+#CHOICE, Rock on., TEACH3
+
+#BRANCH, TEACH3
+#SAY, Now/ the first thing is to visualize your skin/ become more aware of it.  Start to get a feel for it/ and the energy in it.  Start to channel this energy/ excite it/ accelerate it/ make your skin leap forth with it's energy and multiply...
+#CHOICE, (MORE), TEACH4
+
+#BRANCH, TEACH4
+#TEXT, (Vonirea spends the next little while giving you basics and tips on focusing your body's regenerative abilities.  Your regeneration skill goes up by 1 point.)
+#CHOICE, (MORE), #GIVESKILL:Regeneration:TEACH5
+
+#BRANCH, TEACH5
+#TEXT, Was there anything else?
+#ADDCHOICES, MAIN
+
+#BRANCH, AREA
+#SAY, These are the Lakelands/ and you've probably figured out by now that they are rather dangerous.  This whole continent seems to be infested with a huge number of monsters.  We've learned that there is a dungeon to the far south that is supposed to have some sort of extremely powerful weapon inside/ but every girl who's tried to retrieve it has/ well/ frankly met with less success and more stomach than we would have liked.
+#CHOICE, What is this weapon?, WHATWEP
+#CHOICE, Ah.  Can I ask you something else?, MAIN2
+#EXIT, Never mind.
+
+#BRANCH, WHATWEP
+#SAY, I am not entirely sure.  We know only that it is supposedly a potent weapon.  Did you want to know anything else?
+#ADDCHOICES, MAIN
+
+#BRANCH, MAIN2
+#SAY, Yes?
+#CHOICE, Do you have the third Key of Thirsha?, KEY
+#CHOICE, Who are you?, WHO
+#CHOICE, What can you tell me about this area?, AREA
+#EXIT, Never mind.
+
+#BRANCH, KEY
+#SAY, Unfortunately/ no.  That key used to be in the hands of our clan/ but it was lost some time ago.
+#CHOICE, Lost?, LOST
+#CHOICE, Do you know where I can find it?, FIND
+#CHOICE, Crud.  Can I ask something else?, MAIN2
+
+#BRANCH, LOST
+#SAY, Yes.  It was carried by a woman named Matrynia/ but she fell prey to a groundmaw.  Doubtless she lost her life stewing in it's churning depths.
+#CHOICE, Is there any way I can get the key back?, FIND
+
+#BRANCH, FIND
+#SAY, Not unless you particularly fancy the idea of diving into a groundmaw and being digested whole.
+#CHOICE, Ack.  Never mind.  Can I ask something else?, MAIN2
+#EXIT, I just might have to.  Goodbye/ then...
+
+
+#CONVERSATION, Lialyta
+
+#BRANCH, MAIN
+#SAY, Hello.  My name is Lialyta.  And you are?
+#CHOICE, My name is $NAME., #CHANGESTART:MAIN2:NAME
+#EXIT, Never mind.
+
+#BRANCH, MAIN2
+#SAY, (Lialyta nods) Was there something else you needed?
+#CHOICE, Have you heard of Thirsha's Keys?, KEYS
+#CHOICE, What can you tell me about this city?, CITY
+#CHOICE, What can you tell me about this area?, AREA
+#CHOICE, Can you tell me about your clan?, CLAN
+#EXIT, Never mind.
+
+#BRANCH, CLAN
+#SAY, We are the Velvet Intestines/ greatest and wisest among the clans.  Just out of curiousity/ which clan do you belong to?  You certainly don't sound like a Firebelly...
+#CHOICE, I'm neutral/ actually.  My town didn't belong to any clan., NEUTRAL
+
+#BRANCH, NEUTRAL
+#SAY, Ah/ good.  Just stay that way and you'll stay out of trouble.  In any case/ back to your question.  We Velvet Intestines are not as belligerent or wanton as the other clans.  We find the tendency of other clans to constantly try to swallow their enemies whole to be a little childish.
+#CHOICE, So you don't swallow girls?, DONT
+#CHOICE, Amen.  I had another question...,MAIN2
+
+#BRANCH, DONT
+#SAY, Well...I didn't say that.  But I don't think you're in any danger here.
+#CHOICE, So you DO swallow girls/ then., DOSWALLOW
+#CHOICE, That's good...Can I ask you something else?, MAIN2
+
+#BRANCH, DOSWALLOW
+#SAY, We are flesh and blood/ just as you are.  However/ we find swallowing people kicking and screaming to be savage and uncouth.  Our magical abilities allow us to make our targets a little more...cooperative.
+#CHOICE, Cooperative?  You mean they just LET you swallow them?, BRAINWASH
+#CHOICE, You mean you brainwash them into WANTING to be swallowed?!, BRAINWASH
+#CHOICE, I see.  I had some other questions...,MAIN2
+#CHOICE, Ack.  Never mind then., MAIN2
+
+#BRANCH, BRAINWASH
+#SAY, Make no mistake.  We are a civilized clan/ but we have ways to defend ourselves.
+#CHOICE, Well/ at least they go willingly...Can I ask you something else?, MAIN2
+#CHOICE, And satisfy your appetites without a fuss/ apparently...,FUSS
+#EXIT, Ah.  I think I know all I need to.  Farewell.
+
+#BRANCH, FUSS
+#SAY, What do you mean?
+#CHOICE, I mean/ it's a convenient way to eat whomever you want/ whenever you want/ without a fight.  Seems like it would be tempting to abuse., ABUSE
+#CHOICE, I mean I doubt you only use it on people who attack you., ABUSE
+#CHOICE, Never mind...can I ask you about something else?, MAIN2
+
+#BRANCH, ABUSE
+#SAY, You sound as though you're accusing me of something.
+#CHOICE, I am.  I think this whole civility thing is just a facade.  You lure people into your city and then you eat them., ACCUSE
+#CHOICE, No/ no...never mind.  Can I ask you something else?, MAIN2
+
+#BRANCH, ACCUSE
+#SAY, Sad it is that the touted hero would be so cruel.  But if we were as you say/ I would have eaten you already.
+#CHOICE, Bah.  The only reason you haven't is you know you'd be swimming in my stomach if you tried., SWIMMING
+#CHOICE, I suppose.  Can I ask you something else?, MAIN2
+#EXIT, Never mind then.
+
+#BRANCH, SWIMMING
+#SAY, (Her eyes narrow) You are no hero.  You are simply vermin in girl's clothing.  My patience has run out.
+#CHOICE, (Attack her), ATTACK
+#CHOICE, Wait/ wait..., WAIT
+#CHOICE, Okay/ look/ I'm sorry...,WAIT
+
+#BRANCH, ATTACK
+#TEXT, She apparently didn't expect such a quick response from you.  You quickly grab her head and practically ram it into your mouth/ stretching your throat wide and swallowing hard.  You manage to get everything up to her shoulders down your throat/.  Though she is fairly strong/ it doesn't take long for you to overpower her/ and soon she is squirming futilely inside your belly.)
+#CHOICE, (EXIT), #EATME
+
+#BRANCH, WAIT
+#SAY, You are too late.  I shall now prove our powers to you.
+#CHOICE, (Attack her), ATTACK
+#CHOICE, (Run), RUN
+
+#BRANCH, RUN
+#TEXT, You turn around and run away from Lialyta's angry face.  You do not hear her following you.  However/ after a few seconds/ you find yourself with a strange urge.  A VERY strange urge.
+#CHOICE, (Walk back to Lialyta), WALK
+#CHOICE, (Fight it), WALK
+
+#BRANCH, WALK
+#SAY, (You return to Lialyta/ who is smiling wolfishly at you.)  I may not have mentioned/ I'm one of the most powerful sorceresses in our village.  Now do you have anything you would like to say to me?
+#CHOICE, I would like you to eat me/ Lialyta., EAT
+#CHOICE, Yes.  Please swallow me., EAT
+#CHOICE, Yes.  I am very sorry I offended you and would like to make it up to you by jumping down your throat so you can digest me alive., EAT
+
+#BRANCH, EAT
+#SAY, Really?  Are you sure?  You really want me to swallow you down/ and digest you alive and whole inside my stomach?
+#CHOICE, Yes., EAT2
+#CHOICE, Yes please., EAT2
+#CHOICE, I sure do., EAT2
+#CHOICE, (Shove yourself down her throat), EAT3
+
+#BRANCH, EAT2
+#SAY, (She smiles broadly) Well/ okay/ if it's what YOU want...
+#CHOICE, (Let her eat you), EAT3
+
+#BRANCH, EAT3
+#TEXT, She opens her mouth impossibly wide and bends down slightly/ bringing her throat to about shoulder level on you.  You enthusiastically put your hands together and start shoving them down her throat.  You feel the slick warmth of her esophagus on the sides of your arms as you push them deeper and deeper inside.  You take a step forward and place your head in her mouth/ then take another step that starts to push your face down her gullet.  She helpfully grabs your hips and turns you upside down at this point/ making your descent down her throat much easier.  You simply straighten your body and allow your weight to propel you down her throat.  You slide quickly through the slippery tube and into her liquid-filled stomach.
+#CHOICE, (MORE), #DIGESTTO:EAT4:6
+
+#BRANCH, EAT4
+#TEXT, You curl up inside her hot digestive liquids/ grateful you can hold your breath as you feel the stomach walls begin to grind against your submerged body.  The euphoria continues as Lialyta's stomach sets about the task of thoroughly digesting it's huge meal.
+#EXIT, (EXIT)
+
+#BRANCH, CITY
+#SAY, This is the city of Allia/ regional home of the Velvet Intestine clan.  It is a colony from our holdings across the sea.
+#CHOICE, Sea?  What sea would that be?, SEA
+#CHOICE, Colony?, COLONY
+
+#BRANCH, COLONY
+#SAY, Yes.  This is hardly our clan's only city.  However/ the next closest holdings of ours are on islands to the southeast.
+#CHOICE, Is there a way to reach these islands?, ISLANDS
+#CHOICE, Ah.  I had some other questions...,MAIN2
+#EXIT, I see.  Goodbye.
+
+#BRANCH, SEA
+#SAY, Yes.  The surrounding lakelands are actually freshwater rivers that flow into the sea.
+#CHOICE, Really? Is there any way to cross this sea?, ISLANDS
+
+#BRANCH, ISLANDS
+#SAY, Not in this game.
+#CHOICE, Uh...okay...,MAIN2
+
+#BRANCH, AREA
+#SAY, We are situated just outside the edge of the Jungle of Pain.  The jungle is so named because it is infested with powerful beasts/ and practically every plant in the jungle has a digestive tract just about the right size for one of us.  Surrounding this area are the lakelands/ likewise filled with monsters/ as all of this region seems to be...
+#CHOICE, You can thank Thirsha for that.  I had some other questions...,MAIN2
+#EXIT, Thanks.  That's all I needed to know.
+
+#BRANCH, KEYS
+#SAY, Yes/ actually...one of the keys was in our possession until a short time ago.
+#CHOICE, Was?, WAS
+#CHOICE, You mean it isn't now..., WAS
+#CHOICE, Why does that not surprise me?, WAS
+
+#BRANCH, WAS
+#SAY, Unfortunately/ the key was carried by a girl named Matrynia.  She was with a party of village guard a few weeks ago when they were set upon by a swarm of unusually large harpies.  Only two of them made it back--the rest apparently became warm meals for their attackers.  One of them said she saw Matrynia fall into the great Groundmaw.
+#CHOICE, Groundmaw?, GROUNDMAW
+#CHOICE, Does that mean she's dead?, DEAD
+#CHOICE, Is there any way to get the key back?, KEY
+
+#BRANCH, GROUNDMAW
+#SAY, Yes.  Groundmaws are essentially just giant stomachs buried in the ground.  They rely on unwary travellers simply falling into them/ though I've been told some of them hide themselves or have tentacles that they use to drag their prey into their bodies.  Truth be told/ nobody around here knows much about them/ because they're very rare in this region.  The only one we know of is in the Jungle of Pain to the east--but it's said to be one of the biggest in existance.  It's mouth isn't that big/ but once you get inside/ it's tremendous.  Enough to fit an army.  I don't know how they found that out/ but it means it might be possible to actually find an exit/ assuming you survive long enough...
+#CHOICE, So Matrynia could still be alive?, DEAD
+#CHOICE, Then how can I get the key?, KEY
+
+#BRANCH, DEAD
+#SAY, Well/ if Matrynia were still alive/ she would have made her way back here.  Though there may be a way to escape the Groundmaw/ it can't be easy.  I imagine there's a virtual sea of digestive juices inside.  To be honest/ I'm almost certain she's little more than a puddle of goop somewhere in the groundmaw's cavernous insides by now.
+#CHOICE, Then how do we get her key back?, KEY
+
+#BRANCH, KEY
+#SAY, If Matrynia was indeed digested inside the groundmaw/ the key is all but lost.
+#CHOICE, Could somebody go inside and get it?, GETIT
+#CHOICE, Would the key have been digested too?, KEYDIGESTED
+#EXIT, Well/ that would seem to fuck my quest.  Goodbye then...
+
+#BRANCH, KEYDIGESTED
+#SAY, Possibly.  Virtually nothing is indigestible to the monsters around here.  Even the strongest armor has been known to dissolve if it's in the digestive tract for long enough.
+#CHOICE, Then what can I do?, DO
+
+#BRANCH, DO
+#SAY, I'd say all you can do is hope that the key WASN'T digested.
+#CHOICE, Well/ even if it wasn't/ it's still inside that groundmaw!  How do I get it?, HOW
+#EXIT, I suppose.  I'll go investigate further.
+
+#BRANCH, HOW
+#SAY, I'd say you don't/ unless you want to actually jump down the Groundmaw's throat and go after it.
+#CHOICE, Is that possible?, GETIT
+#CHOICE, I just might have to do that/ actually., GETIT
+
+#BRANCH, GETIT
+#SAY, Only if you're suicidal.  You'd have to be crazy to go in there.  No girls have come out of it for as long as I've been alive.  And that isn't to say there haven't been several dozen who have fallen in.  With as huge as that thing's insides supposedly are/ the key could be at the bottom of a hundred-foot-deep pool of gastric acid.
+#CHOICE, But it might NOT/ and I really need that key., ANYWAY
+#CHOICE, Er...do you know where I might get some scuba gear/ then?, SCUBA
+
+#BRANCH, SCUBA
+#SAY, Sorry.  Even if you could find scuba gear on this planet/ it could probably digest it anyway.
+#CHOICE, Crapola.  But I need to go in there.  I NEED that key., ANYWAY
+
+#BRANCH, ANYWAY
+#SAY, Well/ I suppose if you're after Thirsha/ you would...Well/ good luck.
+#CHOICE, So where is this Groundmaw?, WHERE
+#CHOICE, Thanks.  I had some other questions...,MAIN2
+#EXIT, Thank you.  Goodbye.
+
+#BRANCH, WHERE
+#SAY, It's right in the center of the Jungle of Pain to the east.
+#CHOICE, Thanks.  I had some other questions...,MAIN2
+#EXIT, Thank you.  Goodbye.
+
+#BRANCH, NAME
+#SAY, Well/ it's a pleasure to meet you/ $NAME.  What can I do for you?
+#ADDCHOICES, MAIN2
+
+
+
+
+			--[[ ENDINGS ]]--
+
+#CONVERSATION, Win
+#BRANCH, MAIN
+#TEXT, Thirsha's lifeless head falls to your feet as the gruelling battle finally ends.  You may have had many an intimite encounter with her stomach/ but in the end/ it is you who have prevailed.  Thirsha's reign of terror is over.  You kick her lifeless head a few times just for good measure as you wipe what's left of her blood and digestive juices off of your skin.  As you turn to leave/ something glittering catches your eye.
+#IMAGE, Win1.jpg
+#CHOICE, (MORE), Win2
+
+#BRANCH, Win2
+#IMAGE, Win2.jpg
+#TEXT, You turn around a corner to investigate/ and within the adjoining chamber you find a tremendous stash of gold--more than you have ever seen!  Doubtless most of it came from what Thirsha's meals were carrying when she swallowed them.  This could easily be enough to make your city the most powerful in the region--that is/ if you decide not to just spend it on yourself.  But you'll have plenty of time to make that decision--after all/ as the owner of Thirsha's Keys/ you could leave it here for as long as you wanted and no one would be any the wiser.
+#CHOICE, (MORE), Win3
+
+#BRANCH, Win3
+#IMAGE, (NONE)
+#TEXT, You return home to a hero's welcome.  Even the heads of a few of the Clan cities travel to your city to celebrate your victory--your clan consort is quick to use their goodwill to secure mutual treaties of friendship.  With Thirsha destroyed/ a great hunt begins to purge the region of the armies of monsters that have plagued it.  The dark times are over/ and with the power your city stands to gain/ it may well become a clan of it's own someday.
+#CHOICE, (MORE), Win4
+
+#BRANCH, Win4
+#TEXT, Congratulations.  You have officially won Duamutef's Glorious Vore RPG.  Now go away.
+#EXIT, (Go Away)
+
+  You return to a hero's welcome/ 
+
+
+
+
+			---[[ Guest Writers ]]---
+
+#CONVERSATION, Michelle
+#BRANCH, MAIN
+#SAY, The worms here don't bother us. They are all friendly and won't try to eat you. Especially Gargmaw. He is as gentle as can be. He loves to play with us.
+#CHOICE:IFQUEST:Gargmaw, You lied to me! Gargmaw was a girl-hungry beast. He tried to eat me!,#CHANGESTART:MAIN2:EXPLAIN
+#CHOICE, Who or what is this Gargmaw?, WHO
+#CHOICE:IFNOTQUEST:Gargmaw, Where is Gargmaw?, WHERE
+#CHOICE, Does the Nagas ever come in here to try to eat you?, NAGAS
+#EXIT, Excuse me/ but I have more important things to do than play with worms.
+ 
+#BRANCH, WHO
+#SAY, He's the most adorable little worm!  He's big and black/ and purrs just like a kitten when you tickle him!
+#EXIT, Um...this is unreal.  Excuse me while I stagger off in disbelief.
+#BRANCH, MAIN2
+#SAY, You... You're back! I expected you to be sliding through Gargmaw's intestines by now. You're not angry are you? 
+#CHOICE, You bet your ass I am! Tell me one reason I shouldn't eat you right now!, EXPLAIN
+#BRANCH, EXPLAIN
+#SAY, Sorry/ but Gargmaw has been eating our people. I thought if I fed you to him/ it would buy me some time. But this is even better! Now I don't have to worry about winding up as part of a balanced breakfast. 
+#CHOICE, I wouldn't be too sure about that!  (Eat the jerk), #EATME
+#CHOICE:SAYONCE, Well/ I won't eat you THIS time/ but behave from now on., #EFFECT:WARNING:Manapotion:3
+#EXIT, *Grumble grumble* (Leave)
+#BRANCH, WARNING
+#SAY, I'm glad you are being such a good sport about this. Here/ take these mana potions.
+#EXIT, ...Thanks.  (Leave)
+#BRANCH, WHERE
+#SAY, He lives in a cave to the West. He LOVES to have his belly rubbed. I hope you go visit him. He just loves girls like you.
+#EXIT, I'm sure.  Goodbye.
+#BRANCH, NAGAS
+#SAY, Occasionally a naga will wander in here looking for a meal/ but more often than not she will wind up slithering down the esophagus of one of our guards.
+#CHOICE, Have you ever eaten a Naga?, NAGA
+#BRANCH, NAGA
+#SAY, Oh my/ YES! They squirm all the way down/ but can't kick. I look forward to guard duty and hope they do try to sneak in. Then I can get a tasty snake-girl snack!
+#CHOICE, Have the Nagas ever succeeded in eating any of you?, EATEN
+
+#BRANCH, EATEN
+#SAY, Once in a while. It makes a great show/ though. One time my friend Jill and I were on guard duty when a Naga snuck up behind us. That snake-slut grabbed Jill's feet and slurped her down. When she had completely enveloped Jill/ I grabbed her tail and sucked it up like spaghetti. She was too stuffed to put up a fight. I could feel her moving around for hours until she just curled up into a ball and digested quietly. Serves that bitch right. I had always wanted to eat Jill.
+#CHOICE, Well I hope that meal was worth it!, MAIN
+#EXIT, Suddenly I get the idea it isn't safe to be one of your friends.  Goodbye.
+
+
+
+
+

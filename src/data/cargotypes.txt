@@ -1,0 +1,12 @@
+Cargo, Iron Ore, 20
+Cargo, Iron, 40
+Cargo, Steel, 60
+Cargo, Gold Ore, 40
+Cargo, Gold, 80
+Cargo, Raw Xodium Crystals, 400
+Cargo, Xodium Crystals, 800
+Cargo, Raw Emerald, 200
+Cargo, Emeralds, 600
+
+
+

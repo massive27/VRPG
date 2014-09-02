@@ -1,0 +1,84 @@
+
+#RANDOMSEED, 500
+#MAPSIZE, 100, 100
+
+#OBJTYPE, WeaponSalesgirl
+/EFFECT, Conversation, Ettra, portrait-ettra.jpg, , ,
+#EFFECT, SELLWEAPONS, 3, 8, , ,
+#GRAPH, girl44.bmp, 3, 250, 0, 0, .5
+
+#OBJTYPE, ArmorSalesgirl
+/EFFECT, Conversation, Ettra, portrait-ettra.jpg, , ,
+#EFFECT, SELLARMOR, 3, 8, , ,
+#GRAPH, girl45.bmp, 3, 250, 250, 250, .5
+
+#OBJTYPE, CyberSalesgirl
+/EFFECT, Conversation, Ettra, portrait-ettra.jpg, , ,
+#EFFECT, SELLCYBER, 3, 8, , ,
+#GRAPH, girl32.bmp, 3, 50, 50, 150, .5
+
+#OBJTYPE, CargoSalesgirl
+/EFFECT, Conversation, Ettra, portrait-ettra.jpg, , ,
+#EFFECT, SELLCARGO, 3, 8, , ,
+#GRAPH, girl35.bmp, 3, 250, 50, 150, .5
+
+#OBJTYPE, CrewSalesgirl
+/EFFECT, Conversation, Ettra, portrait-ettra.jpg, , ,
+#EFFECT, SELLCREW, 3, 8, , ,
+#GRAPH, girl54.bmp, 3, 50, 50, 150, .5
+
+#OBJTYPE, ShipSalesgirl
+/EFFECT, Conversation, Ettra, portrait-ettra.jpg, , ,
+#EFFECT, SELLSHIPS, 3, 8, , ,
+#GRAPH, girl56.bmp, 3, 250, 0, 0, .5
+
+#OBJTYPE, PartsSalesgirl
+/EFFECT, Conversation, Ettra, portrait-ettra.jpg, , ,
+#EFFECT, SELLPARTS, 3, 8, , ,
+#GRAPH, girl47.bmp, 3, 100, 100, 100, .5
+
+#OBJTYPE, ArmorRack
+/EFFECT, Conversation, Ettra, portrait-ettra.jpg, , ,
+/EFFECT, Message, A rack of armor on display., , , ,
+#GRAPH, armorrack1.bmp, 1, 100, 100, 100, .5
+
+#OBJTYPE, DressRack
+/EFFECT, Conversation, Ettra, portrait-ettra.jpg, , ,
+/EFFECT, Message, A piece of clothing on display., , , ,
+#GRAPH, dressrack1.bmp, 1, 100, 100, 100, .5
+
+#OBJTYPE, ShipRack
+/EFFECT, Conversation, Ettra, portrait-ettra.jpg, , ,
+/EFFECT, Message, A miniature model of a starship., , , ,
+#GRAPH, shiprack1.bmp, 1, 100, 100, 100, .5
+
+#OBJTYPE, WeaponSign
+#GRAPH, weaponsign1.bmp, 1, 100, 100, 100, .5
+
+#OBJTYPE, ArmorSign
+#GRAPH, armorsign1.bmp, 1, 100, 100, 100, .5
+
+#OBJTYPE, GemSign
+#GRAPH, gemsign1.bmp, 1, 100, 100, 100, .5
+
+#OBJTYPE, CargoSign
+#GRAPH, cargosign1.bmp, 1, 100, 100, 100, .5
+
+#OBJTYPE, NewsThing
+#GRAPH, cargosign1.bmp, 1, 100, 100, 100, .5
+
+#OBJTYPE, PotionSign
+#GRAPH, potionsign1.bmp, 1, 100, 100, 100, .5
+
+
+//LOADSEG, segfilen, X, Y, rotation, floortype, walltype, salesobj, signobj, bij1, bij2, doorobj, stealobj
+
+
+#LOADSEG, "20cooridor2.seg", 40, 30, 1, 24, 26, , , NewsThing, , ,
+#LOADSEG, "20cooridor1.seg", 10, 30, 1, 24, 26, , , NewsThing, , ,
+#LOADSEG, "10IJunc.seg", 30, 35, 1, 24, 26, , , NewsThing, , ,
+#LOADSEG, "10IJunc.seg", 60, 35, 1, 24, 26, , , NewsThing, , ,
+
+#LOADSEG, "10shop8.seg", 1, 35, 3, 24, 26, "WeaponSalesgirl", "WeaponSign", "ArmorRack", "ArmorRack", , 
+
+

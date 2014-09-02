@@ -1,0 +1,101 @@
+Forest Glade
+
+#TERSTR, Now entering the Jungle of Pain...
+
+#LEVEL, 37
+
+#RANDOMSEED, 24578
+#MAPSIZE, 100, 100
+FILLMAP, 13
+/Mapchunk, type, size-ish
+#MAPCHUNK, 12, 30
+#MAPCHUNK, 12, 30
+#MAPCHUNK, 12, 30
+#MAPCHUNK, 3, 8
+#MAPCHUNK, 3, 8
+#OVRCHUNK, 8, 15
+#OVRCHUNK, 8, 15
+#OVRCHUNK, 8, 15
+#OVRCHUNK, 8, 10
+#OVRCHUNK, 8, 10
+
+#BUILDING, 0, 0, 0, 0, 3, 10, Treasure8
+BUILDING, 8, 8, 0, 0, 13, 10, Treasure4
+MULTBUILDING, 5, 0, 0, 0, 0, 13, 10, Treasure6
+BUILDING, 3, 5, 0, 0, 12, 9, Treasure5
+BUILDING, 5, 3, 0, 0, 12, 9, Treasure5
+#BUILDING, 0, 0, 0, 0, 12, 9, Treasure12
+#BUILDING, 0, 0, 0, 0, 15, 10, Armor17
+#BUILDING, 0, 0, 0, 0, 12, 9, Treasure12
+#BUILDING, 0,0,0,0,3,11,Clothes23
+
+#SPRINKLEOVR, 135, 8
+#SPRINKLEOVR, 225, 2
+#SPRINKLEOVR, 225, 8
+#SPRINKLEOVR, 425, 17
+#SPRINKLE, 525, 2
+#SETMAPS, , , , Allia.txt
+
+/MONTYPE, Name, Graphic, Swallowtype, HP, Skill, Dice, Damage, Eatskill, Exp, move, acid, Red/"Clan", Green/Clannumber, Blue, Lightness
+
+MONTYPE, Demi Kari, kari1.bmp, ,1600, 15, 12, 6, 12, 30, 4, 12, 195, 195, 0, .4,
+MONTYPE, Red Naga, snakewoman2.bmp, ,150, 6, 2, 6, 6, 50, 4, 3, 150, 20, 0,.3
+MONTYPE, Naga, snakewoman2.bmp, ,350, 8, 4, 6, 7, 80, 4, 4, 60, 150, 0,.5
+MONTYPE, Mudsnake, snake1.bmp, ,280, 6, 1, 8, 8, 25, 4, 3, 120, 90, 60,.4
+MONTYPE, Titan Serpent, snake1.bmp, ,2025, 12, 8, 6, 12, 55, 5, 12, 20, 180, 0,.4
+MONTYPE, Giant Worm, worm1.bmp, ,40, 6, 2, 6, 6, 80, 4, 3, 100, 0, 150,.5,
+MONTYPE, Slime Vines, tendrils1.bmp, Plant,20, 4, 1, 4, 8, 15, 2, 1, 60, 140, 10,.5, 
+MONTYPE, Oozeflower Vines, tendrils1.bmp, Plant,90, 4, 1, 4, 12, 40, 5, 5, 250, 100, 250,.8
+MONTYPE, Bogsnapper Plant, venus1.bmp, Plant,320, 8, 1, 4, 18, 80, 1, 6, 130, 140, 110,.5
+MONTYPE, Greater Girlcrunch Plant, venus1.bmp, Plant,1420, 12, 1, 4, 18, 80, 1, 12, 70, 100, 10,.3
+MONTYPE, Venus Demon, venus1.bmp, Plant,2420, 14, 12, 8, 20, 80, 1, 18, 200, 10, 10,.3
+MONTYPE, Demon Weed, tendrils1.bmp, Plant, 800, 12, 9, 10, 8, 15, 4, 8, 200, 10, 10,.3, 
+MONTYPE, Oozeflower, venus1.bmp, Plant,320, 8, 1, 4, 16, 100, 2, 6, 250, 100, 250,.8
+MONTYPE, Swamp Toad, frog1.bmp, ,225, 4, 1, 4, 12, 15, 4, 2, 140, 120, 110,.4,
+MONTYPE, Slime, slime1.bmp, 40, ,6, 2, 6, 6, 80, 4, 3, 200, 160, 0,.5,
+MONTYPE, Predator Sprite, sprite1.bmp, , 1000, 12, 6, 8, 9, 40, 7, 12, 150, 0, 0,.4
+MONTYPE, Centauress, centauress1.bmp ,,350, 9, 4, 8, 8, 100, 6, 3, 120, 90, 0, 0.5
+MONTYPE, Jungle Bird, harpy1.bmp ,,1350, 12, 8, 8, 12, 100, 6, 9, 250, 0, 0, 0.5
+MONTYPE, Sprite, sprite1.bmp, , 60, 8, 4, 8, 9, 40, 7, 3, 150, 100, 250,.8
+
+#MONTYPE2, Demi Kari, kari2.bmp, 37, 195, 195, 0, .4,
+#MONTYPE2, Titan Serpent, snake1.bmp, 35, 20, 180, 50,.4
+#MONTYPE2, Oozeflower Vines, tendrils1.bmp, 35, 250, 100, 250,.8
+#MONTYPE2, Greater Girlcrunch Plant, venus1.bmp, 35, 90, 100, 10,.3
+#MONTYPE2, Venus Demon, venus1.bmp, 38, 200, 10, 10,.3
+#MONTYPE2, Fire Flower, flower1.bmp, 38, 200, 10, 10,.3
+#MONTYPE2, Demon Weed, tendrils1.bmp, 36, 200, 10, 10,.3, 
+#MONTYPE2, Predator Sprite, sprite1.bmp, 35, 150, 0, 0,.4
+#MONTYPE2, Jungle Bird, harpy1.bmp, 35, 250, 0, 0, 0.5
+#MONTYPE2, Lizard Woman, lizardwoman1.bmp, 36, 30, 80, 0, 0.5
+#MONTYPE2, Dark Lizard Woman, lizardwoman1.bmp, 36, 30, 50, 0, 0.5
+#MONTYPE2, Red Lizard Woman, lizardwoman1.bmp, 36, 50, 20, 0, 0.5
+
+
+#FAVMONSTER, Oozeflower Vines, 15
+
+/RANDOMMONSTERS, Type (Or ALL), number, x zone start, y zone start, x end, y end
+
+#RANDOMMONSTERS, ALL, 550, 0,0,0,0
+RANDOMMONSTERS, Marsh Serpent, 350, 0,0,0,0
+
+RANDOMMONSTERS, Mudsnake, 100, 0,0,0,0
+RANDOMMONSTERS, Giant Frog, 200, 0,0,0,0
+
+OBJTYPE, Treasure Bag (Orange)
+EFFECT, GiveGold, 50,,,
+EFFECT, Destruct,,,,
+GRAPH, treasure2.bmp, 1, 200, 140, , .5
+
+CREATEOBJ, Treasure Bag (Orange), 127,75,,,
+CREATEOBJ, Treasure Bag (Orange), 127,76,,,
+CREATEOBJ, Treasure Bag (Orange), 128,75,,,
+CREATEOBJ, Treasure Bag (Orange), 128,76,,,
+
+#OBJTYPE, Groundmaw
+#EFFECT, MapTeleport, giantgroundmaw.txt, 95, 5, , ,
+#EFFECT, NoEat, , , , ,
+#GRAPH, groundmaw1.bmp, 1, 150,150,0,.5
+
+#CREATEOBJ, Groundmaw, 50, 50, , ,
+

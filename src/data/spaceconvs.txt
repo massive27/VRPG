@@ -1,0 +1,319 @@
+$HELLO changes according to the point you're at in the conversation
+
+Random String Gets:
+Start with #$ by default, run filestr(#$stringname) to get one.  The function stops when it hits a blank line.
+
+#$SHIELDPARTS
+Ezotronic Coil
+Ezotron Regulator
+Ezotron Bridge
+Shield Emitter
+
+Cryoregulator
+Cyclic Regulator
+Prismatic Regulator
+Shunt Regulator
+
+(Hello at start of conv)
+#$HELLOSTART
+"Good morning, miss."
+Hi.
+Hello.
+Good evening.
+"Good evening, my lady."
+Greetings.
+Hey, sexy.
+
+(Any other time)
+#$HELLOMID
+"Anyway, "
+"So, "
+"Well, "
+"Well anyway, "
+
+
+#$GOODBYE
+See you later.
+I'll see you around then.
+Tah tah.
+Toodles.
+Goodbye.
+Farewell.
+See ya.
+Catch you later.
+See you around.
+
+Happy ask for helps
+#$WHAT
+$HELLO Did you want something?
+$HELLO What can I do for you?
+$HELLO Is there something you wanted?
+$HELLO Was there something you were interested in?
+$HELLO Is there some way I can help you?
+
+Angry ask for helps
+#$ANGRYWHAT
+Make it quick.
+What do you want?
+What is it?
+What?
+
+
+Wanna Buy Stuff
+
+Say/ would you be willing to sell that $OBJECT?  I'd give you $GOLD gold pieces for it.
+How much is that $OBJECT worth to you?  I'd be willing to pay $GOLD gold.
+Hey/ I'll buy that $OBJECT off of you for $GOLD gold/ if you're interested.
+Were you interested in selling that $OBJECT?  I'd be willing to give you $GOLD gold for it.
+I notice you're not using that $OBJECT.  You want to sell it?  For/ say/ $GOLD gold?
+I'll give you $GOLD gold pieces for that $OBJECT you've got.
+I'll take that $OBJECT off your hands for $GOLD gold.
+I could really use that $OBJECT.  Would you accept $GOLD gold pieces for it?
+
+Wanna sell stuff
+
+I've got a $OBJECT here.  I could be willing to let go of it for $GOLD gold.
+Would you be interested in this $OBJECT?  I'll sell it to you for $GOLD gold pieces.
+"For $GOLD gold, I could give you this $OBJECT."
+Would you be willing to pay $GOLD gold for this $OBJECT?
+How about $GOLD gold for this $OBJECT?
+Would you be interested in buying this $OBJECT for $GOLD gold?
+I'm not using this $OBJECT anymore.  You could have it for $GOLD gold.
+Hows about $GOLD gold for this $OBJECT?
+
+You say nope
+
+#$OHWELL
+Okay/ I guess you're not interested...
+Ah well/ never mind. $GOODBYE
+Oh well. $GOODBYE
+You're sure?  Ah well/ okay...
+Never mind then. $GOODBUE
+Too bad.  $GOODBYE
+Your loss/ then...$GOODBYE
+
+They say nope
+
+#$NOTHANKS
+Sorry/ not interested.
+Um/ no thanks.
+Er/ I don't think so.
+Nah.  I think I can do better.
+Ah/ Not this time.
+Uh/ no.
+Tempting/ but no.
+Sorry.  That's too much.
+Sorry.  No.
+
+Cargo They Sell
+#$ISELLCARGO
+I've got a load of $AMT $CARGO that I need to get rid of fast.  Could you take it for $GOLD gold?
+Say/ I can get you $AMT $CARGO for $GOLD gold/ if you're interested.
+You looking to buy $CARGO?  Then look no further.  I can get you $AMT units for only $GOLD gold.  Interested?
+I have a huge surplus of $CARGO.  So much that I'd be willing to sell $AMT units for only $GOLD gold/ but only if you take it now.  Do we have a deal?
+How about some $CARGO?  I can get you $AMT units for $GOLD gold.
+If you can scrape up $GOLD gold/ I can get ahold of $AMT $CARGO for you.  What do you say?
+I have some $CARGO that's just sitting in storage.  If you want it/ I can give it to you for $GOLD gold.  I have $AMT units.
+I've been looking to sell some $CARGO/ but I don't want to go through the main exchange.  It's a hassle.  I'd rather just sell it to you.  I've got $AMT units, and I'll sell them to you for $GOLD gold.
+
+Cargo They Buy
+#$IBUYCARGO
+$HELLO I'm looking for some $CARGO/ and I will pay $GOLD gold for each unit.  Have you got any?
+I desperately need some $CARGO.  I'll give you $GOLD gold per unit if you can get me any.
+$HELLO Have you got any $CARGO?  I'll pay $GOLD gold for every unit if you can get me some.
+I'll buy $CARGO for $GOLD gold per unit/ if you've got any.
+I'll pay $GOLD gold per unit for any $CARGO you might have.  Interested?
+
+Officer Offer
+
+#$IAMOFFICER
+Say/ are you looking for a $OFFICER?  I happen to be looking for a ship to serve on.
+You're a starship captain/ aren't you?  Are you looking for a $OFFICER?
+Say/ do you have any openings for a $OFFICER?  I've been looking for work.
+"You know, I'm a qualified $OFFICER.  If you happen to be looking for one, I'm sure I could accomodate you."
+Hey/ you're a starship captain/ and I'm a qualified $OFFICER.  Maybe we could team up!
+Oh/ by the way/ I'm a trained $OFFICER.  I'd be interested in working for you if you need one.
+Incidentally/ if you need a $OFFICER/ just ask me.  I'm fully qualified.
+
+Mission Offer
+
+
+Anger
+
+Attack/Eat/Digest/Etc.
+
+
+
+Random Conversation
+
+#NEWS, #MONSTEREATRumors
+#NEWSSTR, Did you see the news last night?  A $STARSHIPTYPE from $FACTION got swallowed whole by a $SPACEMONSTER!  It's probably still digesting them!  Man/ I'm sure glad I wasn't on that ship...
+#NEWSSTR, I heard that $FACTION just lost one of their ships to a $SPACEMONSTER.  Those things sure have mean appetites.  They can $DIGEST a whole starship in days/ and that usually includes the crew...
+
+#FOUNDORE rumors
+Have you been around $OREPLANET lately?  I've heard there's tons of $PLANETORE there.  Unfortunately/ the hungry $PLANETMONSTERs have kept anyone from mining it...
+I just heard that space scouts have reported a giant deposit of $PLANETORE on $OREPLANET!  They lost contact with the scouts just after the report...doubtless they're churning in some $PLANETMONSTER's $BELLY...
+There's some sort of new deposit of $PLANETORE on $OREPLANET.  I'm sure the miners will be heading out there soon/ though I imagine most will end up as dinner for the $PLANETMONSTERs...
+A news report recently stated that a scouting party has located high levels of $PLANETORE on $OREPLANET.  Of course/ what they didn't mention was the fact that they also found high levels of $PLANETMONSTERS/ which found high levels of nutrition in most of the scouting party...
+I've heard there's a $PLANETORE rush going on around $OREPLANET.  If you're in the mining business/ you might want to take a look.
+
+#NEWS, #MONSTERSRumors
+#NEWSSTR, I just came in from $PLANETNAME.  There are $PLANETMONSTERs there that can $EAT a woman whole faster than you can pull a blaster on them.  And their $POOP smells awful!
+#NEWSSTR, I heard there's all kinds of $PLANETMONSTERs on $PLANETNAME.  They've been $EATING all of the scouting parties that have tried to survey the planet!
+#NEWSSTR, Man/ I'm getting sick of the monsters everywhere.  It's like you can't take one step out of a starbase without falling down something's throat.  Why/ just last month/ I heard one of my ex-shipmates was swallowed whole by a $PLANETMONSTER on $PLANETNAME!  It's insane/ the voraciousness of the food chain around here...
+
+#ARTIFACT Rumors
+I've heard there's some sort of artifacts on $ARTIFACTPLANET.  I don't know if it's true/ but I'm sure there must be some very hungry monsters there if nobody has already taken the artifacts...
+Have you heard of $ARTIFACTPLANET?  I've heard there is some sort of archeological anomoly there/ some sort of artifacts.  It might be worth checking out/ if you're an explorer.
+I've heard that some factions have begun sending secret exploratory teams to $ARTIFACTPLANET.  I wouldn't be surprised if there were some sort of valuable artifacts there.
+
+#NEWS, #WARRumors
+#NEWSSTR, I heard that $FACTION1 just conquered $PLANETTAKEN!  Man/ $FACTION2 isn't going to last much longer...
+#NEWSSTR, Have you heard?  $FACTION2 is getting it's ass kicked by $FACTION1.  They just conquered $PLANETTAKEN.
+#NEWSSTR, $FACTION1 has just conquered $PLANETTAKEN from $FACTION2.  $FACTION2 hasn't even been able to muster a counterattack.
+#NEWSSTR, There's still a battle going on between $FACTION1 and $FACTION2.  They're practically at each other's throats.  Or/ rather/ IN each other's throats.  $FACTION1 just took $PLANETTAKEN from them/ though.
+#NEWSSTR, I just heard that $FACTION1 conquered $FACTION2 planet of $PLANETTAKEN.
+#NEWSSTR, Well/ $FACTION1 is at it again.  They just took $PLANETTAKEN from $FACTION2.
+
+Not being used
+NEWSSTR, I've heard $FACTION1 is at war with $FACTION2!  Man/ you get those two together/ and you know somebody's gonna $EAT somebody...
+NEWSSTR, There's some sort of war going on between $FACTION1 and $FACTION2.  I wish they'd just $EAT each other and get it over with.
+
+
+War rumors part 2
+#NEWS, #WARRumors
+#NEWSSTR, And now with $PLANETTAKEN conquered/ $FACTION2 is going to have a really hard time defending themselves.
+#NEWSSTR, Next we'll be hearing that $FACTION1 has conquered $FACTION2's homeworld...
+#NEWSSTR, Now it's only a matter of time before $FACTION2 is totally wiped out.
+#NEWSSTR, Now $FACTION1 flag flies over $PLANETTAKEN.
+#NEWSSTR, With $PLANETTAKEN now in the hands of $FACTION1/ $FACTION2 has been trying to mount a counterattack.
+#NEWSSTR, It's only a matter of time before $FACTION2 retaliates/ though.
+#NEWSSTR, I wonder how this war is going to turn out.  For all we know/ $FACTION1 may end up being the ones to churn in the stomachs of $FACTION2's leaders...
+#NEWSSTR, I don't give much for $FACTION2's odds.
+#NEWSSTR, Don't think $FACTION1 has got it made/ though.  $FACTION2 is putting up a fierce fight.
+
+#NEWS, #RANDOMRumors
+#NEWSSTR, So/ are you new around here?
+#NEWSSTR, Seen any good flicks lately?
+#NEWSSTR, Have you gotten any cybernetics?  Man/ they're great!  They make you stronger/ faster/ and way tougher/ without weighing you down or anything!  The only trouble is/ only a few people can really afford them...especially the advanced ones.
+#NEWSSTR, You're a captain/ huh?  Watch out for space monsters.  Ships are constantly being swallowed whole by the merciless beasts--they digest the ship with it's crew still inside!
+#NEWSSTR, If you're ever swallowed by a space monster/ you'll have to get out of your ship and attack the pelvic splanknic ganglian.  This will force an involuntary spasm in the monster's gastrointestinal tract/ freeing your ship.  Unfortunately/ getting to it almost invariably means traversing the monster's digestive tract on foot/ which is not exactly the safest proposition...
+#NEWSSTR, I can't wait until I can afford some cybernetics.  They make people strong and fast/ and don't weigh you down like armor does.  You should get some for yourself.
+#NEWSSTR, Be sure to read the consumer reviews before you ever commit to buying a new ship.  The sales pitches may make a particular ship class sound tantalizing/ but you're just setting yourself up to get ripped off if you don't check into it yourself.
+#NEWSSTR, Let me give you a bit of advice.  When equipping your starship/ make sure you keep in mind what you intend to do with it.  Not every ship can be strong/ fast/ heavily armed and have a huge cargo hold all at once.  You'll have to make some trade-offs with your upgrades/ so make sure you keep everything in balance according to your profession.
+#NEWSSTR, Man/ this area is crawling with pirates.  I never liked them.  I mean sure/ a lot of them are sexy/ but it seems like you can't fly half a mile without having a dozen of the heavily-armed bimbos coming after you...
+#NEWSSTR, Watch out for pirates.  I've heard they're all over the place.  The only thing they like better than looting starships is $EATING their captains whole.
+
+Say/ you're the captain of the $SHIPNAME/ aren't you?
+
+News
+
+#NEWS, #MONSTEREAT
+#NEWSSTR, The leaders of $FACTION sighed in frustration again today when one of their vessels was swallowed whole by a $SPACEMONSTER.  $FACTION has been unsuccessful in their attempts to intercept the beast/ and experts say the ship is doubtless digested beyond repair by now.  This doubtless includes the vessel's brave crew/ who gave their lives to fatten the hideous $SPACEMONSTER.  
+#NEWSSTR, $FACTION traffic was stopped in one sector a short time ago due to reports that the starship $STARSHIPNAME was $EATEN by a marauding $SPACEMONSTER. The $STARSHIPTYPE-class vessel was no match for the $SPACEMONSTER's hungry jaws/ and it was $EATEN almost instantly.
+#NEWSSTR, A $STARSHIPTYPE-class starship was $EATEN whole last week by a $SPACEMONSTER/ the latest in a practically endless string of military ships being $EATEN by space monsters.  Every ship in the sector was put on alert/ and $FACTION/ the previous owners of the ship/ have stepped up their defenses in the sector.
+
+'Monster part 2
+#NEWS, #MONSTEREAT
+#NEWSSTR, An expedition is planned by $FACTION to hunt down the beast before it claims any more of $FACTION's ships.  Their warships should be adequate for the task/ though many fear they will simply end up sliding down the $SPACEMONSTER's intestines alongside the last ship.
+#NEWSSTR, When asked about a potential response to this threat/ a spokeswoman for $FACTION said 'I'm afraid we cannot afford to mount a response at this time.  Space creatures $EAT starships every day/ and it's just something you have to account for in your fleet maneuvers.'
+#NEWSSTR, The crew's fate was confirmed yesterday when a deep space exploration team discovered a large mass of $SPACEMONSTER excrement tumbling through space.  Trace evidence consisting of small/ undigested flecks of starship hull and bone confirmed the fate of the $STARSHIPNAME.
+#NEWSSTR, It is believed that the crew of the $STARSHIPNAME are still alive and undergoing digestion within the depths of the $SPACEMONSTER.  A rescue attempt is impossible at this point/ however/ as every ship to approach the $SPACEMONSTER has been either driven off or $EATEN whole.
+#NEWSSTR, Sightings of $SPACEMONSTERs have been on the rise ever since captain $RANDOMNAME's ship was $EATEN several months ago.  $SPACEMONSTERs have been $EATING freighters/ scouts and warships alike/ prompting many citizen's groups to call for serious action against the $SPACEMONSTER's lairs.
+
+'Monster part 3
+#NEWS, #MONSTEREAT
+#NEWSSTR, '$FACTION really needs to pay more attention to these threats' said expert analyst $RANDOMNAME.  'If they had paid proper attention to their anti-$SPACEMONSTER defenses/ this never would have happened.  I think the digestion of the $STARSHIPNAME's crew should serve as a serious wakeup call to $FACTION.'
+#NEWSSTR, 'The ship never really had a chance/' said $RANDOMNAME/ a purported witness of the apparent devouring.  'I mean/ the $STARSHIPNAME was a plenty sturdy ship/ but a $STARSHIPTYPE-class ship like her really has no chance against that big of a $SPACEMONSTER.  They were food the second they were spotted.'
+#NEWSSTR, $FACTION's leaders were quick to downplay the threat posed by the $SPACEMONSTER. "There is nothing to worry about/" said $RANK $RANDOMNAME/ an officer in $FACTION navy.  "The devouring of the $STARSHIPNAME was really just bad luck.  This is not indicative of a greater threat to $FACTION or it's fleets."  Rumors of several other ships having been $EATEN by $SPACEMONSTERs as of the time of the interview were quickly dismissed as preposterous.
+#NEWSSTR, '$SPACEMONSTERs have been a serious problem for everyone ever since we ventured into space/' said $RANK $RANDOMNAME/ a spokeswoman for $FACTION.  'If any of us have any brains/ we'd stop eating each other and spend the time hunting down these monsters who are eating ALL of us.'  Opponents of $FACTION have labeled this stance as hypocritical/ saying 'They really should put their money where their mouth is/ so to speak.  They haven't exactly stopped swallowing US to help us fight space monsters.'
+#NEWSSTR, $RANDOMNAME/ a scholar who advises numerous factions on anti-monster protocol/ had a fairly clear interpretation of the event.  'Nobody has been able to pull off a successful strike against the $SPACEMONSTER's lairs/' she said in a recent interview. 'So long as their breeding grounds remain intact/ their feeding grounds will too.  They'll keep $EATING our ships until we wipe them out.'
+
+'Monster part 4
+#NEWS, #MONSTEREAT
+#NEWSSTR, The $SPACEMONSTER could not be reached for comment.
+#NEWSSTR, Salvage operations are scheduled to begin on the remains of the $STARSHIPNAME as soon as the $SPACEMONSTER $POOPs out the rest of it.
+#NEWSSTR, There are anecdotal reports of a fattened $SPACEMONSTER lounging about the area/ belching contentedly.
+#NEWSSTR, That's all for the news/ and now on to sports...
+#NEWSSTR, Now in lighter news...
+
+#NEWS, #WAR
+#NEWSSTR, $FACTION2Z leaders met today to discuss their latest setback in their war with $FACTION1/ the military loss of the planet $PLANETTAKEN in a prolonged assault on $FACTION2Z positions.  
+#NEWSSTR, The ongoing war between $FACTION1 and $FACTION2 took a turn for the worse today as $PLANETTAKEN came under full assault.  $FACTION1Z forces swarmed all over the planet/ destroying key defensive installations and devouring dozens of hapless $FACTION2Z defenders.  The battle ended quickly/ with $FACTION1 reigning victorious over the world as they digested the hapless members of $FACTION2.
+#NEWSSTR,News of a full-scale attack on $PLANETTAKEN was recieved today/ the latest in a string of aggressive acts in the ongoing war between $FACTION1 and $FACTION2.  $FACTION2 defended $PLANETTAKEN with all they could against the $FACTION1Z onslaught/ but in the end they were driven off the planet.  $PLANETTAKEN is now in $FACTION1Z hands.
+#NEWSSTR, In a surprise attack by $FACTION1/ the planet $PLANETTAKEN was assaulted and subsequently overrun.  Fleets of $FACTION1Z girls attacked the planet/ $EATING the defenders and establishing a beachhead which was then pressed forward until the $FACTION2Z command center was conquered.
+#NEWSSTR, Sad news for $FACTION2 today as the planet $PLANETTAKEN was conquered by $FACTION1.  The lightning attack by $FACTION1Z forces pressed the $FACTION2Z girls back to their emergency defense points/ and they were forced to retreat when their commander was $EATEN whole by a $FACTION1Z assassin.
+#NEWSSTR, A tremendous battle took place on the planet $PLANETTAKEN today/ as $FACTION1 continued their ongoing war against $FACTION2.  The fierce attack ended with the conquering of $PLANETTAKEN and the retreat of the $FACTION2Z forces.
+#NEWSSTR, News has just reached us of an assault on the planet $PLANETTAKEN by $FACTION1.  Reports indicate that they have successfully wrested control of the planet from $FACTION2/ which on last sighting was in full retreat.
+#NEWSSTR, $FACTION1 has announced that they have conquered the $FACTION2Z planet of $PLANETTAKEN.  Their official announcement stated "We have liberated $PLANETTAKEN from the unsavory forces of $FACTION2.  Those who resisted are currently experiencing digestion in our $BELLIES."
+#NEWSSTR, Ferocious fighting took place recently on $FACTION2 planet of $PLANETTAKEN.  $FACTION1 sent an assault fleet in an attempt to take the planet with military force.  Eyewitnesses report scenes of unbelievable gluttony on the part of the $FACTION1Zs/ $EATING $FACTION2 girls with reckless abandon.
+
+'War part 2
+#NEWS, #WAR
+#NEWSSTR, Ships from both sides suffered heavy casualties in the prolonged battle/ but in the end $FACTION2 was driven from $PLANETTAKEN and $FACTION1 is busy building defenses to keep the planet under their control.
+#NEWSSTR, Losses were heavy on the $FACTION1Z side/ but they kept coming and eventually the defenders were overwhelmed.  The blocking of reinforcements by $FACTION1Z fleets made sure the planet would be theirs.
+#NEWSSTR, $FACTION2 plans a counterattack to retake $PLANETTAKEN/ but their battered forces have been slow to mobilize in taking the offensive back to $FACTION1Z space.  $FACTION1/ meanwhile/ continues to press the attack further and further into $FACTION2Z territory.
+#NEWSSTR, With $PLANETTAKEN now in the hands of $FACTION1/ $FACTION2 will be hard pressed to continue their war efforts.  Experts suggest that this will prove to be a serious blow to $FACTION2/ and if losses like this continue/ their conquering by $FACTION1 is almost inevitable.
+#NEWSSTR, Casualties on the $FACTION1Z side were practically nonexistant--the biggest hazard to their troops came when massively overstuffed $FACTION1Z girls had to retreat from battle in order to digest the huge numbers of $FACTION2Z girls they had eaten.  Overall/ it was a crushing (and dissolving) defeat for $FACTION2.  Their ships have retreated from the area around $PLANETTAKEN in order to defend more crucial targets nearby.
+#NEWSSTR, With the military of $PLANETTAKEN reduced to $FACTION1Z $POOP/ $FACTION2 will need to consolidate their remaining forces before any counterattack will be possible.  $FACTION2's leaders have vowed that/ no matter how many of their girls they have to throw into the bellies of the enemy/ they will fight until they are victorious.
+#NEWSSTR, $FACTION1's losses were quite heavy/ however/ and some believe the attack may have been more costly than it was worth.  Many retreating $FACTION2Z girls were seen trying to run with their sloshing bellies grossly overfilled with the squirming bodies of $FACTION1Z attackers.
+#NEWSSTR, $FACTION1 did not come out of the battle totally unscathed/ however.  Many of their warriors reported 'mild intestinal discomfort' as they digested the legions of $FACTION2Z girls who had previously been defending the planet.
+#NEWSSTR, The planet itself took minor ecological damage in the battle/ as much of the terrain is now covered in girl $POOP.  "I don't think $FACTION1 respects the damage they are doing to the environment/" said $RANDOMNAME/ a local news columnist.  "I mean/ they were just shitting wherever they felt like it/ leaving huge mounds of $POOP all over the landscape.  And considering how big those $FACTION2Z girls were/ that's a whole lot of $POOP to clean up."  A spokeswoman for $FACTION1 responded to $RANDOMNAME by unloading a plump log of $POOP all over her.
+#NEWSSTR, $RANDOMNAME/ a columnist who has been following the $FACTION1Z-$FACTION2Z conflict since it began/ offered her commentary on this disaster.  "Obviously/ $FACTION1 had the upper hand in this fight/" she started.  "Those $FACTION1Z girls were well-trained/ well-armed/ and practically starving.  They fell upon $FACTION2 like banshees--it's amazing they survived as long as they did.  Once the digestion began/ I don't think anyone was surprised at the outcome."
+#NEWSSTR, '$FACTION1 won't be defeating us as easily as they think,' said $RANK $RANDOMNAME/ an officer in $FACTION2's navy.  'We may have lost $PLANETTAKEN/ but we intend to win this war/ and if $FACTION1 thinks we'll just lie down and be $DIGESTED they're in for a very dangerous surprise.'
+#NEWSSTR, The fighting was ferocious on both sides/ with both $FACTION1Z and $FACTION2Z forces taking heavy losses as their troops were mercilessly $EATEN whole.  $PLANETTAKEN's landscape is now covered in $POOP/ a grim reminder to both sides of the cost of this war.
+
+News/Rumor Stuff
+
+Each news tidbit can have five unique strings describing the event. Newspapers report on a randomly selected set of events that occur, and rumors can circulate using the same strings.
+Newscasts can be read in news publications or on the news at space station video monitors (In cooridors)
+
+Monster eats starship
+#MONSTEREAT
+$FACTION
+$STARSHIPNAME
+$STARSHIPTYPE
+$SPACEMONSTER
+
+Pirate Base location
+#PIRATEBASE
+$FACTION
+$BASELOC
+
+There is a lot of ore on a particular planet
+#FOUNDORE
+$OREPLANET The planet with the ore
+$PLANETORE The type of ore
+$PLANETMONSTER Most common type of monster
+
+Monster rumors
+#MONSTERS
+$PLANETNAME (Planet the monsters come from)
+$PLANETMONSTER (The monster type)
+
+War (Planet conquered)
+#WAR
+$FACTION1 (Winner or aggressor)
+$FACTION2
+$FACTION1Z
+$FACTION2Z (Secondary reference: No 'The ' at the beginning, often singular, ie "The Demon Princesses" becomes "Demon Princess")
+$PLANETTAKEN
+
+Artifacts found
+#ARTIFACT
+$ARTIFACTPLANET
+$PLANETMONSTER
+
+Generic Rumor Replacements
+$POOP
+$EAT
+$EATEN
+$EATING
+$DIGEST
+$DIGESTED
+$DIGESTING
+$RANDOMNAME
+$RANDOMNAME2
+$BELLIES
+$BELLY
+$RANK

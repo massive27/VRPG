@@ -1,0 +1,96 @@
+Worm Cave
+
+#TERSTR, Now entering the Worm Cave...
+
+#LEVEL, 16
+
+#RANDOMSEED, 67551
+#MAPSIZE, 100, 100
+FILLMAP, 13
+/Mapchunk, type, size-ish
+MAPCHUNK, 9, 50
+MAPCHUNK, 9, 30
+MAPCHUNK, 8, 30
+MAPCHUNK, 8, 30
+MAPCHUNK, 12, 30
+MAPCHUNK, 12, 35
+OVRCHUNK, 11, 15
+OVRCHUNK, 8, 10
+OVRCHUNK, 11, 10
+MULTBUILDING, 5, 0, 0, 0, 0, 13, 10, SELLCLOTHES:Gurglemeister Clothing:girl9.bmp:4:8
+MULTBUILDING, 2, 0, 0, 0, 0, 13, 10, SELLARMOR:Gurglemeister Armor:girl8.bmp:5:6
+BUILDING, 0, 0, 0, 0, 12, 9, SELLWEAPONS:Gurglemeister Weapons:girl8.bmp:5:8
+#DUNGEON, 1,1,100,100,12,10,2
+
+BUILDING, 5, 5, 0, 0, 3, 10, Treasure8
+BUILDING, 8, 8, 0, 0, 13, 10, Treasure4
+
+BUILDING, 5, 3, 0, 0, 12, 9, Treasure5
+BUILDING, 6, 5, 0, 0, 12, 9, Treasure12
+#BUILDING, 5, 5, 0, 0, 15, 10, Armor20
+BUILDING, 16, 15, 0, 0, 12, 9, Treasure12
+BUILDING, 0,0,0,0,3,11,Treasure30
+
+SPRINKLEOVR, 635, 8
+#SPRINKLEOVR, 825, 5
+SPRINKLE, 525, 13
+#SETMAPS, ,Cityofwormgut.txt, , 
+
+/MONTYPE, Name, Graphic, Swallowtype, HP, Skill, Dice, Damage, Eatskill, Exp, move, acid, Red/"Clan", Green/Clannumber, Blue, Lightness
+
+MONTYPE, Red Naga, snakewoman2.bmp, ,150, 6, 2, 6, 6, 50, 4, 3, 150, 20, 0,.3
+MONTYPE, Naga, snakewoman2.bmp, ,350, 8, 4, 6, 7, 80, 4, 4, 60, 150, 0,.5
+MONTYPE, Royal Naga, snakewoman1.bmp, ,550, 9, 4, 6, 7, 80, 4, 4, 0, 0, 150,.3
+MONTYPE, Naga Queen, snakewoman1.bmp, ,5550, 10, 4, 6, 7, 1000, 4, 4, 150, 0, 150,.7
+MONTYPE, Naga, snakewoman2.bmp, ,40, 6, 2, 6, 6, 80, 4, 3, 40, 50, 210,.1
+MONTYPE, Giant Snake, snake1.bmp, ,40, 6, 1, 8, 8, 25, 4, 3, 40, 120, 10,.5
+MONTYPE, Marsh Serpent, snake1.bmp, ,125, 8, 2, 8, 9, 55, 5, 3, 20, 80, 0,.4
+MONTYPE, Golden Serpent, snake1.bmp, ,255, 10, 3, 10, 14, 75, 5, 4, 240, 200, 0,.5
+
+MONTYPE, Giant Worm, worm1.bmp, ,600, 8, 3, 6, 9, 90, 6, 3, 150, 150, 0,.3
+MONTYPE, Giant Worm , worm1.bmp, ,600, 8, 3, 6, 9, 90, 6, 3, 180, 180, 0,.5
+MONTYPE, Purple Worm, worm1.bmp, ,900, 9, 5, 6, 9, 120, 6, 5, 150, 0, 150,.3
+
+MONTYPE, Gurglemeister Girl, girl4.bmp, , 350, 10, 5, 6, 8, 100, 7, 4, 254, 255, 0, .5
+
+MONTYPE, Acid Vines, tendrils1.bmp, Plant,60, 4, 1, 4, 12, 35, 3, 5, 80, 140, 10,.4
+MONTYPE, Girlcrunch Plant, venus1.bmp, Plant,120, 8, 1, 4, 18, 80, 1, 6, 50, 100, 10,.5
+MONTYPE, Giant Frog, frog1.bmp, ,25, 4, 1, 4, 12, 15, 4, 2, 100, 160, 10,.5
+MONTYPE, Slime, slime1.bmp, 40, ,6, 2, 6, 6, 80, 4, 3, 200, 160, 0,.5
+
+#MONTYPE2, Giant Worm, worm1.bmp, 16, 105, 150, 0, .3
+#MONTYPE2, Giant Worm , worm1.bmp, 16, 105, 150, 0, .5
+#MONTYPE2, Purple Worm, worm1.bmp, 18, 150, 0, 150,.3
+
+#FAVMONSTER, Giant Worm, 15
+
+/RANDOMMONSTERS, Type (Or ALL), number, x zone start, y zone start, x end, y end
+#RANDOMMONSTERS, ALL, 350, 0,0,0,0
+#RANDOMMONSTERS, Giant Worm, 40, 0, 0, 0, 0
+MONTYPE, Gargmaw, worm1.bmp, ,8000, 9, 5, 6, 9, 3000, 6, 5, 50, 50, 50,.2
+#MONTYPE3, Gargmaw, worm1.bmp, 20, 50, 50, 50,.2
+
+#RANDOMMONSTERS, Gargmaw, 1, 40, 20, 60
+
+OBJTYPE, Treasure Bag (Orange)
+EFFECT, GiveGold, 50,,,
+EFFECT, Destruct,,,,
+GRAPH, treasure2.bmp, 1, 200, 140, , .5
+
+CREATEOBJ, Treasure Bag (Orange), 127,75,,,
+CREATEOBJ, Treasure Bag (Orange), 127,76,,,
+CREATEOBJ, Treasure Bag (Orange), 128,75,,,
+CREATEOBJ, Treasure Bag (Orange), 128,76,,,
+
+#QUESTMONSTER, Gargmaw
+
+#OBJTYPE, Green Key
+#EFFECT, SetQuest, Greenkey,,,
+#EFFECT, Pickup,,,, 
+#EFFECT, NoEat,,,,
+#GRAPH, key1.bmp, 1, 20,255,20,.6
+
+#OPENBUILDING, 8, 8, 46, 46, 15, 10,
+
+#CREATEOBJ, Green Key, 50, 50,,,,
+

@@ -1,0 +1,105 @@
+Forest of Doubts
+
+Body:112x219
+#TERSTR, Now Entering City of Angels...
+
+//MONTYPE, Name, Graphic, HP, Skill, Dice, Damage, Eatskill, Exp, move, acid, Red/"Clan", Green/Clannumber, Blue, Lightness
+//PLAYER, Name, Str, Dex, Int, HPMax, MPMax, Level, Exp, Expneeded
+//TILESET, Filename, Overlay Filename
+//OBJTYPE, Name
+//EFFECT, Eff1, Eff2, Eff3, Eff4, Eff5
+//Max 6 total effects
+//CREATEOBJ, TypeName, X, Y, Name, String, String2 (Uses pre-made object types)
+/Effects:
+/Clothes, graphic, armor, wear1, wear2
+/GRAPH, filename, cells, r,g,b,l
+/SPELL, Name, MP, Effect, amount, targtype (Self/Target/All/Visible), School
+
+/Particular Objects:
+/NPC, x, y, name, graphic, string
+
+#RANDOMSEED, 500
+#MAPSIZE, 30, 30
+#MAPCHUNK, 3, 40
+#MAPCHUNK, 3, 40
+/BUILDING, Xsize, Ysize, X, Y, Tile, Overlay, Type
+BUILDING, 6, 6, 0, 0, 6, 4, None
+BUILDING, 3, 6, 0, 0, 6, 4, None
+BUILDING, 6, 3, 0, 0, 6, 4, None
+BUILDING, 6, 6, 0, 0, 6, 4, None
+BUILDING, 6, 6, 0, 0, 6, 4, None
+BUILDING, 6, 6, 0, 0, 6, 4, None
+#LOADMAP, city1.map
+#SETMAPS, North, VRPGData.txt, South, West
+
+#PLAYER, Lianna, 3, 4, 3, 50, 25, 3, 200, 300
+MONTYPE, Random Hungry Girl, testmonster1b.bmp, 30, 5, 1, 6, 40, 100, 8, 3, Clan, 1
+MONTYPE, Random Hungry Girl, girl6.bmp, 30, 5, 1, 6, 40, 100, 8, 3, Clan, 1
+MONTYPE, Random Hungry Girl, girl7.bmp, 30, 5, 1, 6, 40, 100, 8, 3, Clan, 1
+MONTYPE, Random Hungry Girl, girl8.bmp, 30, 5, 1, 6, 40, 100, 8, 3, Clan, 1
+MONTYPE, Random Hungry Girl, girl9.bmp, 30, 5, 1, 6, 40, 100, 8, 3, Clan, 1
+MONTYPE, Random Hungry Girl, girl10.bmp, 30, 5, 1, 6, 40, 100, 8, 3, Clan, 1
+MONTYPE, Random Hungry Girl, girl11.bmp, 30, 5, 1, 6, 40, 100, 8, 3, Clan, 1
+MONTYPE, Random Hungry Girl, girl12.bmp, 30, 5, 1, 6, 40, 100, 8, 3, Clan, 1
+
+#MONTYPE, Kari, kari1.bmp, 40, 6, 2, 6, 6, 80, 4, 3, Clan, 1, ,
+#MONTYPE, Naga, snakewoman2.bmp, 40, 6, 2, 6, 6, 80, 4, 3, 40, 50, 210,.1
+MONTYPE, Giant Snake, snake1.bmp, 40, 6, 2, 6, 6, 80, 4, 3, 40, 120, 10,.5
+#MONTYPE, Giant Worm, worm1.bmp, 40, 6, 2, 6, 6, 80, 4, 3, 100, 0, 150,.5
+MONTYPE, Acid Vines, tendrils1.bmp, 40, 6, 2, 6, 6, 80, 4, 3, 60, 140, 10,.5
+MONTYPE, Girlcrunch Plant, venus1.bmp, 40, 6, 2, 6, 6, 80, 4, 3, 40, 100, 10,.8
+MONTYPE, Giant Frog, frog1.bmp, 40, 6, 2, 6, 6, 80, 4, 3, 140, 160, 10,.5
+MONTYPE, Slime, slime1.bmp, 40, 6, 2, 6, 6, 80, 4, 3, 200, 160, 0,.5
+
+/RANDOMMONSTERS, Type (Or ALL), number, x zone start, y zone start, x end, y end
+
+RANDOMMONSTERS, ALL, 40, 0,0,0,0
+
+
+#OBJTYPE, Breastplate
+#EFFECT, Clothes, Breastplate3.bmp, 5, Upper,,
+#GRAPH, armorobj1.bmp, 1, 155,0,155,.5
+
+#OBJTYPE, Black Cotton Panties
+#EFFECT, Clothes, panties1.bmp, 1, Panties,,
+#GRAPH, armorobj1.bmp, 1, 55,55,55,.2
+
+#OBJTYPE, Black Cotton Bra
+#EFFECT, Clothes, bra2.bmp, 1, Bra,,
+#GRAPH, armorobj1.bmp, 1, 55,55,55,.2
+
+#CREATEOBJ, Breastplate, 4, 4,,,
+
+#OBJTYPE, NPC
+#EFFECT, Mobile, 4, , , ,
+#EFFECT, NPC, , , , ,
+#GRAPH, girl3.bmp, 2, 155,0,155,.5
+
+#OBJTYPE, Panty Salesman
+#EFFECT, SELL, Black Cotton Panties, 30, , ,
+#EFFECT, SELL, Black Cotton Bra, 30, , ,
+EFFECT, SELLCLOTHES, 3, 4, , ,
+#GRAPH, girl7.bmp, 2, 255,0,0,.5
+
+#CREATEOBJ, Panty Salesman, 8, 8, Panties R Us, body2.bmp,
+
+#OBJTYPE, Salesgirl
+/EFFECT, SELL, Breastplate, Gold, , ,
+#EFFECT, SELLCLOTHES, 3, 4, , ,
+#GRAPH, girl4.bmp, 2, 0, 150, 255, .7
+
+#OBJTYPE, Salesgirl2
+/EFFECT, SELL, Breastplate, , , ,
+#EFFECT, SELLARMOR, 7, 8, , ,
+#GRAPH, girl5.bmp, 2, 0, 150, 255, .7
+
+/With random weapons girls, string2 is the random seed
+
+#CREATEOBJ, Salesgirl, 2, 2, Mighty Weapons, body2.bmp,
+#CREATEOBJ, Salesgirl, 6, 5, Bildo Bagginz, body2.bmp,
+#CREATEOBJ, Salesgirl2, 7, 5, Bimbo Bigginz, body2.bmp,
+
+#CREATEOBJ, NPC, 3,3, Janet, body2.bmp, $Watch out for Karis. They infest this area like you wouldn't believe. Unfortunately/ I can't help you fight them.$
+
+#SPELL, Firebolt, 5, Damage, R20Die6, Target, All
+

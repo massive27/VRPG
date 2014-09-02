@@ -1,0 +1,80 @@
+Shadow Mountain
+
+#TERSTR, Now entering Shadow Mountain...
+
+#LEVEL, 28
+
+#RANDOMSEED, 47834
+#MAPSIZE, 125, 125
+#FILLMAP, 14
+/Mapchunk, type, size-ish
+#MAPCHUNK, 3, 30
+#MAPCHUNK, 3, 30
+#MAPCHUNK, 3, 20
+#MAPCHUNK, 3, 20
+#OVRCHUNK, 15, 17
+#OVRCHUNK, 13, 15
+#OVRCHUNK, 13, 15
+#OVRCHUNK, 13, 15
+#OVRCHUNK, 12, 10
+OVRCHUNK, 14, 10
+OVRCHUNK, 14, 10
+#OVRCHUNK, 10, 10
+
+#BUILDING, 5, 5, 0, 0, 12, 10, Treasure8
+#BUILDING, 8, 8, 0, 0, 12, 10, Treasure4
+#MULTBUILDING, 5, 0, 0, 0, 0, 3, 1, Treasure6
+BUILDING, 3, 5, 0, 0, 3, 1, Treasure5
+BUILDING, 5, 3, 0, 0, 3, 1, Treasure5
+#BUILDING, 6, 5, 0, 0, 12, 9, Armor19
+#MULTBUILDING, 3, 5, 5, 0, 0, 15, 10, Objective3
+BUILDING, 16, 15, 0, 0, 12, 9, Treasure12
+BUILDING, 0,0,0,0,3,1,Treasure30
+
+#SPRINKLEOVR, 535, 14
+#SPRINKLEOVR, 935, 5
+#SPRINKLEOVR, 335, 13
+#SPRINKLEOVR, 335, 12
+#SPRINKLEOVR, 75, 17
+#SPRINKLEOVR, 75, 15
+#SPRINKLEOVR, 175, 14
+#SPRINKLE, 1225, 15
+#SETMAPS, Castledemongut.txt, Mountain.txt, Blackscourge.txt,
+
+/MONTYPE, Name, Graphic, Swallowtype, HP, Skill, Dice, Damage, Eatskill, Exp, move, acid, Red/"Clan", Green/Clannumber, Blue, Lightness
+
+MONTYPE, Stone Kari, kari1.bmp, ,750, 9, 6, 8, 9, 140, 4, 5, 115, 90, 100, .4
+MONTYPE, Red Naga, snakewoman2.bmp, ,150, 6, 2, 6, 6, 50, 4, 3, 150, 20, 0,.3
+MONTYPE, Mountain Naga, snakewoman2.bmp, ,1250, 8, 5, 6, 14, 80, 4, 8, 145, 110, 100,.5
+MONTYPE, Giant Snake, snake1.bmp, ,40, 6, 1, 8, 8, 25, 4, 3, 40, 120, 10,.5
+MONTYPE, Marsh Serpent, snake1.bmp, ,125, 8, 2, 8, 9, 55, 5, 3, 20, 80, 0,.4
+MONTYPE, Giant Worm, worm1.bmp, ,600, 8, 3, 6, 9, 90, 6, 3, 150, 150, 0,.3
+MONTYPE, Desert Worm, worm1.bmp, ,800, 8, 4, 6, 9, 110, 5, 3, 100, 90, 80,.3
+MONTYPE, Fire Grub, worm1.bmp, ,900, 12, 7, 12, 11, 250, 5, 8, 230, 50, 0,.4
+MONTYPE, Nightvines, tendrils1.bmp, Plant,380, 10, 8, 12, 5, 155, 3, 12, 40, 40, 40,.4
+MONTYPE, Girlcrunch Plant, venus1.bmp, Plant,120, 8, 1, 4, 18, 80, 1, 6, 50, 100, 10,.5
+MONTYPE, Giant Frog, frog1.bmp, ,25, 4, 1, 4, 12, 15, 4, 2, 100, 160, 10,.5,
+MONTYPE, Slime, slime1.bmp, 40, ,6, 2, 6, 6, 80, 4, 3, 200, 160, 0,.5,
+MONTYPE, Mountain Horse, centauress1.bmp ,,950, 9, 6, 8, 12, 500, 6, 4, 220, 210, 210, 0.7
+MONTYPE, Dark Mare, centauress1.bmp ,,1250, 10, 6, 8, 10, 600, 6, 5, 80, 80, 80, 0.2
+MONTYPE, Shadow Raven, harpy1.bmp ,,1100, 13, 6, 8, 9, 90, 7, 6, 30, 30, 40, 0.5
+MONTYPE, Jade Raven, harpy1.bmp ,,975, 12, 6, 8, 9, 90, 7, 5, 70, 80, 40, 0.5
+MONTYPE, Shadow Sprite, sprite1.bmp, , 600, 10, 4, 8, 12, 40, 7, 4, 10, 10, 40,.5
+MONTYPE, Black Serpent, snake1.bmp, ,955, 10, 4, 10, 14, 75, 5, 5, 20, 20, 20,.5
+MONTYPE, Searing Goo, slime1.bmp, ,800, 10, 4, 6, 12, 75, 5, 12, 30, 30, 120,.5
+
+#MONTYPE2, Shadow Raven, harpy1.bmp, 30, 30, 30, 40, 0.5
+#MONTYPE2, Jade Raven, harpy1.bmp, 25, 70, 80, 40, 0.5
+#MONTYPE2, Shadow Sprite, sprite1.bmp, 28, 10, 10, 40,.5
+#MONTYPE2, Black Serpent, snake1.bmp, 30, 20, 20, 20,.5
+#MONTYPE2, Searing Goo, slime1.bmp, 30, 30, 30, 120,.5
+
+#FAVMONSTER, Shadow Raven, 15
+
+/RANDOMMONSTERS, Type (Or ALL), number, x zone start, y zone start, x end, y end
+
+#RANDOMMONSTERS, ALL, 650, 0,0,0,0
+#RANDOMMONSTERS, Shadow Raven, 100, 0,0,0,0
+RANDOMMONSTERS, Firevines, 50, 0,0,0,0
+
+#MULTCREATEOBJ, 1, Fountain of Healing, 0, 0, , ,

@@ -1,0 +1,86 @@
+Kari's Nest
+
+#TERSTR, Now entering the Kari's Nest...
+
+#LEVEL, 28
+
+#RANDOMSEED, 21735
+#MAPSIZE, 80, 80
+FILLMAP, 13
+/Mapchunk, type, size-ish
+MAPCHUNK, 9, 50
+MAPCHUNK, 9, 30
+MAPCHUNK, 8, 30
+MAPCHUNK, 8, 30
+MAPCHUNK, 12, 30
+MAPCHUNK, 12, 35
+OVRCHUNK, 11, 15
+OVRCHUNK, 8, 10
+OVRCHUNK, 11, 10
+MULTBUILDING, 5, 0, 0, 0, 0, 13, 10, SELLCLOTHES:Gurglemeister Clothing:girl9.bmp:4:8
+MULTBUILDING, 2, 0, 0, 0, 0, 13, 10, SELLARMOR:Gurglemeister Armor:girl8.bmp:5:6
+BUILDING, 0, 0, 0, 0, 12, 9, SELLWEAPONS:Gurglemeister Weapons:girl8.bmp:5:8
+#DUNGEON, 1,1,80,80,14,10,2
+
+BUILDING, 5, 5, 0, 0, 3, 10, Treasure8
+BUILDING, 8, 8, 0, 0, 13, 10, Treasure4
+
+BUILDING, 5, 3, 0, 0, 12, 9, Treasure5
+BUILDING, 6, 5, 0, 0, 12, 9, Treasure12
+#BUILDING, 5, 5, 0, 0, 15, 10, Armor20
+BUILDING, 16, 15, 0, 0, 12, 9, Treasure12
+BUILDING, 0,0,0,0,3,11,Treasure30
+
+#SPRINKLEOVR, 435, 14
+#SPRINKLEOVR, 325, 5
+SPRINKLE, 525, 13
+#SETMAPS, , , Mountain.txt, 
+
+/MONTYPE, Name, Graphic, Swallowtype, HP, Skill, Dice, Damage, Eatskill, Exp, move, acid, Red/"Clan", Green/Clannumber, Blue, Lightness
+
+MONTYPE, Red Naga, snakewoman2.bmp, ,150, 6, 2, 6, 6, 50, 4, 3, 150, 20, 0,.3
+MONTYPE, Naga, snakewoman2.bmp, ,350, 8, 4, 6, 7, 80, 4, 4, 60, 150, 0,.5
+MONTYPE, Royal Naga, snakewoman1.bmp, ,550, 9, 4, 6, 7, 80, 4, 4, 0, 0, 150,.3
+MONTYPE, Naga Queen, snakewoman1.bmp, ,5550, 10, 4, 6, 7, 1000, 4, 4, 150, 0, 150,.7
+MONTYPE, Naga, snakewoman2.bmp, ,40, 6, 2, 6, 6, 80, 4, 3, 40, 50, 210,.1
+MONTYPE, Giant Snake, snake1.bmp, ,40, 6, 1, 8, 8, 25, 4, 3, 40, 120, 10,.5
+MONTYPE, Marsh Serpent, snake1.bmp, ,125, 8, 2, 8, 9, 55, 5, 3, 20, 80, 0,.4
+MONTYPE, Golden Serpent, snake1.bmp, ,255, 10, 3, 10, 14, 75, 5, 4, 240, 200, 0,.5
+
+MONTYPE, Kari, kari1.bmp, ,1100, 10, 12, 6, 10, 90, 6, 15, 200, 150, 30,.3
+MONTYPE, Kari , kari1.bmp, ,1200, 11, 14, 6, 11, 90, 6, 16, 100, 180, 0,.5
+MONTYPE, Kari  , kari1.bmp, ,1400, 12, 16, 6, 12, 120, 6, 18, 150, 50, 170,.3
+
+#MONTYPE2, Kari, kari1.bmp, 26, 200, 150, 30,.3
+#MONTYPE2, Kari , kari2.bmp, 28, 100, 180, 0,.5
+#MONTYPE2, Kari  , kari3.bmp, 30, 150, 50, 170,.3
+
+MONTYPE, Gurglemeister Girl, girl4.bmp, , 350, 10, 5, 6, 8, 100, 7, 4, 254, 255, 0, .5
+
+MONTYPE, Acid Vines, tendrils1.bmp, Plant,60, 4, 1, 4, 12, 35, 3, 5, 80, 140, 10,.4
+MONTYPE, Girlcrunch Plant, venus1.bmp, Plant,120, 8, 1, 4, 18, 80, 1, 6, 50, 100, 10,.5
+MONTYPE, Giant Frog, frog1.bmp, ,25, 4, 1, 4, 12, 15, 4, 2, 100, 160, 10,.5
+MONTYPE, Slime, slime1.bmp, 40, ,6, 2, 6, 6, 80, 4, 3, 200, 160, 0,.5
+
+#FAVMONSTER, Kari, 15
+
+/RANDOMMONSTERS, Type (Or ALL), number, x zone start, y zone start, x end, y end
+#RANDOMMONSTERS, ALL, 350, 0,0,0,0
+RANDOMMONSTERS, Giant Worm, 40, 0, 0, 0, 0
+MONTYPE, White Kari, kari1.bmp, ,12000, 12, 15, 6, 12, 3000, 6, 20, 250, 250, 250,.5
+#MONTYPE2, White Kari, kari2.bmp, 40, 250, 250, 250,.5
+#RANDOMMONSTERS, White Kari, 10, 15, 15, 65, 65
+
+OBJTYPE, Treasure Bag (Orange)
+EFFECT, GiveGold, 50,,,
+EFFECT, Destruct,,,,
+GRAPH, treasure2.bmp, 1, 200, 140, , .5
+
+CREATEOBJ, Treasure Bag (Orange), 127,75,,,
+CREATEOBJ, Treasure Bag (Orange), 127,76,,,
+CREATEOBJ, Treasure Bag (Orange), 128,75,,,
+CREATEOBJ, Treasure Bag (Orange), 128,76,,,
+
+#QUESTMONSTER, White Kari
+
+

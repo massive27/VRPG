@@ -1,0 +1,83 @@
+Reptile Bog
+
+#TERSTR, Now entering the Reptile Bog...
+
+#LEVEL, 10
+
+#RANDOMSEED, 920
+#MAPSIZE, 125, 125
+#FILLMAP, 9
+/Mapchunk, type, size-ish
+#MAPCHUNK, 12, 50
+#MAPCHUNK, 12, 30
+#MAPCHUNK, 13, 30
+#MAPCHUNK, 13, 30
+#MAPCHUNK, 16, 30
+#MAPCHUNK, 16, 35
+#OVRCHUNK, 11, 15
+#OVRCHUNK, 8, 10
+OVRCHUNK, 8, 10
+
+#BUILDING, 5, 5, 0, 0, 3, 10, Treasure8
+#BUILDING, 8, 8, 0, 0, 13, 10, Treasure4
+#MULTBUILDING, 5, 0, 0, 0, 0, 13, 10, Treasure6
+#BUILDING, 3, 5, 0, 0, 12, 9, Treasure5
+#BUILDING, 5, 3, 0, 0, 12, 9, Treasure5
+#BUILDING, 6, 5, 0, 0, 12, 9, Treasure12
+#BUILDING, 5, 5, 0, 0, 15, 10, Clothes8
+#BUILDING, 16, 15, 0, 0, 12, 9, Treasure12
+#BUILDING, 0,0,0,0,3,11,Treasure30
+
+#SPRINKLEOVR, 335, 8
+SPRINKLEOVR, 825, 5
+SPRINKLE, 525, 13
+#SETMAPS, Marshland.txt, , Nagacave.txt, Fetidswamp.txt
+
+/MONTYPE, Name, Graphic, Swallowtype, HP, Skill, Dice, Damage, Eatskill, Exp, move, acid, Red/"Clan", Green/Clannumber, Blue, Lightness
+
+MONTYPE, Kari, kari1.bmp, ,60, 6, 2, 3, 6, 30, 4, 4, 155, 15, 0, .4,
+MONTYPE, Red Naga, snakewoman2.bmp, ,150, 6, 2, 6, 6, 50, 4, 3, 150, 20, 0,.3
+MONTYPE, Naga, snakewoman2.bmp, ,350, 8, 4, 6, 7, 80, 4, 4, 60, 150, 0,.5
+MONTYPE, Giant Snake, snake1.bmp, ,40, 6, 1, 8, 8, 25, 4, 3, 40, 120, 10,.5
+MONTYPE, Marsh Serpent, snake1.bmp, ,125, 8, 2, 8, 9, 55, 5, 3, 20, 80, 0,.4
+MONTYPE, Giant Worm, worm1.bmp, ,40, 6, 2, 6, 6, 80, 4, 3, 100, 0, 150,.5,
+MONTYPE, Slime Vines, tendrils1.bmp, Plant,20, 4, 1, 4, 8, 15, 2, 1, 60, 140, 10,.5, 
+MONTYPE, Girlcrunch Plant, venus1.bmp, Plant,120, 8, 1, 4, 18, 80, 1, 6, 50, 100, 10,.5
+MONTYPE, Giant Frog, frog1.bmp, ,25, 4, 1, 4, 12, 15, 4, 2, 100, 160, 10,.5,
+MONTYPE, Slime, slime1.bmp, 40, ,6, 2, 6, 6, 80, 4, 3, 200, 160, 0,.5,
+
+#MONTYPE2, Red Naga, snakewoman2.bmp, 12, 150, 20, 0,.3
+#MONTYPE2, Giant Snake, snake1.bmp, 8, 40, 120, 10,.5
+#MONTYPE2, Marsh Serpent, snake2.bmp, 10, 20, 80, 0,.4
+MONTYPE2, Slime Vines, tendrils1.bmp, 8, 60, 140, 10,.5
+MONTYPE2, Acid Vines, tendrils1.bmp, 14, 80, 140, 10,.4
+#MONTYPE2, Giant Frog, frog1.bmp, 8, 100, 160, 10,.5
+
+MONTYPE2, Swamp Toad, frog1.bmp, 14, 140, 120, 110,.4
+
+#FAVMONSTER, Giant Snake, 15
+
+/RANDOMMONSTERS, Type (Or ALL), number, x zone start, y zone start, x end, y end
+
+#RANDOMMONSTERS, ALL, 250, 0,0,0,0
+#RANDOMMONSTERS, Marsh Serpent, 150, 0,0,0,0
+
+#MONTYPE2, Crocodile, croc2.bmp, 12, 30, 60, 0, .3
+#RANDOMMONSTERS, Crocodile, 30, 0, 0, 0, 0
+
+MONTYPE, Girlcrunch Plant, venus1.bmp, Plant,120, 8, 1, 4, 18, 80, 1, 6, 50, 100, 10,.5
+
+#MONTYPE2, Girlcrunch Plant, venus1.bmp, 10, 50, 100, 10,.5
+#RANDOMMONSTERS, Girlcrunch Plant, 70, 0,0,0,0
+RANDOMMONSTERS, Giant Frog, 200, 0,0,0,0
+
+OBJTYPE, Treasure Bag (Orange)
+EFFECT, GiveGold, 50,,,
+EFFECT, Destruct,,,,
+GRAPH, treasure2.bmp, 1, 200, 140, , .5
+
+CREATEOBJ, Treasure Bag (Orange), 127,75,,,
+CREATEOBJ, Treasure Bag (Orange), 127,76,,,
+CREATEOBJ, Treasure Bag (Orange), 128,75,,,
+CREATEOBJ, Treasure Bag (Orange), 128,76,,,
+
