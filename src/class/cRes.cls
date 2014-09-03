@@ -21,17 +21,20 @@ Attribute VB_Exposed = False
 Option Base 1
 Option Explicit
 
-Private Type RESFILE
+Private Type RESFILE '12
     offset As Long
     length As Long
-    extension As String * 4
-    name As String
+    vindex As Long
 End Type
+Private Res_Names() As String
+Private Res_Ext() As String
 
-Private Type RESFILEHEAD
+Private Type RESFILEHEAD '20
     version As Long
     resarraylen As Long
     resdataoffset As Long
+    resnamesoffset As Long
+    resextoffset As Long
 End Type
 
 
@@ -47,8 +50,9 @@ Private MyExtCnt As Long
 Private aResource() As RESFILE
 Private ResLen As Long
 
+Public NumResource As Long
 
-Private Declare Sub CpMem Lib "KERNEL32" Alias "RtlMoveMemory" (hpvDest As Any, hpvSource As Any, ByVal cbCopy As Long)
+Private Declare Sub CpMem Lib "kernel32" Alias "RtlMoveMemory" (hpvDest As Any, hpvSource As Any, ByVal cbCopy As Long)
 
 Private Sub Class_Initialize()
     MyTempFolder = CleanDirName(App.Path)
@@ -101,11 +105,11 @@ Dim sDest As String
     
     'not extracted, look in pack
     For i = 1 To ResLen
-        If aResource(i).name Like bareName Then
+        If Res_Names(i) Like bareName Then
             'found. prepare output
-            sDest = MyTempFolder & aResource(i).name & sExt
+            sDest = MyTempFolder & Res_Names(i) & sExt
             'extracts
-            If ExtractMe(MyPack, sDest, aResource(i)) Then
+            If ExtractMe(sDest, aResource(i)) Then
                 GetResToFile = sDest
                 'update tracker
                 MyExtCnt = MyExtCnt + 1
@@ -121,17 +125,31 @@ Dim sDest As String
 
 End Function
 
+'extract all file from current pack
+Function ExtractAll() As Boolean
+Dim i As Long
+Dim b As Boolean
+Dim sDest As String
+    ExtractAll = True
+    For i = 1 To ResLen
+        sDest = MyTempFolder & Res_Names(i) & Res_Ext(i)
+        b = ExtractMe(sDest, aResource(i))
+        ExtractAll = ExtractAll And b
+    Next i
+    
+End Function
+
 'extract a file from a pack
-Private Function ExtractMe(TargetPack As String, Destination As String, ByRef ResFilePtr As RESFILE)
+Private Function ExtractMe(Destination As String, ByRef ResFilePtr As RESFILE)
 Dim buf() As Byte
 Dim fp As Integer
 Dim tp As Integer
 
     ReDim buf(1 To ResFilePtr.length) As Byte
     
-    On Local Error Resume Next
+    'On Local Error Resume Next
     fp = FreeFile
-    Open TargetPack For Binary Access Read As #fp
+    Open MyPack For Binary Access Read As #fp
     tp = FreeFile
     Open Destination For Binary As #tp
         Get #fp, ResFilePtr.offset, buf()
@@ -142,7 +160,7 @@ Dim tp As Integer
     'possible error : unable to write to dest, io error
     If Err.Number <> 0 Then
         ExtractMe = False
-        Err.clear
+        Err.Clear
     Else
         ExtractMe = True
     End If
@@ -160,7 +178,12 @@ Dim tmpHead As RESFILEHEAD
         If tmpHead.version = 1 Then
         
             ReDim tResFile(1 To tmpHead.resarraylen) As RESFILE
-            Get #fp, 13, tResFile()
+            ReDim Res_Names(1 To tmpHead.resarraylen) As String
+            ReDim Res_Ext(1 To tmpHead.resarraylen) As String
+            Me.NumResource = tmpHead.resarraylen
+            Get #fp, 21, tResFile()
+            Get #fp, tmpHead.resextoffset, Res_Ext()
+            Get #fp, tmpHead.resnamesoffset, Res_Names()
             
             If tResFile(1).offset <> tmpHead.resdataoffset Then
                 'corrupted. to be handled. later.
@@ -168,6 +191,7 @@ Dim tmpHead As RESFILEHEAD
                 'prepare the extract tracker
                 ReDim MyExtracted(1 To tmpHead.resarraylen) As String
                 ReDim MyExtPath(1 To tmpHead.resarraylen) As String
+                LoadPack = True
             End If
             
         Else
@@ -185,6 +209,7 @@ Dim rp As Integer, rlen As Long, buf() As Byte
 Dim i As Long
 Dim mb As VbMsgBoxResult
 Dim miniRes() As RESFILE, miniHead As RESFILEHEAD
+Dim rNames() As String, rExt() As String
 Dim ResCnt As Long
 Dim snm As String, sExt As String
 Dim p As Long
@@ -201,6 +226,10 @@ Dim nextOffset As Long
     On Local Error GoTo notarget
     Open TargetPack For Binary As #fp
     
+    ReDim miniRes(1 To 50) As RESFILE
+    ReDim rNames(1 To 50) As String
+    ReDim rExt(1 To 50) As String
+    ResCnt = 0
     
     sFile = Dir$(DirSource & "*", vbNormal)
     Do Until sFile = vbNullString
@@ -208,31 +237,51 @@ Dim nextOffset As Long
         ResCnt = ResCnt + 1
         If ResCnt Mod 50 = 0 Then
             ReDim Preserve miniRes(1 To ((ResCnt \ 50) + 1) * 50) As RESFILE
+            ReDim Preserve rNames(1 To ((ResCnt \ 50) + 1) * 50) As String
+            ReDim Preserve rExt(1 To ((ResCnt \ 50) + 1) * 50) As String
         End If
         
         'name cleanup
         Call CleanFileExt(sFile, snm, sExt)
         
         'storing result
-        miniRes(ResCnt).extension = sExt
-        miniRes(ResCnt).name = snm
+        rExt(ResCnt) = sExt
+        rNames(ResCnt) = snm
         miniRes(ResCnt).length = FileLen(DirSource & sFile)
         
+        sFile = Dir$()
     Loop
     
     'resizing resource table
     ReDim Preserve miniRes(1 To ResCnt) As RESFILE
+    ReDim Preserve rExt(1 To ResCnt) As String
+    ReDim Preserve rNames(1 To ResCnt) As String
     
     'preparing header
-    nextOffset = LenB(miniRes) + 16&
     miniHead.version = 1&
+    'total number of entries
     miniHead.resarraylen = ResCnt
+    'offset to extention string array
+    nextOffset = ResCnt * 20& + 17&
+    miniHead.resextoffset = nextOffset
+    'offset to name string array
+    nextOffset = nextOffset + LenAr(rExt, ResCnt)
+    miniHead.resnamesoffset = nextOffset
+    'offset to files data
+    nextOffset = nextOffset + LenAr(rNames, ResCnt)
     miniHead.resdataoffset = nextOffset
+
+    'adding header
+    Put #fp, 1, miniHead
+    'adding extensions array
+    Put #fp, miniHead.resextoffset, rExt()
+    'adding names array
+    Put #fp, miniHead.resnamesoffset, rNames()
     
     'copying resources file into pack
     For i = 1 To ResCnt
         rp = FreeFile
-        Open Trim$(DirSource & miniRes(i).name & miniRes(i).extension) For Binary Access Read As #rp
+        Open Trim$(DirSource & rNames(i) & rExt(i)) For Binary Access Read As #rp
             ReDim buf(1 To miniRes(i).length) As Byte
             Get #rp, 1, buf()
         Close #rp
@@ -242,7 +291,7 @@ Dim nextOffset As Long
     Next i
     
     Put #fp, 1, miniHead
-    Put #fp, 13, miniRes()
+    Put #fp, 21, miniRes()
     Close #fp
     
     BuildPack = True
@@ -252,7 +301,7 @@ Dim nextOffset As Long
 notarget:
     If Verbose Then
         mb = MsgBox(Err.Number & " : " & Err.Description, vbCritical + vbAbortRetryIgnore)
-        Err.clear
+        Err.Clear
         If mb = vbRetry Then
             Resume
         ElseIf mb = vbIgnore Then
@@ -262,7 +311,7 @@ notarget:
             Exit Function
         End If
     Else
-        Err.clear
+        Err.Clear
         BuildPack = False
     End If
 End Function
@@ -280,12 +329,24 @@ Dim p As Long
 
     'name cleanup : separate extension
     p = InStrRev(ThisFile, ".", , vbBinaryCompare)
-    If p = Len(ThisFile) - 4 Then
+    If p = Len(ThisFile) - 3 Then
         OutExt = Right$(ThisFile, 4)
-        OutName = Left$(ThisFile, Len(ThisFile) - 5)
+        OutName = Left$(ThisFile, Len(ThisFile) - 4)
     Else
         OutExt = "    "
         OutName = ThisFile
     End If
     
 End Sub
+
+'quick function for array len of string
+Private Function LenAr(ByRef MyArray() As String, ByVal MyAL As Long)
+Dim i As Long
+Dim c As Long
+
+    For i = 1 To MyAL
+        c = c + Len(MyArray(i)) + 2
+    Next i
+    LenAr = c
+    
+End Function
