@@ -76,6 +76,18 @@ Dim i As Long
     
 End Sub
 
+'return (byref) all the files included in current pack
+Public Sub GetAllFiles(ByRef StringArray() As String)
+Dim i As Long
+
+    ReDim StringArray(1 To ResLen) As String
+
+    For i = 1 To ResLen
+        StringArray(i) = Res_Names(i) & Res_Ext(i)
+    Next i
+
+End Sub
+
 'sets the packfile to use. Will load it if exists
 Public Function SetPackFile(PackFileName As String) As Boolean
 

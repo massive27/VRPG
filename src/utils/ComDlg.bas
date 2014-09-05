@@ -100,7 +100,7 @@ Dim OFName As OPENFILENAME
 
     'pops the window
     If GetOpenFileName(OFName) Then
-        SelectAfile = Trim$(OFName.lpstrFile)
+        SelectAfile = Mid$(OFName.lpstrFile, 1, InStr(1, OFName.lpstrFile, Chr$(0), vbBinaryCompare) - 1)
     Else
         SelectAfile = vbNullString
     End If
@@ -131,7 +131,7 @@ Dim OFName As OPENFILENAME
 End Function
 
 Function GetFileName(Fichier As String) As String
-    Fichier = Mid$(Fichier, InStrRev(Fichier, "\") + 1)
+    GetFileName = Mid$(Fichier, InStrRev(Fichier, "\") + 1)
 End Function
 Function GetDossier(Fichier As String) As String
     GetDossier = Left$(Fichier, InStrRev(Fichier, "\"))

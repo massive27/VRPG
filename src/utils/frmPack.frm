@@ -1,7 +1,7 @@
 VERSION 5.00
 Begin VB.Form frmPack 
    BorderStyle     =   1  'Fixed Single
-   Caption         =   "VRPG Pack utility"
+   Caption         =   "VRPG Pack utility rev.a"
    ClientHeight    =   2445
    ClientLeft      =   45
    ClientTop       =   435
@@ -87,6 +87,7 @@ Begin VB.Form frmPack
       Height          =   375
       Left            =   120
       TabIndex        =   2
+      ToolTipText     =   "Attempts to extract the file selected on the left, else extacts all files"
       Top             =   1320
       Width           =   1455
    End
@@ -95,6 +96,7 @@ Begin VB.Form frmPack
       Height          =   375
       Left            =   120
       TabIndex        =   1
+      ToolTipText     =   "Create a genuine pack from all files found in a folder"
       Top             =   720
       Width           =   1455
    End
@@ -103,6 +105,7 @@ Begin VB.Form frmPack
       Height          =   375
       Left            =   120
       TabIndex        =   0
+      ToolTipText     =   "Opens a pack file"
       Top             =   120
       Width           =   1455
    End
@@ -119,6 +122,8 @@ Private Const PFilt = "Pack file (*.pkf)|*.pkf|all files (*.*)|*.*|"
 
 Private Sub Command1_Click()
 Dim Target As String
+Dim FileList() As String
+Dim i As Long
 
     Target = ComDlg.SelectAfile(Me.hWnd, "Open a pack file", PFilt)
     If LenB(Target) > 0 Then
@@ -126,7 +131,12 @@ Dim Target As String
         Set MyPackFile = New cRes
         
         If MyPackFile.SetPackFile(Target) Then
-            Label5.Caption = MyPackFile.NumResource
+            Label6.Caption = MyPackFile.NumResource
+            Call MyPackFile.GetAllFiles(FileList)
+            List1.Clear
+            For i = 1 To UBound(FileList)
+                List1.AddItem FileList(i)
+            Next i
         End If
         
     End If
@@ -151,15 +161,31 @@ End Sub
 
 Private Sub Command3_Click()
 Dim TDir As String
+Dim i As Long
+
     If MyPackFile Is Nothing Then Exit Sub
     
     TDir = ComDlg.SelectADir(Me.hWnd, "Select dir to unpack to")
     If LenB(TDir) > 0 Then
         If MyPackFile.SetTempFolder(TDir) Then
-            If MyPackFile.ExtractAll() Then
-                MsgBox "Files extracted"
+            'if no file were selected in the listbox, extracts all
+            If List1.SelCount = 0 Then
+                If MyPackFile.ExtractAll() Then
+                    MsgBox "Files extracted"
+                Else
+                    MsgBox "Fail to extract files"
+                End If
             Else
-                MsgBox "Fail to extract files"
+            'extract selected files
+                For i = 0 To List1.ListCount - 1
+                    If List1.Selected(i) Then
+                        If MyPackFile.GetResToFile(List1.List(i)) <> "" Then
+                            MsgBox "Extraction item " & i & " successful"
+                        Else
+                            MsgBox "Extraction failed"
+                        End If
+                    End If
+                Next i
             End If
         Else
             MsgBox "Target folder unreachable"
@@ -170,6 +196,10 @@ Dim TDir As String
 End Sub
 
 Private Sub Command4_Click()
+If MyPackFile Is Nothing Then
+Else
+    Set MyPackFile = Nothing
+End If
 Unload Me
 End
 End Sub
