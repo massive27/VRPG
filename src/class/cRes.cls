@@ -40,6 +40,7 @@ End Type
 
 Private MyPack As String
 Private MyTempFolder As String
+Private PackIsFolder As Boolean
 
 'tracker of already-extracted files
 'not doing Type for faster lookup
@@ -56,19 +57,86 @@ Private Declare Sub CpMem Lib "kernel32" Alias "RtlMoveMemory" (hpvDest As Any, 
 
 Private Sub Class_Initialize()
     MyTempFolder = CleanDirName(App.Path)
+    PackIsFolder = False
+End Sub
+Private Sub Class_Terminate()
+    'called only if set to nothing
+    'clear temp folder out of files
+    Me.Flush
+End Sub
+
+'deletes all temps files
+Public Sub Flush()
+Dim i As Long
+
+    For i = 1 To MyExtCnt
+        Kill MyExtPath(i)
+    Next i
+    MyExtCnt = 0
+    
 End Sub
 
 'sets the packfile to use. Will load it if exists
 Public Function SetPackFile(PackFileName As String) As Boolean
 
-    If Dir$(PackFileName, vbNormal) <> "" Then
+    If Dir$(PackFileName, vbNormal) <> vbNullString Then
         MyPack = PackFileName
         SetPackFile = LoadPack(MyPack, aResource)
         If SetPackFile Then
             ResLen = UBound(aResource)
+            PackIsFolder = False
+            Me.Flush
         End If
     Else
         SetPackFile = False
+    End If
+
+End Function
+
+'sets a virtual packfile as a folder.
+Public Function SetFolderAsPackFile(FulldirName As String) As Boolean
+Dim sDir As String
+Dim sFile As String, sName As String, sExt As String
+
+    sDir = CleanDirName(FulldirName)
+    If Dir$(sDir, vbDirectory) = vbNullString Then
+        SetFolderAsPackFile = False
+    Else
+        Me.Flush
+        SetFolderAsPackFile = True
+        PackIsFolder = True
+        MyPack = sDir
+        ResLen = 0
+        
+        'loads the files for faster search
+        ReDim aResource(1 To 50) As RESFILE
+        ReDim Res_Names(1 To 50) As String
+        ReDim Res_Ext(1 To 50) As String
+        sFile = Dir$(sDir & "*", vbNormal)
+        Do Until sFile = vbNullString
+            'array of resource
+            ResLen = ResLen + 1
+            If ResLen Mod 50 = 0 Then
+                'ReDim Preserve aResource(1 To ((ResLen \ 50) + 1) * 50) As RESFILE
+                ReDim Preserve Res_Names(1 To ((ResLen \ 50) + 1) * 50) As String
+                ReDim Preserve Res_Ext(1 To ((ResLen \ 50) + 1) * 50) As String
+            End If
+            
+            'name cleanup
+            Call CleanFileExt(sFile, sName, sExt)
+            
+            'storing result
+            Res_Ext(ResLen) = sExt
+            Res_Names(ResLen) = sName
+            
+            sFile = Dir$()
+        Loop
+        
+        'initialize tempfile tracker
+        MyExtCnt = 0
+        ReDim MyExtracted(1 To ResLen) As String
+        ReDim MyExtPath(1 To ResLen) As String
+        
     End If
 
 End Function
@@ -78,7 +146,7 @@ Dim sBuf As String
 
     'test if exists
     sBuf = CleanDirName(DestFolder)
-    If Dir$(sBuf, vbDirectory) = "" Then
+    If Dir$(sBuf, vbDirectory) = vbNullString Then
         SetTempFolder = False
     Else
         MyTempFolder = sBuf
@@ -103,25 +171,41 @@ Dim sDest As String
         End If
     Next i
     
+    GetResToFile = vbNullString
+        
+    If Not PackIsFolder Then
     'not extracted, look in pack
-    For i = 1 To ResLen
-        If Res_Names(i) Like bareName Then
-            'found. prepare output
-            sDest = MyTempFolder & Res_Names(i) & sExt
-            'extracts
-            If ExtractMe(sDest, aResource(i)) Then
+        For i = 1 To ResLen
+            If Res_Names(i) Like bareName Then
+                'found. prepare output
+                sDest = MyTempFolder & Res_Names(i) & sExt
+                'extracts
+                If ExtractMe(sDest, aResource(i)) Then
+                    GetResToFile = sDest
+                    'update tempfile tracker
+                    MyExtCnt = MyExtCnt + 1
+                    MyExtracted(MyExtCnt) = bareName
+                    MyExtPath(MyExtCnt) = sDest
+                Else
+                    Exit Function
+                End If
+            End If
+        Next i
+        
+    Else
+    'not duped, look in source folder and dupes in temp folder
+        For i = 1 To ResLen
+            If Res_Names(i) Like bareName Then
+                sDest = MyTempFolder & Res_Names(i) & sExt
+                FileCopy MyPack & Res_Names(i) & Res_Ext(i), sDest
                 GetResToFile = sDest
-                'update tracker
+                'update tempfile tracker
                 MyExtCnt = MyExtCnt + 1
                 MyExtracted(MyExtCnt) = bareName
                 MyExtPath(MyExtCnt) = sDest
-            Else
-                GetResToFile = vbNullString
             End If
-            Exit Function
-        End If
-    Next i
-    GetResToFile = vbNullString
+        Next i
+    End If
 
 End Function
 
@@ -262,7 +346,7 @@ Dim nextOffset As Long
     'total number of entries
     miniHead.resarraylen = ResCnt
     'offset to extention string array
-    nextOffset = ResCnt * 20& + 17&
+    nextOffset = ResCnt * 12& + 21&
     miniHead.resextoffset = nextOffset
     'offset to name string array
     nextOffset = nextOffset + LenAr(rExt, ResCnt)
@@ -339,7 +423,7 @@ Dim p As Long
     
 End Sub
 
-'quick function for array len of string
+'quick function to get array len of string
 Private Function LenAr(ByRef MyArray() As String, ByVal MyAL As Long)
 Dim i As Long
 Dim c As Long
