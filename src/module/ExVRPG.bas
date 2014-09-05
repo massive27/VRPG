@@ -717,29 +717,24 @@ Debugger.DataPak_Check App.Path 'm'' data.pak file supposed to be in game direct
 
 #If USELEGACY <> 1 Then
 'm'' mod manager loading
-Debugger.PakCount = 0 'm''
-ReDim Debugger.PakFiles(1 To 4) 'm''
 'm'' command line analysis
 If InStr(1, command, "mod", vbTextCompare) > 0 Then 'm''
     'm'' a mod addon is indicated in the commandline
     tmp = Split(command, " ", , vbBinaryCompare) 'm''
     For i = 0 To UBound(tmp) - 1 'm'' analysis parameters
         If tmp(i) Like "-mod" Then 'm''
-            Debugger.PakCount = Debugger.PakCount + 1 'm''
-            If PakCount = UBound(PakFiles) Then ReDim Preserve PakFiles(1 To PakCount + 4) As String 'm'' extend mod stack
-            Debugger.PakFiles(PakCount) = Trim(tmp(i + 1)) 'm''
+            ResHandler.AddPack Trim(tmp(i + 1)) 'm''
         End If 'm''
     Next i 'm''
 End If 'm''
 
 'm'' adding main pak file
-PakCount = PakCount + 1 'm''
-Debugger.PakFiles(PakCount) = "Data.pak" 'm''
+ResHandler.AddPack "Data.pkf" 'm''
 #End If
 
 'm'' preparing title screen from Data.pak
-tspic = getfile_mod("TitleScreen.jpg") 'm''
-If (tspic <> "") Then TitleScreen.Picture = LoadPicture(tspic) 'm''
+tspic = ResHandler.GetResFile("TitleScreen.jpg") 'm''
+If (tspic <> vbNullString) Then TitleScreen.Picture = LoadPicture(tspic) 'm''
 
 
 

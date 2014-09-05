@@ -106,6 +106,10 @@ Attribute VB_Name = "Debugger"
 'm'' - removed debug log file when not in hydebug
 'm'' 2014-01-13
 'm'' - changed Form10.findchoice to immediatly quit if choice is "exit". could lead to other bug.
+'m'' 2014-01-09
+'m'' - now using github for further updates
+'m'' 2014-05-09
+'m'' - adding the new pack format support, stripping all old code
 
 #Const HYDEBUG = 1 'm''
 
@@ -142,7 +146,7 @@ Public PakCount As Long
 'declataion for already-unpacked files handling
 Private Type TMPFH
     skey As Long 'key for faster search
-    sname As String 'short name
+    sName As String 'short name
     spath As String 'real fs name
 End Type
 Private ExtractedFile() As TMPFH
@@ -397,7 +401,7 @@ tmp = Right$(filen, 3) 'get extension
 skey = Asc(Mid$(filen, 1, 1))
 For i = 1 To ExtractedLen
     If ExtractedFile(i).skey = skey Then
-        If ExtractedFile(i).sname = sfilen Then
+        If ExtractedFile(i).sName = sfilen Then
             getfile_mod = ExtractedFile(i).spath
             Exit Function
         End If
@@ -479,7 +483,7 @@ AddToTable:
     ExtractedLen = ExtractedLen + 1
     ReDim Preserve ExtractedFile(1 To ExtractedLen) As TMPFH
     ExtractedFile(ExtractedLen).skey = skey
-    ExtractedFile(ExtractedLen).sname = sfilen
+    ExtractedFile(ExtractedLen).sName = sfilen
     ExtractedFile(ExtractedLen).spath = getfile_mod
     Return
 End Function
@@ -487,7 +491,7 @@ End Function
 Sub EFBP()
 'm'' extracted file buffer printout
 For i = 1 To ExtractedLen
-    gamemsg i & " : " & ExtractedFile(i).sname & " @ " & ExtractedFile(i).spath
+    gamemsg i & " : " & ExtractedFile(i).sName & " @ " & ExtractedFile(i).spath
 Next i
 End Sub
 
@@ -751,7 +755,7 @@ WaveFail:
     
 End Function
 
-Private Function Snd_IsHere(sname As String) As Long
+Private Function Snd_IsHere(sName As String) As Long
 'm'' find or not a loaded sound and return its index
 Dim i As Long
 Dim m As Long
@@ -759,7 +763,7 @@ Dim dc As DSCURSORS
 
     m = 0
     For i = 1 To soundbanklen
-        If soundbank(i).SoundName = sname Then
+        If soundbank(i).SoundName = sName Then
             'm'' trick : to have multiple instance of the same sound,
             'm'' we have to duplicate the sndbuff, unless another is ready
             soundbank(i).DSBuffer.GetCurrentPosition dc

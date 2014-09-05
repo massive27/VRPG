@@ -198,6 +198,7 @@ Dim sDest As String
                     MyExtCnt = MyExtCnt + 1
                     MyExtracted(MyExtCnt) = bareName
                     MyExtPath(MyExtCnt) = sDest
+                    Exit Function
                 Else
                     Exit Function
                 End If
@@ -215,6 +216,7 @@ Dim sDest As String
                 MyExtCnt = MyExtCnt + 1
                 MyExtracted(MyExtCnt) = bareName
                 MyExtPath(MyExtCnt) = sDest
+                Exit Function
             End If
         Next i
     End If
@@ -256,7 +258,7 @@ Dim tp As Integer
     'possible error : unable to write to dest, io error
     If Err.Number <> 0 Then
         ExtractMe = False
-        Err.Clear
+        Err.clear
     Else
         ExtractMe = True
     End If
@@ -397,7 +399,7 @@ Dim nextOffset As Long
 notarget:
     If Verbose Then
         mb = MsgBox(Err.Number & " : " & Err.Description, vbCritical + vbAbortRetryIgnore)
-        Err.Clear
+        Err.clear
         If mb = vbRetry Then
             Resume
         ElseIf mb = vbIgnore Then
@@ -407,7 +409,7 @@ notarget:
             Exit Function
         End If
     Else
-        Err.Clear
+        Err.clear
         BuildPack = False
     End If
 End Function

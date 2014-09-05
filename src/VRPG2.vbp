@@ -29,6 +29,7 @@ Form=form\skilltree.frm
 Form=form\shipsys.frm
 Module=Add_UI; module\Add_UI.bas
 Class=cRes; class\cRes.cls
+Module=ResHandler; module\ResHandler.bas
 Startup="Sub Main"
 HelpFile=""
 Title="Duamutef's Glorious Vore RPG"

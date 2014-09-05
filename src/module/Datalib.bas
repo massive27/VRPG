@@ -138,14 +138,14 @@ End Function
 
 Function getfile(ByVal filen As String, Optional ByVal PakFile As String = "Data.pak", Optional ByVal add As Byte = 0, Optional extract As Byte = 0, Optional noerr = 0, Optional pakfileonly = 0) As String
 
-ChDir App.Path
+'m'' ChDir App.Path
 
-getfile = ""
+'m'' getfile = ""
 
 #If USELEGACY <> 1 Then
     'm'' alternate getfile procedure
-    If PakFile = "Data.pak" Or PakFile = "" Then 'm'' may be a gamesave
-        getfile = Debugger.getfile_mod(filen) 'm''
+    If PakFile = "Data.pak" Or PakFile = vbNullString Then  'm'' may be a gamesave
+        getfile = ResHandler.GetResFile(filen) 'm''
         Exit Function 'm''
     End If 'm''
 #End If
