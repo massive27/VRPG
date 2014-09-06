@@ -22,7 +22,7 @@ Section "Game files"
   SectionIn 1 2 3
   SetOutPath $INSTDIR
   File "Data.pak"
-  File "..\bin\VRPG2_2014-01-13.exe"
+  File "..\bin\VRPG2_2014-09-06.exe"
   File "..\bin\MPQExtractor.exe"
 SectionEnd
 
