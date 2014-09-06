@@ -20,6 +20,7 @@ Attribute VB_Exposed = False
 
 Option Base 1
 Option Explicit
+Option Compare Text
 
 Private Type RESFILE '12
     offset As Long
@@ -190,7 +191,7 @@ Dim sDest As String
         For i = 1 To ResLen
             If Res_Names(i) Like bareName Then
                 'found. prepare output
-                sDest = MyTempFolder & Res_Names(i) & sExt
+                sDest = MyTempFolder & Res_Names(i) & Res_Ext(i)
                 'extracts
                 If ExtractMe(sDest, aResource(i)) Then
                     GetResToFile = sDest
@@ -209,7 +210,7 @@ Dim sDest As String
     'not duped, look in source folder and dupes in temp folder
         For i = 1 To ResLen
             If Res_Names(i) Like bareName Then
-                sDest = MyTempFolder & Res_Names(i) & sExt
+                sDest = MyTempFolder & Res_Names(i) & Res_Ext(i)
                 FileCopy MyPack & Res_Names(i) & Res_Ext(i), sDest
                 GetResToFile = sDest
                 'update tempfile tracker

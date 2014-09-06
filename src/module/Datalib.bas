@@ -145,7 +145,7 @@ getfile = vbNullString
 #If USELEGACY <> 1 Then
     'm'' alternate getfile procedure
     If PakFile = "Data.pak" Or PakFile = "" Then 'm'' may be a gamesave
-        getfile = Debugger.getfile_mod(filen) 'm''
+        getfile = ResHandler.GetResFile(filen)  'm''
         Exit Function 'm''
     Else 'm''
         'm'' hotfix to prevent searching in modfolder when it should be in app.path
