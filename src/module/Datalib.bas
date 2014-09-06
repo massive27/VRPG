@@ -140,13 +140,18 @@ Function getfile(ByVal filen As String, Optional ByVal PakFile As String = "Data
 
 ChDir App.Path
 
-getfile = ""
+getfile = vbNullString
 
 #If USELEGACY <> 1 Then
     'm'' alternate getfile procedure
     If PakFile = "Data.pak" Or PakFile = "" Then 'm'' may be a gamesave
         getfile = Debugger.getfile_mod(filen) 'm''
         Exit Function 'm''
+    Else 'm''
+        'm'' hotfix to prevent searching in modfolder when it should be in app.path
+        If Left$(filen, 1) = "." Then
+            filen = Mid$(filen, InStrRev(filen, "\") + 1)
+        End If
     End If 'm''
 #End If
 
