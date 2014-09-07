@@ -258,8 +258,9 @@ Dim tp As Integer
     
     'possible error : unable to write to dest, io error
     If Err.Number <> 0 Then
+        MsgBox "Error " & Err.Number & " occured.", vbExclamation + vbOKOnly
         ExtractMe = False
-        Err.clear
+        Err.Clear
     Else
         ExtractMe = True
     End If
@@ -400,7 +401,7 @@ Dim nextOffset As Long
 notarget:
     If Verbose Then
         mb = MsgBox(Err.Number & " : " & Err.Description, vbCritical + vbAbortRetryIgnore)
-        Err.clear
+        Err.Clear
         If mb = vbRetry Then
             Resume
         ElseIf mb = vbIgnore Then
@@ -410,7 +411,7 @@ notarget:
             Exit Function
         End If
     Else
-        Err.clear
+        Err.Clear
         BuildPack = False
     End If
 End Function

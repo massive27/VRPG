@@ -34,7 +34,6 @@ Begin VB.Form frmPack
          Width           =   2295
       End
       Begin VB.Label Label6 
-         Caption         =   "Label6"
          Height          =   255
          Left            =   1200
          TabIndex        =   9
@@ -42,7 +41,6 @@ Begin VB.Form frmPack
          Width           =   1215
       End
       Begin VB.Label Label5 
-         Caption         =   "Label5"
          Height          =   255
          Left            =   1200
          TabIndex        =   8
@@ -50,7 +48,6 @@ Begin VB.Form frmPack
          Width           =   1215
       End
       Begin VB.Label Label4 
-         Caption         =   "Label4"
          Height          =   255
          Left            =   1200
          TabIndex        =   7
